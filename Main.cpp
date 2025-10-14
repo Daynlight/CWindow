@@ -5,18 +5,6 @@
 
 #include "Renderer/Shaders/Mandelbrot.h"
 
-// [TODO] Uniforms
-// [TODO] Vertices and edges
-// [TODO] Write compute shader for parametric function, fill all pixels that needed
-// [TODO] Write vertex, fragment shader that draw parametric points that was created by compute shader
-// [TODO] Optimize vertex drawing only what is in viewport
-// [TODO] On allow movement in window and zooming
-// [TODO] On zoom and move update every idk 0.2s or sth
-// [TODO] GUI with adding nodes etc
-// [TODO] If nothing change dont waste gpu to generate new frame just use last one
-// [TODO] DirectX
-// [TODO] Vulkan
-
 int main(){
   Renderer::iRenderer* window_renderer = new Renderer::Renderer();
   
