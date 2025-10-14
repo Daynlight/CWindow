@@ -1,6 +1,8 @@
+#include "iRenderer.h"
 #include "OpenGL_Renderer.h"
+
 #include "Gui/Gui.h"
-#include "Renderer/Shaders/shaders.h"
+#include "Renderer/Shaders/Mandelbrot.h"
 
 // [TODO] Write compute shader for parametric function, fill all pixels that needed
 // [TODO] Write vertex, fragment shader that draw parametric points that was created by compute shader
@@ -12,35 +14,40 @@
 
 
 int main(){
-  OpenGLRenderer::Renderer renderer = OpenGLRenderer::Renderer();
+  Renderer::iRenderer* window_renderer = new Renderer::Renderer();
   
   // init window and opengl
-  renderer.createWindow();
-  renderer.createRenderer();
+  window_renderer->createWindow();
+  window_renderer->createRenderer();
   
   // compile compute shader
-  renderer.bindComputeShader(Shader::compute);
-  std::vector<glm::vec2> data;
-  data.emplace_back(glm::vec2({0.0f, 0.0f})); // z_0
-  data.emplace_back(glm::vec2({500, 20.0f})); // maxIter, red
-  data.emplace_back(glm::vec2({100.0f, 5.0f})); // green, blue
-  renderer.runComputeShader(data);
+  window_renderer->bindComputeShader(Mandelbrot::compute);
+  std::vector<float> data;
+  data.emplace_back(0.0f);  // z_0
+  data.emplace_back(0.0f);  // z_0
+  data.emplace_back(500);   // maxIter
+  data.emplace_back(20.0f); // red
+  data.emplace_back(100.0f);// green
+  data.emplace_back(5.0f);   // blue
+  window_renderer->runComputeShader(data);
   
   // compile vertex and fragment shader
-  renderer.bindVertexShader(Shader::vertex);
-  renderer.bindFragmentShader(Shader::fragment);
-  renderer.compileShaders();
+  window_renderer->bindVertexShader(Mandelbrot::vertex);
+  window_renderer->bindFragmentShader(Mandelbrot::fragment);
+  window_renderer->compileShaders();
   
   // init gui
-  Gui::Gui gui = Gui::Gui(&renderer, &data);
+  Gui::Gui gui = Gui::Gui(window_renderer, &data);
   
   // main loop
-  while(renderer.isRunning()){
-    renderer.renderFrame();
+  while(window_renderer->isRunning()){
+    window_renderer->renderFrame();
     gui.render();
-    renderer.windowEvents();
-    renderer.swapBuffer();
+    window_renderer->windowEvents();
+    window_renderer->swapBuffer();
   };
+
+  delete window_renderer;
 
   return 0;
 }

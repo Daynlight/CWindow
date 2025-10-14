@@ -1,4 +1,7 @@
 #pragma once
+#include "Macro.h"
+#include "iRenderer.h"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -6,8 +9,8 @@
 #include <vector>
 #include <stdexcept>
 
-namespace OpenGLRenderer{
-class Renderer{
+namespace Renderer{
+class Renderer : public iRenderer {
 private:
   std::pair<float, float> global_position = {0.0f, 0.0f};
   float zoom  = 1.0f;
@@ -31,7 +34,7 @@ public:
   void windowEvents();
   
   void createWindow();
-  GLFWwindow* getWindow();
+  Window* getWindow();
   void createRenderer();
   bool isRunning();
   void renderFrame();
@@ -41,7 +44,9 @@ public:
   void bindFragmentShader(std::string shader);
   void compileShaders();
   void bindComputeShader(std::string shader);
-  void runComputeShader(std::vector<glm::vec2> data);
+  void runComputeShader(std::vector<float> data);
   
 };
 };
+
+#include "OpenGL_Renderer.h"

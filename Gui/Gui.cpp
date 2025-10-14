@@ -1,7 +1,7 @@
 #include "Gui.h"
 
-Gui::Gui::Gui(OpenGLRenderer::Renderer *renderer, std::vector<glm::vec2>* data)
-: renderer(renderer), data(data) { 
+Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::vector<float>* data)
+: window_renderer(window_renderer), data(data) { 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   
@@ -12,7 +12,7 @@ Gui::Gui::Gui(OpenGLRenderer::Renderer *renderer, std::vector<glm::vec2>* data)
   io.IniFilename = "window.ini";
   ImGui::StyleColorsDark();
 
-  ImGui_ImplGlfw_InitForOpenGL(renderer->getWindow(), true);
+  ImGui_ImplGlfw_InitForOpenGL(window_renderer->getWindow(), true);
   ImGui_ImplOpenGL3_Init("#version 430");
 };
 
@@ -70,11 +70,14 @@ void Gui::Gui::renderSettings()
   if(ImGui::InputInt("MaxIter", &new_max_iter)) update = true;
 
   if(update){
-    (*data)[0] = static_cast<glm::vec2>(new_z_0[0], new_z_0[1]);
-    (*data)[1] = static_cast<glm::vec2>(static_cast<float>(new_max_iter), new_colors[0]);
-    (*data)[2] = static_cast<glm::vec2>(new_colors[1], new_colors[2]);
+    (*data)[0] = new_z_0[0];
+    (*data)[1] = new_z_0[1];
+    (*data)[2] = new_max_iter;
+    (*data)[3] = new_colors[0];
+    (*data)[4] = new_colors[1];
+    (*data)[5] = new_colors[2];
 
-    renderer->runComputeShader(*data);
+    window_renderer->runComputeShader(*data);
     update = false;
   }
 
