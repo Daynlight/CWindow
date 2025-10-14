@@ -3,20 +3,22 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <vector>
+#include <functional>
 
 namespace Renderer{
 class iRenderer{
 public:
   virtual ~iRenderer() = default;
 
+  virtual void createWindow() = 0;
+  virtual Window* getWindow() = 0;
+  virtual bool isRunning() = 0;
+
   virtual void windowMovement(std::pair<float, float> move) = 0;
   virtual void windowZoom(float zoom) = 0;
   virtual void windowEvents() = 0;
   
-  virtual void createWindow() = 0;
-  virtual Window* getWindow() = 0;
   virtual void createRenderer() = 0;
-  virtual bool isRunning() = 0;
   virtual void renderFrame() = 0;
   virtual void swapBuffer() = 0;
 

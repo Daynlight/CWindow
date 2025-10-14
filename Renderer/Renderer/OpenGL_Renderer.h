@@ -5,9 +5,11 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <functional>
 
 namespace Renderer{
 class Renderer : public iRenderer {
