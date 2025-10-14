@@ -1,7 +1,8 @@
+#pragma once
 #include "iRenderer.h"
 #include "OpenGL_Renderer.h"
-
 #include "Gui/Gui.h"
+
 #include "Renderer/Shaders/Mandelbrot.h"
 
 // [TODO] Uniforms
