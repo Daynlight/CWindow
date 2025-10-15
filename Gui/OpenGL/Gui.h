@@ -1,6 +1,6 @@
 #pragma once
 #include "Macro.h"
-#include "Renderer/OpenGL_Renderer.h"
+#include "OpenGL/OpenGL_Renderer.h"
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"

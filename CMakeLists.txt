@@ -13,37 +13,33 @@ set(RENDERER "OPENGL")
 # [UNIX/WIN32/MACOS]
 set(PLATFORM "WIN32")
 
-# Validate RENDERER
-if(NOT RENDERER STREQUAL "OPENGL" 
-  AND NOT RENDERER STREQUAL "VULKAN" 
-  AND NOT RENDERER STREQUAL "DIRECTX"
-  AND NOT RENDERER STREQUAL "METAL")
-    message(FATAL_ERROR "Invalid RENDERER specified: ${RENDERER}.")
-endif()
-
-# Validate PLATFORMS
-if(NOT PLATFORM STREQUAL "WIN32" 
-  AND NOT PLATFORM STREQUAL "UNIX" 
-  AND NOT PLATFORM STREQUAL "MACOS")
-    message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
-endif()
-
-message(STATUS "Configured Renderer: ${RENDERER}")
-message(STATUS "Configured Platform: ${PLATFORM}")
 
 
 
-############# [Setup main project] #############
+############# [Setup project] #############
+project(Main LANGUAGES CXX C)
 
+### Vendor Libs
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
+
+### Subfolders
 add_subdirectory(Renderer)
 add_subdirectory(Gui)
 
+### Files
 set(src "Main.cpp")
 set(headers "Macro.h")
 
-project(Main LANGUAGES CXX C)
-add_executable(Main ${src})
+### Setup Main Project
+if(PLATFORM STREQUAL "UNIX")
+  add_executable(Main ${src})
+elseif(PLATFORM STREQUAL "WIN32")
+  add_executable(Main WIN32 ${src})
+else()
+  message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
+endif()
+
+### Link libs and directories
 target_link_libraries(Main Renderer Gui)
 link_directories(${headers})

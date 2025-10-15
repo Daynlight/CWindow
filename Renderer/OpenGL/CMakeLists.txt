@@ -47,10 +47,10 @@ set(libs
   setupapi
 )
 
-
 else()
   message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
 endif()
+
 
 
 

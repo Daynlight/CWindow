@@ -1,13 +1,13 @@
 #include "iRenderer.h"
 #include "OpenGL_Renderer.h"
-#include "Gui/Gui.h"
+#include "Gui.h"
 
 #include "Renderer/Shaders/Mandelbrot.h"
 
 int main(){
   Renderer::iRenderer* window_renderer = new Renderer::Renderer();
   
-  // init window and opengl
+  // init window and renderer
   window_renderer->createWindow();
   window_renderer->createRenderer();
   
