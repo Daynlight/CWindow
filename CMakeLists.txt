@@ -9,12 +9,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ############# [Set Variables] #############
 # [OPENGL/VULKAN/DIRECTX/METAL]
-set(RENDERER "OPENGL") 
+# set(RENDERER "OPENGL") 
 # [UNIX/WIN32/MACOS]
-set(PLATFORM "WIN32")
+# set(PLATFORM "WIN32")
 
-
-
+message("Used Renderer: ${RENDERER}")
+message("Used Platform: ${PLATFORM}")
 
 ############# [Setup project] #############
 project(Main LANGUAGES CXX C)
