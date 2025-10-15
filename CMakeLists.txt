@@ -9,9 +9,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ############# [Set Variables] #############
 # [OPENGL/VULKAN/DIRECTX/METAL]
-# set(RENDERER "OPENGL") 
+if(NOT DEFINED RENDERER)
+  set(RENDERER "OPENGL")
+endif() 
 # [UNIX/WIN32/MACOS]
-# set(PLATFORM "WIN32")
+if(NOT DEFINED PLATFORM)
+  set(PLATFORM "WIN32")
+endif()
 
 message("Used Platform: ${PLATFORM}")
 message("Used Renderer: ${RENDERER}")
