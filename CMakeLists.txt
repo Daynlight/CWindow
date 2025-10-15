@@ -13,8 +13,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # [UNIX/WIN32/MACOS]
 # set(PLATFORM "WIN32")
 
-message("Used Renderer: ${RENDERER}")
 message("Used Platform: ${PLATFORM}")
+message("Used Renderer: ${RENDERER}")
+
+
 
 ############# [Setup project] #############
 project(Main LANGUAGES CXX C)
