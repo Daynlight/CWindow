@@ -17,7 +17,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 ## Installation
 ### 1. clone repo with submodules
 ```bash
-  git --recursive clone https://github.com/Daynlight/CWindow.git
+  git clone --recursive https://github.com/Daynlight/CWindow.git
 ```
 ### 2. init and update submodules (if not cloned with --recursive flag)
 ```bash
