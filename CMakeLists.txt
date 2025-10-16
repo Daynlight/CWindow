@@ -37,15 +37,6 @@ add_subdirectory(Gui)
 set(src "Main.cpp")
 set(headers "Macro.h")
 
-### Setup Main Project
-if(PLATFORM STREQUAL "UNIX")
-  add_executable(Main ${src})
-elseif(PLATFORM STREQUAL "WIN32")
-  add_executable(Main WIN32 ${src})
-else()
-  message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
-endif()
+### add exe
+add_executable(Main ${src} Renderer Gui)
 
-### Link libs and directories
-target_link_libraries(Main Renderer Gui)
-link_directories(${headers})
