@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <functional>
 
-namespace Renderer{
+namespace CW::Renderer{
 class Renderer : public iRenderer {
 private:
   std::pair<float, float> global_position = {0.0f, 0.0f};

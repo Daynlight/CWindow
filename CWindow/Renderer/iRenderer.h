@@ -5,7 +5,7 @@
 #include <vector>
 #include <functional>
 
-namespace Renderer{
+namespace CW::Renderer{
 class iRenderer{
 public:
   virtual ~iRenderer() = default;

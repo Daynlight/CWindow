@@ -5,11 +5,11 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-namespace Gui
+namespace CW::Gui
 {
 class Gui{
 private:
-  Renderer::iRenderer *window_renderer;
+  CW::Renderer::iRenderer *window_renderer;
   std::vector<float>* data;
 
   float new_z_0[2] = {0, 0};
@@ -18,7 +18,7 @@ private:
   bool update = true;
 
 public:
-  Gui(Renderer::iRenderer *window_renderer, std::vector<float>* data);
+  Gui(CW::Renderer::iRenderer *window_renderer, std::vector<float>* data);
   ~Gui();
 
   void render();

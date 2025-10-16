@@ -1,8 +1,8 @@
 #include "OpenGL_Renderer.h"
 
-Renderer::Renderer::Renderer() {};
+CW::Renderer::Renderer::Renderer() {};
 
-Renderer::Renderer::~Renderer()
+CW::Renderer::Renderer::~Renderer()
 {
   running = false;
   if (compiledShader) glDeleteProgram(compiledShader);
@@ -14,20 +14,20 @@ Renderer::Renderer::~Renderer()
   glfwTerminate();
 };
 
-void Renderer::Renderer::windowMovement(std::pair<float, float> move) {
+void CW::Renderer::Renderer::windowMovement(std::pair<float, float> move) {
 
 };
 
-void Renderer::Renderer::windowZoom(float zoom) {
+void CW::Renderer::Renderer::windowZoom(float zoom) {
 };
 
-void Renderer::Renderer::windowEvents()
+void CW::Renderer::Renderer::windowEvents()
 {
   glfwPollEvents();
   if(glfwWindowShouldClose(window)) running = false;
 }
 
-void Renderer::Renderer::createWindow()
+void CW::Renderer::Renderer::createWindow()
 {
 
   if(!glfwInit()) {
@@ -53,12 +53,12 @@ void Renderer::Renderer::createWindow()
   running = true;
 }
 
-Window* Renderer::Renderer::getWindow()
+Window* CW::Renderer::Renderer::getWindow()
 {
   return window;
 }
 
-void Renderer::Renderer::createRenderer()
+void CW::Renderer::Renderer::createRenderer()
 {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     running = false;
@@ -101,12 +101,12 @@ void Renderer::Renderer::createRenderer()
   
 }
 
-bool Renderer::Renderer::isRunning()
+bool CW::Renderer::Renderer::isRunning()
 {
   return running;
 }
 
-void Renderer::Renderer::renderFrame() {
+void CW::Renderer::Renderer::renderFrame() {
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
   
@@ -116,12 +116,12 @@ void Renderer::Renderer::renderFrame() {
   glBindVertexArray(0);
 }
 
-void Renderer::Renderer::swapBuffer()
+void CW::Renderer::Renderer::swapBuffer()
 {
   glfwSwapBuffers(window);
 }
 
-void Renderer::Renderer::compileShaders() {
+void CW::Renderer::Renderer::compileShaders() {
   GLuint vertexShaderPart = glCreateShader(GL_VERTEX_SHADER);
   const char* vertexShaderData = vertexShader.c_str();
   glShaderSource(vertexShaderPart, 1, &vertexShaderData, nullptr);
@@ -138,11 +138,11 @@ void Renderer::Renderer::compileShaders() {
   glDeleteShader(fragmentShaderPart);
 }
 
-void Renderer::Renderer::bindComputeShader(std::string shader) {
+void CW::Renderer::Renderer::bindComputeShader(std::string shader) {
   computeShader = shader;
 }
 
-void Renderer::Renderer::runComputeShader(std::vector<float> data)
+void CW::Renderer::Renderer::runComputeShader(std::vector<float> data)
 {
   GLuint computeShaderPart = glCreateShader(GL_COMPUTE_SHADER);
   const char* computeShaderData = computeShader.c_str();
@@ -165,11 +165,11 @@ void Renderer::Renderer::runComputeShader(std::vector<float> data)
   glDeleteProgram(program);
 }
 
-void Renderer::Renderer::bindVertexShader(std::string shader)
+void CW::Renderer::Renderer::bindVertexShader(std::string shader)
 {
   vertexShader = shader;
 }
 
-void Renderer::Renderer::bindFragmentShader(std::string shader) {
+void CW::Renderer::Renderer::bindFragmentShader(std::string shader) {
   fragmentShader = shader;
 };

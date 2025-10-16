@@ -3,7 +3,7 @@
 #include "Mandelbrot.h"
 
 int main(){
-  Renderer::iRenderer* window_renderer = new Renderer::Renderer();
+  CW::Renderer::iRenderer* window_renderer = new CW::Renderer::Renderer();
   
   // init window and renderer
   window_renderer->createWindow();
@@ -26,7 +26,7 @@ int main(){
   window_renderer->compileShaders();
   
   // init gui
-  Gui::Gui gui = Gui::Gui(window_renderer, &data);
+  CW::Gui::Gui gui = CW::Gui::Gui(window_renderer, &data);
   
   // main loop
   while(window_renderer->isRunning()){

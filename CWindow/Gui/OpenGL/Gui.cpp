@@ -1,6 +1,6 @@
 #include "Gui.h"
 
-Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::vector<float>* data)
+CW::Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::vector<float>* data)
 : window_renderer(window_renderer), data(data) { 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -16,13 +16,13 @@ Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::vector<float>* data)
   ImGui_ImplOpenGL3_Init("#version 430");
 };
 
-Gui::Gui::~Gui(){
+CW::Gui::Gui::~Gui(){
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
 
-void Gui::Gui::render(){
+void CW::Gui::Gui::render(){
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
@@ -52,7 +52,7 @@ void Gui::Gui::render(){
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Gui::Gui::renderSettings()
+void CW::Gui::Gui::renderSettings()
 {
   ImGui::Begin("Settings", nullptr);
 
