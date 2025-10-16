@@ -1,4 +1,6 @@
 build/
+bin/
+output/
 vendor/
 .vscode/
 *.ini

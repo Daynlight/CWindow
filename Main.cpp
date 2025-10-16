@@ -1,6 +1,6 @@
-#include "iRenderer.h"
-#include "OpenGL_Renderer.h"
-#include "Gui.h"
+#include "CWindow/Renderer/iRenderer.h"
+#include "CWindow/Renderer/OpenGL/OpenGL_Renderer.h"
+#include "CWindow/Gui/OpenGL/Gui.h"
 
 #include "Renderer/Shaders/Mandelbrot.h"
 
