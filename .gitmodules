@@ -1,9 +1,6 @@
 [submodule "CWindow/vendor/glfw"]
 	path = CWindow/vendor/glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "CWindow/vendor/glm"]
-	path = CWindow/vendor/glm
-	url = https://github.com/g-truc/glm.git
 [submodule "CWindow/vendor/imgui"]
 	path = CWindow/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
@@ -11,3 +8,6 @@
 [submodule "CWindow/vendor/glad"]
 	path = CWindow/vendor/glad
 	url = https://github.com/Daynlight/glad.git
+[submodule "CWindow/vendor/glm"]
+	path = CWindow/vendor/glm
+	url = https://github.com/g-truc/glm.git
