@@ -1,8 +1,6 @@
-#include "CWindow/Renderer/iRenderer.h"
-#include "CWindow/Renderer/OpenGL/OpenGL_Renderer.h"
-#include "CWindow/Gui/OpenGL/Gui.h"
-
-#include "Renderer/Shaders/Mandelbrot.h"
+#include "OpenGL_Renderer.h"
+#include "Gui.h"
+#include "Mandelbrot.h"
 
 int main(){
   Renderer::iRenderer* window_renderer = new Renderer::Renderer();

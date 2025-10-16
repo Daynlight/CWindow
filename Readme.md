@@ -60,16 +60,14 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 
 ## Example
 ```cpp
-#include "iRenderer.h"
 #include "OpenGL_Renderer.h"
-#include "Gui/Gui.h"
-
-#include "Renderer/Shaders/Mandelbrot.h"
+#include "Gui.h"
+#include "Mandelbrot.h"
 
 int main(){
   Renderer::iRenderer* window_renderer = new Renderer::Renderer();
   
-  // init window and opengl
+  // init window and renderer
   window_renderer->createWindow();
   window_renderer->createRenderer();
   
