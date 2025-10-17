@@ -14,8 +14,6 @@
 namespace CW::Renderer{
 class Renderer : public iRenderer {
 private:
-  std::pair<float, float> global_position = {0.0f, 0.0f};
-  float zoom  = 1.0f;
   APIWindow* window;
 
   GLuint VAO, VBO, EBO;
@@ -32,9 +30,6 @@ private:
 public:
   Renderer();
   ~Renderer();
-
-  void windowMovement(std::pair<float, float> move);
-  void windowZoom(float zoom);
 
   void windowEvents();
   WindowData* getWindowData();
