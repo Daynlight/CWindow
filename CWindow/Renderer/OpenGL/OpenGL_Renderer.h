@@ -26,6 +26,8 @@ private:
   GLuint compiledShader;
 
   WindowData windowData;
+  WindowData lastWindowData;
+  bool init_update = true;
 
 public:
   Renderer();
@@ -35,7 +37,7 @@ public:
   void windowZoom(float zoom);
 
   void windowEvents();
-  const WindowData* getWindowData();
+  WindowData* getWindowData();
   
   void createWindow();
   APIWindow* getWindow();

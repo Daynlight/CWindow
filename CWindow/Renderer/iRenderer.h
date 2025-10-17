@@ -6,12 +6,20 @@
 #include <functional>
 
 namespace CW::Renderer{
+enum WindowMode{
+  WINDOW = 0,
+  BOARDLESS = 1,
+  FULLSCREEN = 3
+};
+
 struct WindowData{
   unsigned int width;
   unsigned int height;
   unsigned int x;
   unsigned int y;
   bool should_close = true;
+  bool vsync = 0;
+  WindowMode window_mode = WindowMode::WINDOW;
 };
 
 class iRenderer{
@@ -20,7 +28,7 @@ public:
 
   virtual void createWindow() = 0;
   virtual APIWindow* getWindow() = 0;
-  virtual const WindowData* getWindowData() = 0;
+  virtual WindowData* getWindowData() = 0;
 
   virtual void windowMovement(std::pair<float, float> move) = 0;
   virtual void windowZoom(float zoom) = 0;
