@@ -70,7 +70,7 @@ int main(){
   auto last_time = std::chrono::high_resolution_clock::now();
   
   // main loop
-  while(window_renderer->isRunning()){
+  while(window_renderer->getWindowData()->should_close){
     window_renderer->renderFrame();
     gui->render();
     window_renderer->windowEvents();
