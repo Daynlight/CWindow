@@ -28,7 +28,7 @@ public:
   void setDefaultDockingWorkspace() noexcept override;
   void setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace) noexcept override;
 
-  void addWindow(const std::string& name, CW::Gui::GuiWindow window) noexcept override;
+  void addWindow(const std::string& name, const CW::Gui::GuiWindow& window) noexcept override;
   void deleteWindow(const std::string& name) noexcept override;
   
   void render() const override;

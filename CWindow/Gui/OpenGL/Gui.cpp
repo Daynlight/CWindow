@@ -68,7 +68,7 @@ void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_
   workspace = new_workspace;
 };
 
-void CW::Gui::Gui::addWindow(const std::string& name, CW::Gui::GuiWindow window) noexcept {
+void CW::Gui::Gui::addWindow(const std::string& name, const CW::Gui::GuiWindow& window) noexcept {
   windows[name] = window;
 };
 
