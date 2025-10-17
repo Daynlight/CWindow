@@ -50,6 +50,8 @@ void CW::Renderer::Renderer::createWindow()
 
   glfwMakeContextCurrent(window);
   
+  glfwSwapInterval(0);
+
   running = true;
 }
 
