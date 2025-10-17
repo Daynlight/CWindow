@@ -4,6 +4,8 @@ CWindow is cross-platform multi renderer lib for creating simple meshes, shaders
 It unify multiple renderers to simple most often used operations like, binding shaders, rendering mashes,
 swapping window etc. Good to use in simple project or just learning shaders and rendering.
 
+
+
 ## Screenshots
 
 <div style="float: left; width: calc(50% - 20px); margin-right: 20px;">
@@ -13,6 +15,8 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   <img src="docs/Julia.png" alt="Julia" style="width: 100%;" />
 </div>
 <div style="clear: both;"></div>
+
+
 
 ## Installation
 ### 1. clone repo with submodules
@@ -35,6 +39,8 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   ./CWindow.exe
 ```
 
+
+
 ## Configurations flags
 ### Platforms
 1. WIN32 - windows platform
@@ -48,38 +54,148 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 4. METAL - macos renderer (macos only)
 
 
-## Usage
+## Gui Usage
+### Usage
+#### Initialization
+1. Initialize renderer and window
+2. Initialize gui here you can provide custom gui style with ImGuiIo usage
 
-## iRenderer interface
+#### Workspace
+##### Info
+You can provide workspace
+You have to provide ```std::function<void()> render_windows``` that specify place where window will be render
 
-## Build-in Shaders
+##### Example Workspace
+```cpp
+[](std::function<void()> render_windows){
+  const ImGuiViewport* viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(viewport->WorkPos);
+  ImGui::SetNextWindowSize(viewport->WorkSize);
 
-## Build-in Matrices
+  render_windows();
+};
+```
 
-## Implemented optimizations
+#### Adding Window
+##### Info
+1. You need to specify unique name for renderer window it is use for fast look up
+2. If you want update it you need pass same name with new parameters
+3. You can provide custom destruction function as second param
 
-## Example
+##### Example Window
+```cpp
+gui->addWindow("Example", {[](CW::Renderer::iRenderer *renderer){
+  ImGui::Begin("Example", nullptr);
+  ImGui::Text("Hello Gui");
+  ImGui::End();
+}});
+```
+
+### Full Example of Usage
 ```cpp
 #include "OpenGL_Renderer.h"
 #include "Gui.h"
 #include "Mandelbrot.h"
 
 int main(){
-  Renderer::iRenderer* window_renderer = new Renderer::Renderer();
+  // init window and renderer
+  CW::Renderer::iRenderer* window_renderer = new CW::Renderer::Renderer();
+  window_renderer->createWindow();
+  window_renderer->createRenderer();
+  
+  // init gui and add Settings Window
+  CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
+  gui->addWindow("Example", {[](CW::Renderer::iRenderer *renderer){
+    ImGui::Begin("Example", nullptr);
+    ImGui::Text("Hello Gui");
+    ImGui::End();
+  }});
+  
+  // main loop
+  while(window_renderer->isRunning()){
+    gui->render();
+    window_renderer->windowEvents();
+    window_renderer->swapBuffer();
+  };
+
+  // clean up
+  delete gui;
+  delete window_renderer;
+  
+  return 0;
+}
+```
+
+
+
+## Renderer Usage
+
+
+
+## Build-in Shaders
+
+
+
+## Build-in Matrices
+
+
+
+## Implemented optimizations
+
+
+
+## Malgenbrota and Julia Code Example
+```cpp
+#include "OpenGL_Renderer.h"
+#include "Gui.h"
+#include "Mandelbrot.h"
+
+////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
+std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
+bool update = true;
+
+std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWindow = [](CW::Renderer::iRenderer *renderer){
+  ImGui::Begin("Settings", nullptr);
+
+  if(ImGui::InputFloat2("Z_0", &data[0], "%.3f")) update = true;
+  if(ImGui::SliderFloat2("Z_0 Sidler", &data[0], -3, 3, "%.3f")) update = true;
+  if(ImGui::InputFloat3("colors", &data[3], "%.3f")) update = true;
+  if(ImGui::ColorPicker3("colors", &data[3])){
+    for(int i = 0; i < 3; i++){
+      if(data[3 + i] >1) data[3 + i] /= 255;
+      data[3 + i] *= 255;
+    }
+    
+    update = true;
+  }
+
+  int maxIter = static_cast<int>(data[2]);
+  if(ImGui::InputInt("MaxIter", &maxIter)) update = true;
+  data[2] = static_cast<float>(maxIter);
+
+  if(update){
+    renderer->runComputeShader(data);
+    update = false;
+  }
+
+  ImGui::End();
+};
+
+
+
+int main(){
+  CW::Renderer::iRenderer* window_renderer = new CW::Renderer::Renderer();
   
   // init window and renderer
   window_renderer->createWindow();
   window_renderer->createRenderer();
   
+  // init gui and add Settings Window
+  CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
+  gui->addWindow("Settings", renderSettingsWindow);
+  
   // compile compute shader
   window_renderer->bindComputeShader(Mandelbrot::compute);
-  std::vector<float> data;
-  data.emplace_back(0.0f);    // z_0
-  data.emplace_back(0.0f);    // z_0
-  data.emplace_back(500);     // maxIter
-  data.emplace_back(20.0f);   // red
-  data.emplace_back(100.0f);  // green
-  data.emplace_back(5.0f);    // blue
   window_renderer->runComputeShader(data);
   
   // compile vertex and fragment shader
@@ -87,23 +203,28 @@ int main(){
   window_renderer->bindFragmentShader(Mandelbrot::fragment);
   window_renderer->compileShaders();
   
-  // init gui
-  Gui::Gui gui = Gui::Gui(window_renderer, &data);
-  
   // main loop
   while(window_renderer->isRunning()){
     window_renderer->renderFrame();
-    gui.render();
+    gui->render();
     window_renderer->windowEvents();
     window_renderer->swapBuffer();
   };
 
+  // clean up
+  delete gui;
   delete window_renderer;
-
+  
   return 0;
 }
 ```
 
+
+
 ## Features
 
+
+
 ## License
+
+
