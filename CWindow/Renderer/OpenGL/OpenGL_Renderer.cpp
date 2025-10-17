@@ -53,7 +53,7 @@ void CW::Renderer::Renderer::createWindow()
   running = true;
 }
 
-Window* CW::Renderer::Renderer::getWindow()
+APIWindow* CW::Renderer::Renderer::getWindow()
 {
   return window;
 }
