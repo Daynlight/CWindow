@@ -25,6 +25,10 @@ void CW::Renderer::Renderer::windowEvents()
 {
   glfwPollEvents();
   if(glfwWindowShouldClose(window)) running = false;
+
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  glViewport(0, 0, width, height);
 }
 
 void CW::Renderer::Renderer::createWindow()
