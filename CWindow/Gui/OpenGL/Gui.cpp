@@ -1,6 +1,6 @@
 #include "Gui.h"
 
-void CW::Gui::Gui::setDefaultDockingWorkspace(){
+void CW::Gui::Gui::setDefaultDockingWorkspace() noexcept {
   workspace = [](std::function<void()> render_windows){
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -44,13 +44,13 @@ CW::Gui::Gui::Gui(Renderer::iRenderer *renderer, std::function<void(ImGuiIO &io)
   setDefaultDockingWorkspace();
 };
 
-CW::Gui::Gui::~Gui(){
+CW::Gui::Gui::~Gui() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
 
-void CW::Gui::Gui::render(){
+void CW::Gui::Gui::render() const {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
@@ -64,14 +64,14 @@ void CW::Gui::Gui::render(){
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace) {
+void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace) noexcept {
   workspace = new_workspace;
 };
 
-void CW::Gui::Gui::addWindow(std::string name, CW::Gui::GuiWindow window) {
+void CW::Gui::Gui::addWindow(const std::string& name, CW::Gui::GuiWindow window) noexcept {
   windows[name] = window;
 };
 
-void CW::Gui::Gui::deleteWindow(std::string name) {
+void CW::Gui::Gui::deleteWindow(const std::string& name) noexcept {
   windows.erase(name);
 };

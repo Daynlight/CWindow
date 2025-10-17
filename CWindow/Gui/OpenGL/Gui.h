@@ -25,12 +25,12 @@ public:
     std::function<void(ImGuiIO& io)> style = [](ImGuiIO& io){});
   ~Gui();
     
-  void setDefaultDockingWorkspace();
-  void setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace);
+  void setDefaultDockingWorkspace() noexcept override;
+  void setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace) noexcept override;
 
-  void addWindow(std::string name, CW::Gui::GuiWindow window);
-  void deleteWindow(std::string name);
+  void addWindow(const std::string& name, CW::Gui::GuiWindow window) noexcept override;
+  void deleteWindow(const std::string& name) noexcept override;
   
-  void render();
+  void render() const override;
 };
-}; // namespace Gui
+};

@@ -15,9 +15,9 @@ public:
   std::function<void()> onDestroy;
 
 public:
-  GuiWindow();
+  GuiWindow() noexcept;
   GuiWindow(std::function<void(CW::Renderer::iRenderer *renderer)> onRender,
-            std::function<void()> onDestroy = [](){});
-  ~GuiWindow();
+            std::function<void()> onDestroy = [](){}) noexcept;
+  ~GuiWindow() noexcept;
 };
-}; // namespace CW::Gui
+};
