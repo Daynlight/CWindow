@@ -30,8 +30,6 @@ public:
   virtual APIWindow* getWindow() = 0;
   virtual WindowData* getWindowData() = 0;
 
-  virtual void windowMovement(std::pair<float, float> move) = 0;
-  virtual void windowZoom(float zoom) = 0;
   virtual void windowEvents() = 0;
   
   virtual void createRenderer() = 0;

@@ -14,13 +14,6 @@ CW::Renderer::Renderer::~Renderer()
   glfwTerminate();
 };
 
-void CW::Renderer::Renderer::windowMovement(std::pair<float, float> move) {
-
-};
-
-void CW::Renderer::Renderer::windowZoom(float zoom) {
-};
-
 void CW::Renderer::Renderer::windowEvents()
 {
   glfwPollEvents();
