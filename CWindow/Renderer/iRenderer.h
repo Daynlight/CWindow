@@ -21,6 +21,12 @@ public:
   virtual void renderFrame() = 0;
   virtual void swapBuffer() = 0;
 
+  virtual void setWindowMode(CW::Renderer::WindowMode mode) = 0;
+  virtual void setVsync(bool vsync) = 0;
+  virtual void setWindowTitle(const std::string& title) = 0;
+  virtual void minimizedSwitch() = 0;
+  virtual void maximizeSwitch() = 0;
+
   virtual void bindVertexShader(std::string shader) = 0;
   virtual void bindFragmentShader(std::string shader) = 0;
   virtual void compileShaders() = 0;

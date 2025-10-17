@@ -25,8 +25,11 @@ private:
   GLuint compiledShader;
 
   WindowData windowData;
-  WindowData lastWindowData;
-  bool init_update = true;
+
+private:
+  void updateWindowMode();
+  void updateVsync();
+  void updateWindowTitle();
 
 public:
   Renderer();
@@ -40,6 +43,12 @@ public:
   void createRenderer();
   void renderFrame();
   void swapBuffer();
+
+  void setWindowMode(CW::Renderer::WindowMode mode);
+  void setVsync(bool vsync);
+  void setWindowTitle(const std::string& title);
+  void minimizedSwitch();
+  void maximizeSwitch();
 
   void bindVertexShader(std::string shader);
   void bindFragmentShader(std::string shader);

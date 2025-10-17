@@ -1,9 +1,64 @@
 #include "OpenGL_Renderer.h"
 
+void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+  
+  switch (new_mode) {
+    case WindowMode::FULLSCREEN:
+      glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
+      glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
+      break;
+
+    case WindowMode::BOARDLESS:
+      glfwSetWindowMonitor(window, nullptr, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
+      glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+      break;
+    
+    default:
+      glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
+      glfwSetWindowMonitor(window, nullptr, (windowData.x + windowData.width) / 2, (windowData.y + windowData.height) / 2, 
+      windowData.width / 2, windowData.height / 2, GLFW_DONT_CARE);
+      break;
+  }
+  windowData.window_mode = new_mode;
+}
+
+void CW::Renderer::Renderer::setVsync(bool vsync){
+  glfwSwapInterval(vsync);
+  windowData.vsync = vsync;
+}
+
+void CW::Renderer::Renderer::setWindowTitle(const std::string& title){
+  glfwSetWindowTitle(window, title.c_str());
+  windowData.title = title;
+}
+
+void CW::Renderer::Renderer::minimizedSwitch() {
+  if(windowData.is_minimize){
+    glfwIconifyWindow(window);
+  }
+  else{
+    glfwRestoreWindow(window);
+  }
+}
+
+void CW::Renderer::Renderer::maximizeSwitch() {
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+  if (windowData.is_maximize) {
+    glfwSetWindowSize(window, mode->width, mode->height);
+    glfwMaximizeWindow(window);
+  } 
+  else {
+    glfwRestoreWindow(window);
+  }
+};
+
 CW::Renderer::Renderer::Renderer() {};
 
-CW::Renderer::Renderer::~Renderer()
-{
+CW::Renderer::Renderer::~Renderer() {
   windowData.should_close = false;
   if (compiledShader) glDeleteProgram(compiledShader);
   if (VBO) glDeleteBuffers(1, &VBO);
@@ -18,50 +73,19 @@ void CW::Renderer::Renderer::windowEvents()
 {
   glfwPollEvents();
 
-  // WindowMode
-  if(windowData.window_mode != lastWindowData.window_mode || init_update){
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    
-    switch (windowData.window_mode) {
-      case WindowMode::FULLSCREEN:
-        glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
-        glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
-        break;
-
-      case WindowMode::BOARDLESS:
-        glfwSetWindowMonitor(window, nullptr, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
-        glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
-        break;
-      
-      default:
-        glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
-        glfwSetWindowMonitor(window, nullptr, (windowData.x + windowData.width) / 2, (windowData.y + windowData.height) / 2, 
-        windowData.width / 2, windowData.height / 2, GLFW_DONT_CARE);
-        break;
-    }
-    lastWindowData.window_mode = windowData.window_mode;
-  };
-
-  // vsync
-  if(windowData.vsync != lastWindowData.vsync || init_update){
-    glfwSwapInterval(windowData.vsync);
-    lastWindowData.vsync = windowData.vsync;
-  } 
-    
   // Update Window Info
   int width, height, x, y;
   glfwGetFramebufferSize(window, &width, &height);
   glfwGetWindowPos(window, &x, &y);
   glViewport(0, 0, windowData.width, windowData.height);
   windowData.should_close = !glfwWindowShouldClose(window);
+  windowData.is_focused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
+  windowData.is_minimize = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
+  windowData.is_maximize = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
   windowData.width = width;
   windowData.height = height;
   windowData.x = x;
   windowData.y = y;
-
-  if(init_update)
-    init_update = false;
 }
 
 CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
@@ -82,7 +106,7 @@ void CW::Renderer::Renderer::createWindow()
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 
-  window = glfwCreateWindow(800, 600, "Curve", nullptr, nullptr);
+  window = glfwCreateWindow(800, 600, windowData.title.c_str(), nullptr, nullptr);
   if(!window) {
     windowData.should_close = false;
     glfwTerminate();

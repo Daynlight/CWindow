@@ -53,6 +53,7 @@ int main(){
   // init window and renderer
   window_renderer->createWindow();
   window_renderer->createRenderer();
+  window_renderer->setWindowTitle("Malgenbrota and Julia");
   
   // init gui and add Settings Window
   CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
