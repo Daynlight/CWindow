@@ -143,7 +143,7 @@ int main(){
 
 
 
-## Malgenbrota and Julia Code Example
+## Full Example
 ```cpp
 #include "OpenGL_Renderer.h"
 #include "Gui.h"
