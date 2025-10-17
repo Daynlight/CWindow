@@ -1,7 +1,7 @@
 #pragma once
 #include "Macro.h"
 
-#include "../GuiWindow.h"
+#include "../GuiWindow/GuiWindow.h"
 #include "../iGui.h"
 #include "OpenGL/OpenGL_Renderer.h"
 

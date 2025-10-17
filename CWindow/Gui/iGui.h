@@ -2,7 +2,7 @@
 #include "Macro.h"
 
 #include "OpenGL/OpenGL_Renderer.h"
-#include "GuiWindow.h"
+#include "GuiWindow/GuiWindow.h"
 
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
