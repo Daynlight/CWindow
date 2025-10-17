@@ -15,7 +15,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
     - [1. clone repo with submodules](#1-clone-repo-with-submodules)
     - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
     - [3. compile via cmake with parameters for platform and renderer](#3-compile-via-cmake-with-parameters-for-platform-and-renderer)
-    - [4. Run it your executable](#4-run-it-your-executable)
+    - [4. Run your executable](#4-run-your-executable)
   - [Configurations flags](#configurations-flags)
     - [Platforms](#platforms)
     - [Renderers](#renderers)
@@ -72,7 +72,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   cd build/
   cmake .. -DRENDERER="DIRECTX" -DPLATFORM="WIN32"
 ```
-### 4. Run it your executable
+### 4. Run your executable
 ```bash
   ./CWindow.exe
 ```
