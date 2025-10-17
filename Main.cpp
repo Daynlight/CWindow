@@ -4,35 +4,28 @@
 
 ////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
 std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
-float new_z_0[2] = {0, 0};
-int new_max_iter = 500;
-float new_colors[3] = {50, 20, 9};
 bool update = true;
 
 std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWindow = [](CW::Renderer::iRenderer *renderer){
   ImGui::Begin("Settings", nullptr);
 
-  if(ImGui::InputFloat2("Z_0", new_z_0, "%.3f")) update = true;
-  if(ImGui::SliderFloat2("Z_0 Sidler", new_z_0, -3, 3, "%.3f")) update = true;
-  if(ImGui::InputFloat3("colors", new_colors, "%.3f")) update = true;
-  if(ImGui::ColorPicker3("colors", new_colors)){
+  if(ImGui::InputFloat2("Z_0", &data[0], "%.3f")) update = true;
+  if(ImGui::SliderFloat2("Z_0 Sidler", &data[0], -3, 3, "%.3f")) update = true;
+  if(ImGui::InputFloat3("colors", &data[3], "%.3f")) update = true;
+  if(ImGui::ColorPicker3("colors", &data[3])){
     for(int i = 0; i < 3; i++){
-      if(new_colors[i] >1) new_colors[i] /= 255;
-      new_colors[i] *= 255;
+      if(data[3 + i] >1) data[3 + i] /= 255;
+      data[3 + i] *= 255;
     }
     
     update = true;
   }
-  if(ImGui::InputInt("MaxIter", &new_max_iter)) update = true;
+
+  int maxIter = static_cast<int>(data[2]);
+  if(ImGui::InputInt("MaxIter", &maxIter)) update = true;
+  data[2] = static_cast<float>(maxIter);
 
   if(update){
-    data[0] = new_z_0[0];
-    data[1] = new_z_0[1];
-    data[2] = new_max_iter;
-    data[3] = new_colors[0];
-    data[4] = new_colors[1];
-    data[5] = new_colors[2];
-
     renderer->runComputeShader(data);
     update = false;
   }
@@ -79,5 +72,6 @@ int main(){
   // clean up
   delete gui;
   delete window_renderer;
+  
   return 0;
 }

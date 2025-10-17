@@ -1,13 +1,15 @@
 #pragma once
 #include "Macro.h"
+
 #include "OpenGL/OpenGL_Renderer.h"
 #include "GuiWindow.h"
+
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
 #include <functional>
 #include <string>
-#include <vector>
 
 namespace CW::Gui {
 class iGui{
