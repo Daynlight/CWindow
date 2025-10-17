@@ -10,16 +10,13 @@
 namespace CW::Gui {
 class GuiWindow {
 public:
-  std::string name = "";
   std::function<void(CW::Renderer::iRenderer *renderer)> onRender;
   std::function<void()> onDestroy;
 
 public:
-  GuiWindow(std::string name, 
-            std::function<void(CW::Renderer::iRenderer *renderer)> onRender,
+  GuiWindow();
+  GuiWindow(std::function<void(CW::Renderer::iRenderer *renderer)> onRender,
             std::function<void()> onDestroy = [](){});
   ~GuiWindow();
-
-  bool operator==(const CW::Gui::GuiWindow& second);
 };
 }; // namespace CW::Gui

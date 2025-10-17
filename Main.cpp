@@ -57,7 +57,7 @@ int main(){
   
   // init gui and add Settings Window
   CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
-  gui->addWindow({"Settings", renderSettingsWindow});
+  gui->addWindow("Settings", renderSettingsWindow);
   
   // compile compute shader
   window_renderer->bindComputeShader(Mandelbrot::compute);

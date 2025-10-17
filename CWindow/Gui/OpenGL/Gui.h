@@ -8,16 +8,16 @@
 #include "backends/imgui_impl_opengl3.h"
 #include <functional>
 #include <algorithm>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace CW::Gui {
 class Gui : public iGui{
 private:
   CW::Renderer::iRenderer *renderer;
-  
-public:
   std::function<void(std::function<void()> render_windows)> workspace;
-  std::vector<GuiWindow> windows;
+  std::unordered_map<std::string, CW::Gui::GuiWindow> windows;
 
 public:
   Gui(CW::Renderer::iRenderer *renderer,
@@ -27,9 +27,8 @@ public:
   void setDefaultDockingWorkspace();
   void setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace);
 
-  void addWindow(CW::Gui::GuiWindow window);
+  void addWindow(std::string name, CW::Gui::GuiWindow window);
   void deleteWindow(std::string name);
-  void deleteWindow(unsigned int index);
   
   void render();
 };

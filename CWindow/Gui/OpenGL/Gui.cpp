@@ -56,8 +56,8 @@ void CW::Gui::Gui::render(){
   ImGui::NewFrame();
 
   workspace([this](){
-    for(CW::Gui::GuiWindow& window : windows)
-      window.onRender(renderer);
+    for(auto& window : windows)
+      window.second.onRender(renderer);
   });
   
   ImGui::Render();
@@ -68,20 +68,10 @@ void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_
   workspace = new_workspace;
 };
 
-void CW::Gui::Gui::addWindow(CW::Gui::GuiWindow window) {
-  auto it = std::find(windows.begin(), windows.end(), window);
-  if(it > windows.end())
-    *it = window;
-  else
-    windows.emplace_back(window);
+void CW::Gui::Gui::addWindow(std::string name, CW::Gui::GuiWindow window) {
+  windows[name] = window;
 };
 
 void CW::Gui::Gui::deleteWindow(std::string name) {
-  CW::Gui::GuiWindow window = CW::Gui::GuiWindow(name, [](CW::Renderer::iRenderer* renderer){});
-  auto it = std::find(windows.begin(), windows.end(), window);
-  windows.erase(it);
-};
-
-void CW::Gui::Gui::deleteWindow(unsigned int index) {
-  windows.erase(windows.begin() + index);
+  windows.erase(name);
 };
