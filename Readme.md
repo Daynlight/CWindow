@@ -267,5 +267,4 @@ int main(){
 
 
 ## License
-
-
+[GNU GENERAL PUBLIC LICENSE Version 2, June 1991](LICENSE)
