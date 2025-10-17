@@ -94,7 +94,6 @@ gui->addWindow("Example", {[](CW::Renderer::iRenderer *renderer){
 ```cpp
 #include "OpenGL_Renderer.h"
 #include "Gui.h"
-#include "Mandelbrot.h"
 
 int main(){
   // init window and renderer
