@@ -54,8 +54,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 4. METAL - macos renderer (macos only)
 
 
-## Gui Usage
-### Usage
+### Gui Usage
 #### Initialization
 1. Initialize renderer and window
 2. Initialize gui here you can provide custom gui style with ImGuiIo usage
