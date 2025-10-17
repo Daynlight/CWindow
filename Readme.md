@@ -182,8 +182,7 @@ int main(){
 
 
 ## Implemented optimizations
-* Unordered _map for window fast look up
-*
+- Unordered _map for window fast look up
 
 ## Full Example
 ```cpp
