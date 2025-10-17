@@ -4,24 +4,39 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include <functional>
+#include <vector>
 
-namespace CW::Gui
-{
+namespace CW::Gui {
+class GuiWindow {
+public:
+  std::function<void(CW::Renderer::iRenderer *window_renderer)> render_function;
+  std::function<void()> update_function;
+  std::function<void()> destroy_function;
+
+public:
+  GuiWindow(std::function<void(CW::Renderer::iRenderer *window_renderer)> render_function, 
+         std::function<void()> update_function = [](){},
+         std::function<void()> destroy_function = [](){});
+  ~GuiWindow();
+};
+
 class Gui{
 private:
   CW::Renderer::iRenderer *window_renderer;
-  std::vector<float>* data;
-
-  float new_z_0[2] = {0, 0};
-  int new_max_iter = 500;
-  float new_colors[3] = {50, 20, 9};
-  bool update = true;
+  std::function<void(std::function<void()> render_windows)> workspace;
 
 public:
-  Gui(CW::Renderer::iRenderer *window_renderer, std::vector<float>* data);
-  ~Gui();
+  std::vector<GuiWindow> windows;
 
+public:
+  Gui(CW::Renderer::iRenderer *window_renderer,
+    std::function<void(ImGuiIO& io)> style = [](ImGuiIO& io){});
+  ~Gui();
+    
+  void setDefaultWorkspace();
+  void setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace);
+  
   void render();
-  void renderSettings();
 };
 }; // namespace Gui

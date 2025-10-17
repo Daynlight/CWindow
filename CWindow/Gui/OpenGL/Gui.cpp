@@ -1,32 +1,7 @@
 #include "Gui.h"
 
-CW::Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::vector<float>* data)
-: window_renderer(window_renderer), data(data) { 
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  
-  ImGuiIO& io = ImGui::GetIO();  (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-  io.IniFilename = "window.ini";
-  ImGui::StyleColorsDark();
-
-  ImGui_ImplGlfw_InitForOpenGL(window_renderer->getWindow(), true);
-  ImGui_ImplOpenGL3_Init("#version 430");
-};
-
-CW::Gui::Gui::~Gui(){
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
-}
-
-void CW::Gui::Gui::render(){
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
-
+void CW::Gui::Gui::setDefaultWorkspace(){
+  workspace = [](std::function<void()> render_windows){
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
   ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -42,44 +17,64 @@ void CW::Gui::Gui::render(){
   ImGui::PopStyleColor();
   ImGuiID docspace_id = ImGui::GetID("MyDockSpace");
   ImGui::DockSpace(docspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
-  
-  
-  renderSettings();
+
+  render_windows();
 
   ImGui::End();
+  };
+};
 
+CW::Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::function<void(ImGuiIO &io)> style)
+  : window_renderer(window_renderer) {
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  
+  ImGuiIO& io = ImGui::GetIO();  (void)io;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.IniFilename = "window.ini";
+  ImGui::StyleColorsDark();
+
+  style(io);
+
+  ImGui_ImplGlfw_InitForOpenGL(window_renderer->getWindow(), true);
+  ImGui_ImplOpenGL3_Init("#version 430");
+
+  setDefaultWorkspace();
+};
+
+CW::Gui::Gui::~Gui(){
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+}
+
+void CW::Gui::Gui::render(){
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+
+  workspace([this](){
+    for(CW::Gui::GuiWindow window : windows)
+      window.render_function(window_renderer);
+  });
+  
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void CW::Gui::Gui::renderSettings()
-{
-  ImGui::Begin("Settings", nullptr);
+void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace){
+  workspace = new_workspace;
+};
 
-  if(ImGui::InputFloat2("Z_0", new_z_0, "%.3f")) update = true;
-  if(ImGui::SliderFloat2("Z_0 Sidler", new_z_0, -3, 3, "%.3f")) update = true;
-  if(ImGui::InputFloat3("colors", new_colors, "%.3f")) update = true;
-  if(ImGui::ColorPicker3("colors", new_colors)){
-    for(int i = 0; i < 3; i++){
-      if(new_colors[i] >1) new_colors[i] /= 255;
-      new_colors[i] *= 255;
-    }
-    
-    update = true;
-  }
-  if(ImGui::InputInt("MaxIter", &new_max_iter)) update = true;
+CW::Gui::GuiWindow::GuiWindow(std::function<void(CW::Renderer::iRenderer *window_renderer)> render_function, 
+                              std::function<void()> update_function,
+                              std::function<void()> destroy_function)
+  :render_function(render_function), 
+   update_function(update_function),
+   destroy_function(destroy_function) {}
 
-  if(update){
-    (*data)[0] = new_z_0[0];
-    (*data)[1] = new_z_0[1];
-    (*data)[2] = new_max_iter;
-    (*data)[3] = new_colors[0];
-    (*data)[4] = new_colors[1];
-    (*data)[5] = new_colors[2];
-
-    window_renderer->runComputeShader(*data);
-    update = false;
-  }
-
-  ImGui::End();
-}
+CW::Gui::GuiWindow::~GuiWindow() {
+  destroy_function();
+};
