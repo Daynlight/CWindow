@@ -6,15 +6,53 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 
 
 
+## Table of Content
+- [CWindow](#cwindow)
+  - [About](#about)
+  - [Table of Content](#table-of-content)
+  - [Screenshots](#screenshots)
+  - [Installation](#installation)
+    - [1. clone repo with submodules](#1-clone-repo-with-submodules)
+    - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
+    - [3. compile via cmake with parameters for platform and renderer](#3-compile-via-cmake-with-parameters-for-platform-and-renderer)
+    - [4. Run it your executable](#4-run-it-your-executable)
+  - [Configurations flags](#configurations-flags)
+    - [Platforms](#platforms)
+    - [Renderers](#renderers)
+    - [Default and Detection](#default-and-detection)
+  - [Gui Usage](#gui-usage)
+    - [Initialization](#initialization)
+    - [Workspace](#workspace)
+      - [Info](#info)
+      - [Example Workspace](#example-workspace)
+    - [Adding Window](#adding-window)
+      - [Info](#info-1)
+      - [Example Window](#example-window)
+    - [Full Example of Usage](#full-example-of-usage)
+  - [Renderer Usage](#renderer-usage)
+  - [Build-in Shaders](#build-in-shaders)
+  - [Build-in Matrices](#build-in-matrices)
+  - [Implemented optimizations](#implemented-optimizations)
+  - [Full Example](#full-example)
+  - [Features](#features)
+  - [License](#license)
+
 ## Screenshots
 
-<div style="float: left; width: calc(50% - 20px); margin-right: 20px;">
-  <img src="docs/malgenbrota.png" alt="Malgenbrota" style="width: 100%;" />
-</div>
-<div style="float: left; width: calc(50% - 20px);">
-  <img src="docs/Julia.png" alt="Julia" style="width: 100%;" />
-</div>
-<div style="clear: both;"></div>
+<table>
+  <tr>
+    <td align="center">
+      <a href="docs/malgenbrota.png">
+        <img src="docs/malgenbrota.png" /><br>
+      </a>
+    </td>
+    <td align="center">
+      <a href="docs/Julia.png">
+        <img src="docs/Julia.png" /><br>
+      </a>
+    </td>
+  </tr>
+</table>
 
 
 
@@ -53,35 +91,40 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 3. VULKAN - vulkan renderer (cross-platform)
 4. METAL - macos renderer (macos only)
 
+### Default and Detection
+1. Platform is detected in cmake
+2. Default renderer is OpenGL
 
-### Gui Usage
-#### Initialization
+
+
+## Gui Usage
+### Initialization
 1. Initialize renderer and window
 2. Initialize gui here you can provide custom gui style with ImGuiIo usage
 
-#### Workspace
-##### Info
+### Workspace
+#### Info
 You can provide workspace
 You have to provide ```std::function<void()> render_windows``` that specify place where window will be render
 
-##### Example Workspace
+#### Example Workspace
 ```cpp
-[](std::function<void()> render_windows){
+gui->setWorkspace([](std::function<void()> render_windows){
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
   ImGui::SetNextWindowPos(viewport->WorkPos);
   ImGui::SetNextWindowSize(viewport->WorkSize);
 
   render_windows();
-};
+});
 ```
 
-#### Adding Window
-##### Info
+### Adding Window
+#### Info
 1. You need to specify unique name for renderer window it is use for fast look up
 2. If you want update it you need pass same name with new parameters
 3. You can provide custom destruction function as second param
 
-##### Example Window
+#### Example Window
 ```cpp
 gui->addWindow("Example", {[](CW::Renderer::iRenderer *renderer){
   ImGui::Begin("Example", nullptr);
