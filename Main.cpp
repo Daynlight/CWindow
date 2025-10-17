@@ -2,13 +2,14 @@
 #include "Gui.h"
 #include "Mandelbrot.h"
 
-std::vector<float> data;
+////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
+std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
 float new_z_0[2] = {0, 0};
 int new_max_iter = 500;
 float new_colors[3] = {50, 20, 9};
 bool update = true;
 
-std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettings = [](CW::Renderer::iRenderer *window_renderer){
+std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWindow = [](CW::Renderer::iRenderer *renderer){
   ImGui::Begin("Settings", nullptr);
 
   if(ImGui::InputFloat2("Z_0", new_z_0, "%.3f")) update = true;
@@ -32,12 +33,15 @@ std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettings = [
     data[4] = new_colors[1];
     data[5] = new_colors[2];
 
-    window_renderer->runComputeShader(data);
+    renderer->runComputeShader(data);
     update = false;
   }
 
   ImGui::End();
 };
+
+
+
 
 
 
@@ -51,14 +55,12 @@ int main(){
   window_renderer->createWindow();
   window_renderer->createRenderer();
   
+  // init gui and add Settings Window
+  CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
+  gui->addWindow({"Settings", renderSettingsWindow});
+  
   // compile compute shader
   window_renderer->bindComputeShader(Mandelbrot::compute);
-  data.emplace_back(0.0f);    // z_0
-  data.emplace_back(0.0f);    // z_0
-  data.emplace_back(500);     // maxIter
-  data.emplace_back(20.0f);   // red
-  data.emplace_back(100.0f);  // green
-  data.emplace_back(5.0f);    // blue
   window_renderer->runComputeShader(data);
   
   // compile vertex and fragment shader
@@ -66,19 +68,16 @@ int main(){
   window_renderer->bindFragmentShader(Mandelbrot::fragment);
   window_renderer->compileShaders();
   
-  // init gui
-  CW::Gui::Gui gui = CW::Gui::Gui(window_renderer);
-  gui.windows.emplace_back(renderSettings);
-  
   // main loop
   while(window_renderer->isRunning()){
     window_renderer->renderFrame();
-    gui.render();
+    gui->render();
     window_renderer->windowEvents();
     window_renderer->swapBuffer();
   };
 
+  // clean up
+  delete gui;
   delete window_renderer;
-
   return 0;
 }

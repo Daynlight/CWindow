@@ -1,6 +1,6 @@
 #include "Gui.h"
 
-void CW::Gui::Gui::setDefaultWorkspace(){
+void CW::Gui::Gui::setDefaultDockingWorkspace(){
   workspace = [](std::function<void()> render_windows){
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
   const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -24,8 +24,8 @@ void CW::Gui::Gui::setDefaultWorkspace(){
   };
 };
 
-CW::Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::function<void(ImGuiIO &io)> style)
-  : window_renderer(window_renderer) {
+CW::Gui::Gui::Gui(Renderer::iRenderer *renderer, std::function<void(ImGuiIO &io)> style)
+  : renderer(renderer) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   
@@ -38,10 +38,10 @@ CW::Gui::Gui::Gui(Renderer::iRenderer *window_renderer, std::function<void(ImGui
 
   style(io);
 
-  ImGui_ImplGlfw_InitForOpenGL(window_renderer->getWindow(), true);
+  ImGui_ImplGlfw_InitForOpenGL(renderer->getWindow(), true);
   ImGui_ImplOpenGL3_Init("#version 430");
 
-  setDefaultWorkspace();
+  setDefaultDockingWorkspace();
 };
 
 CW::Gui::Gui::~Gui(){
@@ -56,25 +56,32 @@ void CW::Gui::Gui::render(){
   ImGui::NewFrame();
 
   workspace([this](){
-    for(CW::Gui::GuiWindow window : windows)
-      window.render_function(window_renderer);
+    for(CW::Gui::GuiWindow& window : windows)
+      window.onRender(renderer);
   });
   
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace){
+void CW::Gui::Gui::setWorkspace(std::function<void(std::function<void()> render_windows)> new_workspace) {
   workspace = new_workspace;
 };
 
-CW::Gui::GuiWindow::GuiWindow(std::function<void(CW::Renderer::iRenderer *window_renderer)> render_function, 
-                              std::function<void()> update_function,
-                              std::function<void()> destroy_function)
-  :render_function(render_function), 
-   update_function(update_function),
-   destroy_function(destroy_function) {}
+void CW::Gui::Gui::addWindow(CW::Gui::GuiWindow window) {
+  auto it = std::find(windows.begin(), windows.end(), window);
+  if(it > windows.end())
+    *it = window;
+  else
+    windows.emplace_back(window);
+};
 
-CW::Gui::GuiWindow::~GuiWindow() {
-  destroy_function();
+void CW::Gui::Gui::deleteWindow(std::string name) {
+  CW::Gui::GuiWindow window = CW::Gui::GuiWindow(name, [](CW::Renderer::iRenderer* renderer){});
+  auto it = std::find(windows.begin(), windows.end(), window);
+  windows.erase(it);
+};
+
+void CW::Gui::Gui::deleteWindow(unsigned int index) {
+  windows.erase(windows.begin() + index);
 };
