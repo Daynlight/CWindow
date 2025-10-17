@@ -4,7 +4,7 @@ CW::Renderer::Renderer::Renderer() {};
 
 CW::Renderer::Renderer::~Renderer()
 {
-  running = false;
+  windowData.should_close = false;
   if (compiledShader) glDeleteProgram(compiledShader);
   if (VBO) glDeleteBuffers(1, &VBO);
   if (VAO) glDeleteBuffers(1, &VAO);
@@ -24,18 +24,31 @@ void CW::Renderer::Renderer::windowZoom(float zoom) {
 void CW::Renderer::Renderer::windowEvents()
 {
   glfwPollEvents();
-  if(glfwWindowShouldClose(window)) running = false;
+  if(glfwWindowShouldClose(window)) windowData.should_close = false;
 
-  int width, height;
+
+  // Update Window Info
+  int width, height, x, y;
   glfwGetFramebufferSize(window, &width, &height);
-  glViewport(0, 0, width, height);
+  glViewport(0, 0, windowData.width, windowData.height);
+  glfwGetWindowPos(window, &x, &y);
+
+  // Save Data
+  windowData.width = width;
+  windowData.height = height;
+  windowData.x = x;
+  windowData.y = y;
+}
+
+const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
+  return &windowData;
 }
 
 void CW::Renderer::Renderer::createWindow()
 {
 
   if(!glfwInit()) {
-    running = false;
+    windowData.should_close = false;
     glfwTerminate();
     throw std::runtime_error("Can't initialize GLFW");
   }
@@ -47,7 +60,7 @@ void CW::Renderer::Renderer::createWindow()
 
   window = glfwCreateWindow(800, 600, "Curve", nullptr, nullptr);
   if(!window) {
-    running = false;
+    windowData.should_close = false;
     glfwTerminate();
     throw std::runtime_error("Can't Create Window");
   };
@@ -56,7 +69,7 @@ void CW::Renderer::Renderer::createWindow()
   
   glfwSwapInterval(0);
 
-  running = true;
+  windowData.should_close = true;
 }
 
 APIWindow* CW::Renderer::Renderer::getWindow()
@@ -67,7 +80,7 @@ APIWindow* CW::Renderer::Renderer::getWindow()
 void CW::Renderer::Renderer::createRenderer()
 {
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    running = false;
+    windowData.should_close = false;
     return;
   };
 
@@ -105,11 +118,6 @@ void CW::Renderer::Renderer::createRenderer()
   glBindVertexArray(0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   
-}
-
-bool CW::Renderer::Renderer::isRunning()
-{
-  return running;
 }
 
 void CW::Renderer::Renderer::renderFrame() {

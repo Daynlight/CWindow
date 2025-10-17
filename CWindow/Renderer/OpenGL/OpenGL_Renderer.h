@@ -17,7 +17,6 @@ private:
   std::pair<float, float> global_position = {0.0f, 0.0f};
   float zoom  = 1.0f;
   APIWindow* window;
-  bool running = true;
 
   GLuint VAO, VBO, EBO;
   GLuint pointsSSBO;
@@ -25,6 +24,8 @@ private:
   std::string fragmentShader = "";
   std::string computeShader = "";
   GLuint compiledShader;
+
+  WindowData windowData;
 
 public:
   Renderer();
@@ -34,11 +35,11 @@ public:
   void windowZoom(float zoom);
 
   void windowEvents();
+  const WindowData* getWindowData();
   
   void createWindow();
   APIWindow* getWindow();
   void createRenderer();
-  bool isRunning();
   void renderFrame();
   void swapBuffer();
 

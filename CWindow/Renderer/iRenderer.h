@@ -6,13 +6,21 @@
 #include <functional>
 
 namespace CW::Renderer{
+struct WindowData{
+  unsigned int width;
+  unsigned int height;
+  unsigned int x;
+  unsigned int y;
+  bool should_close = true;
+};
+
 class iRenderer{
 public:
   virtual ~iRenderer() = default;
 
   virtual void createWindow() = 0;
   virtual APIWindow* getWindow() = 0;
-  virtual bool isRunning() = 0;
+  virtual const WindowData* getWindowData() = 0;
 
   virtual void windowMovement(std::pair<float, float> move) = 0;
   virtual void windowZoom(float zoom) = 0;
