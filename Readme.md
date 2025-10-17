@@ -42,13 +42,13 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 <table>
   <tr>
     <td align="center">
-      <a href="docs/malgenbrota.png">
-        <img src="docs/malgenbrota.png" /><br>
+      <a href="https://raw.githubusercontent.com/Daynlight/CWindow/refs/heads/docs/docs/malgenbrota.png">
+        <img src="https://raw.githubusercontent.com/Daynlight/CWindow/refs/heads/docs/docs/malgenbrota.png" /><br>
       </a>
     </td>
     <td align="center">
-      <a href="docs/Julia.png">
-        <img src="docs/Julia.png" /><br>
+      <a href="https://raw.githubusercontent.com/Daynlight/CWindow/refs/heads/docs/docs/Julia.png">
+        <img src="https://raw.githubusercontent.com/Daynlight/CWindow/refs/heads/docs/docs/Julia.png" /><br>
       </a>
     </td>
   </tr>
