@@ -11,7 +11,7 @@ public:
   virtual ~iRenderer() = default;
 
   virtual void createWindow() = 0;
-  virtual Window* getWindow() = 0;
+  virtual APIWindow* getWindow() = 0;
   virtual bool isRunning() = 0;
 
   virtual void windowMovement(std::pair<float, float> move) = 0;

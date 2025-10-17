@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(src 
   "Gui.cpp"
   "../iGui.h"
-  "../GuiWindow.cpp"
+  "../GuiWindow/GuiWindow.cpp"
   ${ROOT_DIR}/vendor/imgui/imgui.cpp
   ${ROOT_DIR}/vendor/imgui/imgui_draw.cpp
   ${ROOT_DIR}/vendor/imgui/imgui_tables.cpp

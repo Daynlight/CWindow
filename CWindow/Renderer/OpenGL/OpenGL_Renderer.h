@@ -16,7 +16,7 @@ class Renderer : public iRenderer {
 private:
   std::pair<float, float> global_position = {0.0f, 0.0f};
   float zoom  = 1.0f;
-  GLFWwindow* window;
+  APIWindow* window;
   bool running = true;
 
   GLuint VAO, VBO, EBO;
@@ -36,7 +36,7 @@ public:
   void windowEvents();
   
   void createWindow();
-  Window* getWindow();
+  APIWindow* getWindow();
   void createRenderer();
   bool isRunning();
   void renderFrame();
