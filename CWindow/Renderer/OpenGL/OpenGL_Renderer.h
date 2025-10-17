@@ -1,6 +1,7 @@
 #pragma once
 #include "Macro.h"
 #include "../iRenderer.h"
+#include "../WindowData.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
