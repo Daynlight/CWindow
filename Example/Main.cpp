@@ -6,6 +6,7 @@
 
 ////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
 std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
+CW::Renderer::ComputeShader* data_pass = nullptr;
 std::chrono::duration<float> delta_time;
 bool update = true;
 
@@ -32,7 +33,7 @@ std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWind
   data[2] = static_cast<float>(maxIter);
 
   if(update){
-    renderer->runComputeShader(data);
+    data_pass->run(data);
     update = false;
   }
 
@@ -61,19 +62,35 @@ int main(){
   gui->addWindow("Settings", renderSettingsWindow);
   
   // compile compute shader
-  window_renderer->bindComputeShader(Mandelbrot::compute);
-  window_renderer->runComputeShader(data);
+  data_pass = new CW::Renderer::ComputeShader(Mandelbrot::compute); 
+  data_pass->run(data);
   
   // compile vertex and fragment shader
-  window_renderer->bindVertexShader(Mandelbrot::vertex);
-  window_renderer->bindFragmentShader(Mandelbrot::fragment);
-  window_renderer->compileShaders();
+  CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+
+  // create viewport mesh
+  std::vector<GLfloat> vertices = {
+    // Positions
+    -1.0f,  1.0f,  // Top-left
+    -1.0f, -1.0f,  // Bottom-left
+    1.0f,  1.0f,  // Top-right
+    1.0f, -1.0f,  // Bottom-right
+  };
+  std::vector<GLuint> indices = {
+    0, 1, 2,  // First triangle
+    1, 3, 2   // Second triangle
+  };
+  CW::Renderer::Mesh mesh = CW::Renderer::Mesh(vertices, indices);
+
 
   auto last_time = std::chrono::high_resolution_clock::now();
   
   // main loop
   while(window_renderer->getWindowData()->should_close){
-    window_renderer->renderFrame();
+    window_renderer->beginFrame();
+    malgenbrot.render();
+    mesh.render();
+
     gui->render();
     window_renderer->windowEvents();
     window_renderer->swapBuffer();
@@ -84,6 +101,7 @@ int main(){
   };
 
   // clean up
+  delete data_pass;
   delete gui;
   delete window_renderer;
   
