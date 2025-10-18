@@ -97,6 +97,9 @@ void CW::Renderer::Renderer::windowEvents()
   inputData.scroll_y = scroll_y;
   scroll_x = 0;
   scroll_y = 0;
+  inputData.scroll_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
+  inputData.left_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  inputData.right_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 }
 
 CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
