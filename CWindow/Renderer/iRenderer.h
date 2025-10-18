@@ -1,6 +1,7 @@
 #pragma once
 #include "../Macro.h"
 #include "WindowData.h"
+#include "InputData.h"
 #include "../vendor/glm/glm/glm.hpp"
 #include <string>
 #include <vector>
@@ -14,12 +15,19 @@ public:
   virtual void createWindow() = 0;
   virtual APIWindow* getWindow() = 0;
   virtual WindowData* getWindowData() = 0;
+  virtual InputData* getInputData() = 0;
 
   virtual void windowEvents() = 0;
   
   virtual void createRenderer() = 0;
   virtual void renderFrame() = 0;
   virtual void swapBuffer() = 0;
+
+  virtual void setWindowMode(CW::Renderer::WindowMode mode) = 0;
+  virtual void setVsync(bool vsync) = 0;
+  virtual void setWindowTitle(const std::string& title) = 0;
+  virtual void minimizedSwitch() = 0;
+  virtual void maximizeSwitch() = 0;
 
   virtual void bindVertexShader(std::string shader) = 0;
   virtual void bindFragmentShader(std::string shader) = 0;

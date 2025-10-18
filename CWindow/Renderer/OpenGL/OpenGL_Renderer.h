@@ -2,6 +2,7 @@
 #include "Macro.h"
 #include "../iRenderer.h"
 #include "../WindowData.h"
+#include "../InputData.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -25,21 +26,27 @@ private:
   GLuint compiledShader;
 
   WindowData windowData;
-  WindowData lastWindowData;
-  bool init_update = true;
-
+  InputData inputData;
+  
 public:
   Renderer();
   ~Renderer();
 
   void windowEvents();
   WindowData* getWindowData();
+  InputData* getInputData();
   
   void createWindow();
   APIWindow* getWindow();
   void createRenderer();
   void renderFrame();
   void swapBuffer();
+
+  void setWindowMode(CW::Renderer::WindowMode mode);
+  void setVsync(bool vsync);
+  void setWindowTitle(const std::string& title);
+  void minimizedSwitch();
+  void maximizeSwitch();
 
   void bindVertexShader(std::string shader);
   void bindFragmentShader(std::string shader);
