@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 set(src 
   "OpenGL_Renderer.cpp"
+  "../Mesh/Mesh.cpp"
+  "../Shader/DrawShader.cpp"
   ${ROOT_DIR}/vendor/glad/glad-4.3/src/glad.c
 )
 set(headers

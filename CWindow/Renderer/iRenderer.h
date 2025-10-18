@@ -1,7 +1,7 @@
 #pragma once
 #include "../Macro.h"
-#include "WindowData.h"
-#include "InputData.h"
+#include "Data/WindowData.h"
+#include "Data/InputData.h"
 #include "../vendor/glm/glm/glm.hpp"
 #include <string>
 #include <vector>
@@ -20,7 +20,7 @@ public:
   virtual void windowEvents() = 0;
   
   virtual void createRenderer() = 0;
-  virtual void renderFrame() = 0;
+  virtual void beginFrame() = 0;
   virtual void swapBuffer() = 0;
 
   virtual void setWindowMode(CW::Renderer::WindowMode mode) = 0;
@@ -28,10 +28,6 @@ public:
   virtual void setWindowTitle(const std::string& title) = 0;
   virtual void minimizedSwitch() = 0;
   virtual void maximizeSwitch() = 0;
-
-  virtual void bindVertexShader(std::string shader) = 0;
-  virtual void bindFragmentShader(std::string shader) = 0;
-  virtual void compileShaders() = 0;
 
   virtual void bindComputeShader(std::string shader) = 0;
   virtual void runComputeShader(std::vector<float> data) = 0;

@@ -1,8 +1,10 @@
 #pragma once
 #include "Macro.h"
 #include "../iRenderer.h"
-#include "../WindowData.h"
-#include "../InputData.h"
+#include "../Mesh/Mesh.h"
+#include "../Shader/DrawShader.h"
+#include "../Data/WindowData.h"
+#include "../Data/InputData.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -18,13 +20,10 @@ class Renderer : public iRenderer {
 private:
   APIWindow* window;
 
-  GLuint VAO, VBO, EBO;
   GLuint pointsSSBO;
-  std::string vertexShader = "";
-  std::string fragmentShader = "";
   std::string computeShader = "";
   GLuint compiledShader;
-
+  
   WindowData windowData;
   InputData inputData;
   
@@ -39,7 +38,7 @@ public:
   void createWindow();
   APIWindow* getWindow();
   void createRenderer();
-  void renderFrame();
+  void beginFrame();
   void swapBuffer();
 
   void setWindowMode(CW::Renderer::WindowMode mode);
@@ -48,9 +47,6 @@ public:
   void minimizedSwitch();
   void maximizeSwitch();
 
-  void bindVertexShader(std::string shader);
-  void bindFragmentShader(std::string shader);
-  void compileShaders();
   void bindComputeShader(std::string shader);
   void runComputeShader(std::vector<float> data);
   

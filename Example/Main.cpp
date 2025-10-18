@@ -65,15 +65,31 @@ int main(){
   window_renderer->runComputeShader(data);
   
   // compile vertex and fragment shader
-  window_renderer->bindVertexShader(Mandelbrot::vertex);
-  window_renderer->bindFragmentShader(Mandelbrot::fragment);
-  window_renderer->compileShaders();
+  CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+
+  // create viewport mesh
+  std::vector<GLfloat> vertices = {
+    // Positions
+    -1.0f,  1.0f,  // Top-left
+    -1.0f, -1.0f,  // Bottom-left
+    1.0f,  1.0f,  // Top-right
+    1.0f, -1.0f,  // Bottom-right
+  };
+  std::vector<GLuint> indices = {
+    0, 1, 2,  // First triangle
+    1, 3, 2   // Second triangle
+  };
+  CW::Renderer::Mesh mesh = CW::Renderer::Mesh(vertices, indices);
+
 
   auto last_time = std::chrono::high_resolution_clock::now();
   
   // main loop
   while(window_renderer->getWindowData()->should_close){
-    window_renderer->renderFrame();
+    window_renderer->beginFrame();
+    malgenbrot.render();
+    mesh.render();
+
     gui->render();
     window_renderer->windowEvents();
     window_renderer->swapBuffer();
