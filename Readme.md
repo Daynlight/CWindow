@@ -216,6 +216,8 @@ You can access InputData by ```renderer->getInputData()```
 
 ## Implemented optimizations
 - Unordered _map for window fast look up
+- On run shader compilation and reusing it
+- Mesh VAO Life time control
 
 ## Full Example
 ```cpp
@@ -328,8 +330,7 @@ int main(){
 
 ## Features
 * Used unordered_map for window fast look up
-* On run shader compilation and reusing it
-* Mesh VAO Life time control
+
 
 
 ## License
