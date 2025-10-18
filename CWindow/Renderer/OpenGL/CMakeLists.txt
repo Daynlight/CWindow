@@ -4,6 +4,7 @@ set(src
   "OpenGL_Renderer.cpp"
   "../Mesh/Mesh.cpp"
   "../Shader/DrawShader.cpp"
+  "../Shader/ComputeShader.cpp"
   ${ROOT_DIR}/vendor/glad/glad-4.3/src/glad.c
 )
 set(headers

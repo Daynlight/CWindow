@@ -66,7 +66,6 @@ CW::Renderer::Renderer::Renderer() {};
 
 CW::Renderer::Renderer::~Renderer() {
   windowData.should_close = false;
-  if (pointsSSBO) glDeleteBuffers(1, &pointsSSBO);
   if (window) glfwDestroyWindow(window);
   glfwTerminate();
 };
@@ -166,31 +165,4 @@ void CW::Renderer::Renderer::beginFrame() {
 
 void CW::Renderer::Renderer::swapBuffer() {
   glfwSwapBuffers(window);
-}
-
-void CW::Renderer::Renderer::bindComputeShader(std::string shader) {
-  computeShader = shader;
-}
-
-void CW::Renderer::Renderer::runComputeShader(std::vector<float> data)
-{
-  GLuint computeShaderPart = glCreateShader(GL_COMPUTE_SHADER);
-  const char* computeShaderData = computeShader.c_str();
-  glShaderSource(computeShaderPart, 1, &computeShaderData, nullptr);
-  glCompileShader(computeShaderPart);
-  GLuint program = glCreateProgram();
-  glAttachShader(program, computeShaderPart);
-  glLinkProgram(program);
-  glUseProgram(program);
-    
-  glGenBuffers(1, &pointsSSBO);
-  glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, pointsSSBO);
-  glBufferData(GL_SHADER_STORAGE_BUFFER, data.size() * sizeof(glm::vec2), data.data(), GL_STATIC_DRAW);
-
-  glDispatchCompute(data.size(), 1, 1);
-
-  glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-
-  glDeleteShader(computeShaderPart);
-  glDeleteProgram(program);
 }

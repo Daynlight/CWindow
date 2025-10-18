@@ -28,8 +28,5 @@ public:
   virtual void setWindowTitle(const std::string& title) = 0;
   virtual void minimizedSwitch() = 0;
   virtual void maximizeSwitch() = 0;
-
-  virtual void bindComputeShader(std::string shader) = 0;
-  virtual void runComputeShader(std::vector<float> data) = 0;
 };
 };

@@ -6,6 +6,7 @@
 
 ////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
 std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
+CW::Renderer::ComputeShader* data_pass = nullptr;
 std::chrono::duration<float> delta_time;
 bool update = true;
 
@@ -32,7 +33,7 @@ std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWind
   data[2] = static_cast<float>(maxIter);
 
   if(update){
-    renderer->runComputeShader(data);
+    data_pass->run(data);
     update = false;
   }
 
@@ -61,8 +62,8 @@ int main(){
   gui->addWindow("Settings", renderSettingsWindow);
   
   // compile compute shader
-  window_renderer->bindComputeShader(Mandelbrot::compute);
-  window_renderer->runComputeShader(data);
+  data_pass = new CW::Renderer::ComputeShader(Mandelbrot::compute); 
+  data_pass->run(data);
   
   // compile vertex and fragment shader
   CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
@@ -100,6 +101,7 @@ int main(){
   };
 
   // clean up
+  delete data_pass;
   delete gui;
   delete window_renderer;
   
