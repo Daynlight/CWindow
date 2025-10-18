@@ -184,7 +184,7 @@ int main(){
 ### Info
 You can access InputData by ```renderer->getWindowData()```
 
-### Data
+### Data Access
 * should_close
 * vsync
 * window_mode
