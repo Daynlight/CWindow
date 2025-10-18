@@ -29,15 +29,12 @@ swapping window etc. Good to use in simple project or just learning shaders and 
       - [Info](#info-1)
       - [Example Window](#example-window)
     - [Full Example of Usage](#full-example-of-usage)
-  - [Renderer Usage](#renderer-usage)
   - [WindowData](#windowdata)
     - [Info](#info-2)
-    - [Data](#data)
+    - [Data Access](#data-access)
   - [InputData](#inputdata)
     - [Info](#info-3)
-    - [Data Access](#data-access)
-  - [Build-in Shaders](#build-in-shaders)
-  - [Build-in Matrices](#build-in-matrices)
+    - [Data Access](#data-access-1)
   - [Implemented optimizations](#implemented-optimizations)
   - [Full Example](#full-example)
   - [Features](#features)
@@ -159,7 +156,7 @@ int main(){
   }});
   
   // main loop
-  while(window_renderer->isRunning()){
+  while(window_renderer->getWindowData()->should_close){
     gui->render();
     window_renderer->windowEvents();
     window_renderer->swapBuffer();
@@ -174,10 +171,10 @@ int main(){
 ```
 
 
-
+<!-- 
 ## Renderer Usage
 
-
+ -->
 
 
 ## WindowData
@@ -209,11 +206,11 @@ You can access InputData by ```renderer->getInputData()```
 
 
 
-## Build-in Shaders
+<!-- ## Build-in Shaders
 
 
 
-## Build-in Matrices
+## Build-in Matrices -->
 
 
 
@@ -226,12 +223,19 @@ You can access InputData by ```renderer->getInputData()```
 #include "Gui.h"
 #include "Mandelbrot.h"
 
+#include <chrono>
+
 ////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
 std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
+CW::Renderer::ComputeShader* data_pass = nullptr;
+std::chrono::duration<float> delta_time;
 bool update = true;
 
 std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWindow = [](CW::Renderer::iRenderer *renderer){
   ImGui::Begin("Settings", nullptr);
+
+  if(delta_time.count() >= 0.0f) 
+    ImGui::Text("FPS: %.f", 1.0f / delta_time.count());
 
   if(ImGui::InputFloat2("Z_0", &data[0], "%.3f")) update = true;
   if(ImGui::SliderFloat2("Z_0 Sidler", &data[0], -3, 3, "%.3f")) update = true;
@@ -250,7 +254,7 @@ std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWind
   data[2] = static_cast<float>(maxIter);
 
   if(update){
-    renderer->runComputeShader(data);
+    data_pass->run(data);
     update = false;
   }
 
@@ -265,29 +269,54 @@ int main(){
   // init window and renderer
   window_renderer->createWindow();
   window_renderer->createRenderer();
+  window_renderer->setVsync(0);
+  window_renderer->setWindowTitle("Malgenbrota and Julia");
   
   // init gui and add Settings Window
   CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
   gui->addWindow("Settings", renderSettingsWindow);
   
   // compile compute shader
-  window_renderer->bindComputeShader(Mandelbrot::compute);
-  window_renderer->runComputeShader(data);
+  data_pass = new CW::Renderer::ComputeShader(Mandelbrot::compute); 
+  data_pass->run(data);
   
   // compile vertex and fragment shader
-  window_renderer->bindVertexShader(Mandelbrot::vertex);
-  window_renderer->bindFragmentShader(Mandelbrot::fragment);
-  window_renderer->compileShaders();
+  CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+
+  // create viewport mesh
+  std::vector<GLfloat> vertices = {
+    // Positions
+    -1.0f,  1.0f,  // Top-left
+    -1.0f, -1.0f,  // Bottom-left
+    1.0f,  1.0f,  // Top-right
+    1.0f, -1.0f,  // Bottom-right
+  };
+  std::vector<GLuint> indices = {
+    0, 1, 2,  // First triangle
+    1, 3, 2   // Second triangle
+  };
+  CW::Renderer::Mesh mesh = CW::Renderer::Mesh(vertices, indices);
+
+
+  auto last_time = std::chrono::high_resolution_clock::now();
   
   // main loop
-  while(window_renderer->isRunning()){
-    window_renderer->renderFrame();
+  while(window_renderer->getWindowData()->should_close){
+    window_renderer->beginFrame();
+    malgenbrot.render();
+    mesh.render();
+
     gui->render();
     window_renderer->windowEvents();
     window_renderer->swapBuffer();
+
+    auto new_time = std::chrono::high_resolution_clock::now();
+    delta_time = new_time - last_time;
+    last_time = new_time;
   };
 
   // clean up
+  delete data_pass;
   delete gui;
   delete window_renderer;
   
@@ -299,6 +328,8 @@ int main(){
 
 ## Features
 * Used unordered_map for window fast look up
+* On run shader compilation and reusing it
+* Mesh VAO Life time control
 
 
 ## License
