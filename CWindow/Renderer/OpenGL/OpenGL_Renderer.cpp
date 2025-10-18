@@ -102,11 +102,11 @@ void CW::Renderer::Renderer::windowEvents()
   inputData.right_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 }
 
-CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
+const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
   return &windowData;
 }
 
-CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
+const CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
   return &inputData;
 }
 

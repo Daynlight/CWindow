@@ -33,8 +33,8 @@ public:
   ~Renderer();
 
   void windowEvents();
-  WindowData* getWindowData();
-  InputData* getInputData();
+  const WindowData* getWindowData();
+  const InputData* getInputData();
   
   void createWindow();
   APIWindow* getWindow();

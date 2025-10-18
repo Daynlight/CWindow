@@ -14,8 +14,8 @@ public:
 
   virtual void createWindow() = 0;
   virtual APIWindow* getWindow() = 0;
-  virtual WindowData* getWindowData() = 0;
-  virtual InputData* getInputData() = 0;
+  virtual const WindowData* getWindowData() = 0;
+  virtual const InputData* getInputData() = 0;
 
   virtual void windowEvents() = 0;
   

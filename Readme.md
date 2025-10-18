@@ -30,6 +30,12 @@ swapping window etc. Good to use in simple project or just learning shaders and 
       - [Example Window](#example-window)
     - [Full Example of Usage](#full-example-of-usage)
   - [Renderer Usage](#renderer-usage)
+  - [WindowData](#windowdata)
+    - [Info](#info-2)
+    - [Data](#data)
+  - [InputData](#inputdata)
+    - [Info](#info-3)
+    - [Data Access](#data-access)
   - [Build-in Shaders](#build-in-shaders)
   - [Build-in Matrices](#build-in-matrices)
   - [Implemented optimizations](#implemented-optimizations)
@@ -170,6 +176,36 @@ int main(){
 
 
 ## Renderer Usage
+
+
+
+
+## WindowData
+### Info
+You can access InputData by ```renderer->getWindowData()```
+
+### Data
+* should_close
+* vsync
+* window_mode
+* title
+* is_focused
+* is_minimize
+* is_maximize
+
+
+## InputData
+### Info
+You can access InputData by ```renderer->getInputData()```
+
+### Data Access
+* mouse_x;
+* mouse_y;
+* scroll_x;
+* scroll_y;
+* scroll_is_down;
+* left_mouse_button_is_down;
+* right_mouse_button_is_down;
 
 
 
