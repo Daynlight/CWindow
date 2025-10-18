@@ -2,6 +2,7 @@
 #include "Macro.h"
 #include "../iRenderer.h"
 #include "../WindowData.h"
+#include "../InputData.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -25,18 +26,15 @@ private:
   GLuint compiledShader;
 
   WindowData windowData;
-
-private:
-  void updateWindowMode();
-  void updateVsync();
-  void updateWindowTitle();
-
+  InputData inputData;
+  
 public:
   Renderer();
   ~Renderer();
 
   void windowEvents();
   WindowData* getWindowData();
+  InputData* getInputData();
   
   void createWindow();
   APIWindow* getWindow();

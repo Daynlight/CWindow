@@ -1,5 +1,7 @@
 #include "OpenGL_Renderer.h"
 
+static double scroll_x, scroll_y;
+
 void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -86,10 +88,23 @@ void CW::Renderer::Renderer::windowEvents()
   windowData.height = height;
   windowData.x = x;
   windowData.y = y;
+
+  double mouse_x, mouse_y;
+  glfwGetCursorPos(window, &mouse_x, &mouse_y);
+  inputData.mouse_x = mouse_x;
+  inputData.mouse_y = mouse_y;
+  inputData.scroll_x = scroll_x;
+  inputData.scroll_y = scroll_y;
+  scroll_x = 0;
+  scroll_y = 0;
 }
 
 CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
   return &windowData;
+}
+
+CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
+  return &inputData;
 }
 
 void CW::Renderer::Renderer::createWindow()
@@ -114,6 +129,11 @@ void CW::Renderer::Renderer::createWindow()
   };
 
   glfwMakeContextCurrent(window);
+
+  glfwSetScrollCallback(window, [](GLFWwindow* window, double xOffset, double yOffset) {
+    scroll_x = xOffset;
+    scroll_y = yOffset;
+  });
 }
 
 APIWindow* CW::Renderer::Renderer::getWindow()

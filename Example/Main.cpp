@@ -81,6 +81,8 @@ int main(){
     auto new_time = std::chrono::high_resolution_clock::now();
     delta_time = new_time - last_time;
     last_time = new_time;
+
+    printf("%.f : %.f\n", window_renderer->getInputData()->scroll_x, window_renderer->getInputData()->scroll_y);
   };
 
   // clean up

@@ -1,6 +1,7 @@
 #pragma once
 #include "../Macro.h"
 #include "WindowData.h"
+#include "InputData.h"
 #include "../vendor/glm/glm/glm.hpp"
 #include <string>
 #include <vector>
@@ -14,6 +15,7 @@ public:
   virtual void createWindow() = 0;
   virtual APIWindow* getWindow() = 0;
   virtual WindowData* getWindowData() = 0;
+  virtual InputData* getInputData() = 0;
 
   virtual void windowEvents() = 0;
   
