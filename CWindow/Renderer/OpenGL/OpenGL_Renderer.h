@@ -25,7 +25,6 @@ public:
   Renderer();
   ~Renderer();
 
-  void windowEvents();
   const WindowData* getWindowData();
   const InputData* getInputData();
   
@@ -34,15 +33,13 @@ public:
   void createRenderer();
   void beginFrame();
   void swapBuffer();
-
+  
+  void windowEvents();
   void setWindowMode(CW::Renderer::WindowMode mode);
-  void setVsync(bool vsync);
   void setWindowTitle(const std::string& title);
+  void setVsync(bool vsync);
   void minimizedSwitch();
   void maximizeSwitch();
-
-  void runComputeShader(std::vector<float> data);
-  
 };
 };
 

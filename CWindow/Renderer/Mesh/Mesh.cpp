@@ -10,7 +10,7 @@ CW::Renderer::Mesh::~Mesh() {
 
 void CW::Renderer::Mesh::render() {
   glBindVertexArray(VAO);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLES, indices_amount, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 }
 
@@ -29,6 +29,7 @@ void CW::Renderer::Mesh::bind(std::vector<GLfloat> vertices, std::vector<GLuint>
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  indices_amount = indices.size();
 }
 
 void CW::Renderer::Mesh::unbind() {

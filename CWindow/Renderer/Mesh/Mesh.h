@@ -10,6 +10,8 @@ namespace CW::Renderer{
 class Mesh{
 private:
   GLuint VAO, VBO, EBO;
+  unsigned int indices_amount = 0;
+
 public:
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
   ~Mesh();
