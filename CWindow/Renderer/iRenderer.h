@@ -1,8 +1,11 @@
 #pragma once
 #include "../Macro.h"
+
 #include "Data/WindowData.h"
 #include "Data/InputData.h"
-#include "../vendor/glm/glm/glm.hpp"
+
+#include "glm/glm.hpp"
+
 #include <string>
 #include <vector>
 #include <functional>
