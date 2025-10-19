@@ -18,12 +18,14 @@ struct WindowData{
   bool is_minimize = false;
   bool is_maximize = false;
   bool is_cursor_visible = true;
+  float delta_time = 0.0f;
+  
+  
   bool is_resizing = false;
   bool is_dragging = false;
   bool is_mouse_over = false; 
   bool is_keyboard_input_enabled = true;
   float opacity = 1.0f;
-  float delta_time = 0.0f;
   unsigned int width;
   unsigned int height;
   unsigned int x;
