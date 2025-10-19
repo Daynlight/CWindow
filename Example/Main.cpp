@@ -8,6 +8,10 @@ CW::Renderer::iRenderer* window = nullptr;
 CW::Gui::iGui* gui = nullptr;
 CW::Renderer::DrawShader* malgenbrot = nullptr;
 CW::Renderer::Uniform* uniform  = nullptr;
+const float scroll_sensitivity = 0.02f; 
+const float sensitivity = 20.0f;
+glm::vec2 last_world_pos;
+glm::vec2 last_mouse_pos;
 
 
 
@@ -67,6 +71,8 @@ int main(){
   (*uniform)["z"]->set<glm::vec2>({0.0f, 0.5f});
   (*uniform)["maxIter"]->set<int>(500);
   (*uniform)["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
+  (*uniform)["world_pos"]->set<glm::vec2>({0.0f, 0.0f});
+  (*uniform)["zoom"]->set<float>(1.0f);
 
   // create viewport mesh
   CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
@@ -88,6 +94,30 @@ int main(){
     malgenbrot->bind();
     viewport.render();
     malgenbrot->unbind();
+
+    if(window->getInputData()->right_mouse_button_is_down){
+      (*uniform)["z"]->set<glm::vec2>({
+        2 * (window->getWindowData()->width / 2 - window->getInputData()->mouse_x) / window->getWindowData()->width, 
+        2 * (window->getWindowData()->height / 2 - window->getInputData()->mouse_y) / window->getWindowData()->height
+      });
+    }
+
+    if(window->getInputData()->scroll_is_down){
+      (*uniform)["world_pos"]->set<glm::vec2>({
+        last_world_pos.x + (window->getInputData()->mouse_x - last_mouse_pos.x) / (*uniform)["zoom"]->get<float>(), 
+        last_world_pos.y + (window->getInputData()->mouse_y - last_mouse_pos.y) / (*uniform)["zoom"]->get<float>()
+      });
+    }
+    else{
+      last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
+      last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
+    };
+
+
+    float zoom = (*uniform)["zoom"]->get<float>();
+    zoom += window->getInputData()->scroll_y * scroll_sensitivity * zoom;
+    zoom = glm::clamp(zoom, 0.0001f, 10.0f);
+    (*uniform)["zoom"]->set<float>(zoom);
 
     gui->render();
     window->windowEvents();

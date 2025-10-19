@@ -19,13 +19,15 @@ out vec4 FragColor;
 uniform vec3 colors;
 uniform int maxIter;
 uniform vec2 z;
+uniform vec2 world_pos;
+uniform float zoom;
 
 void main() {
-    vec2 a1 = (gl_FragCoord.xy / vec2(800.0, 600.0)) * 3.0 - vec2(2.0, 1.5);
+    vec2 a1 = (gl_FragCoord.xy - vec2(800.0, 600.0) / 2  + world_pos) / vec2(800.0, 600.0)  * zoom;
     vec2 c = z;
     if (z.x == 0.0f && z.y == 0.0f){
         a1 = z;
-        c = (gl_FragCoord.xy / vec2(800.0, 600.0)) * 3.0 - vec2(2.0, 1.5);
+        c = (gl_FragCoord.xy - vec2(800.0, 600.0) / 2  + world_pos) / vec2(800.0, 600.0)  * zoom;
     }
     vec2 a2 = a1;
     
