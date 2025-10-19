@@ -21,13 +21,18 @@ uniform int maxIter;
 uniform vec2 z;
 uniform vec2 world_pos;
 uniform float zoom;
+uniform vec2 window_ratio;
+
 
 void main() {
-    vec2 a1 = (gl_FragCoord.xy - vec2(800.0, 600.0) / 2  + world_pos) / vec2(800.0, 600.0)  * zoom;
+    float ratio = window_ratio.y / window_ratio.x;
+    vec2 a1 = ((gl_FragCoord.xy - window_ratio / 2) / window_ratio) * zoom + world_pos / window_ratio;
+    a1.y = a1.y * ratio;
+    
     vec2 c = z;
     if (z.x == 0.0f && z.y == 0.0f){
         a1 = z;
-        c = (gl_FragCoord.xy - vec2(800.0, 600.0) / 2  + world_pos) / vec2(800.0, 600.0)  * zoom;
+        c = a1;
     }
     vec2 a2 = a1;
     
