@@ -8,6 +8,8 @@ CW::Renderer::iRenderer* window = nullptr;
 CW::Gui::iGui* gui = nullptr;
 CW::Renderer::DrawShader* malgenbrot = nullptr;
 CW::Renderer::Uniform* uniform  = nullptr;
+
+
 const float scroll_sensitivity = 0.02f; 
 const float sensitivity = 20.0f;
 glm::vec2 last_world_pos;
