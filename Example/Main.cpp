@@ -58,7 +58,7 @@ int main(){
   gui = new CW::Gui::Gui(window);
   gui->addWindow("Settings", renderSettingsWindow);
   
-  // compile uniform and malgenbrota shader
+  // create uniform and malgenbrota shader
   uniform = new CW::Renderer::Uniform();
   malgenbrot = new CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
   malgenbrot->getUniforms().emplace_back(uniform);
@@ -84,6 +84,7 @@ int main(){
   // main loop
   while(window->getWindowData()->should_close){
     window->beginFrame();
+
     malgenbrot->bind();
     viewport.render();
     malgenbrot->unbind();
