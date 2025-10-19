@@ -60,7 +60,8 @@ int main(){
   
   // compile uniform and malgenbrota shader
   uniform = new CW::Renderer::Uniform();
-  malgenbrot = new CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment, uniform);
+  malgenbrot = new CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+  malgenbrot->getUniforms().emplace_back(uniform);
 
   // uniform default values
   (*uniform)["z"]->set<glm::vec2>({0.0f, 0.5f});
