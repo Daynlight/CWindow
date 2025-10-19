@@ -12,7 +12,9 @@ const float scroll_sensitivity = 0.02f;
 const float sensitivity = 20.0f;
 glm::vec2 last_world_pos;
 glm::vec2 last_mouse_pos;
-
+bool animation = false;
+const float zoom_speed = 0.005;
+float current_zoom_speed = 0.005;
 
 
 
@@ -34,7 +36,21 @@ std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](C
   ImGui::ColorPicker3("colors", &colors[0]);
 
   ImGui::InputInt("MaxIter", &maxIter);
+  
+  if(ImGui::Button("Animation")) 
+    animation = !animation;
+
   ImGui::End();
+
+  if(animation){
+    if((*uniform)["zoom"]->get<float>() < 0.002) 
+      current_zoom_speed = -1 * (zoom_speed);
+
+    if((*uniform)["zoom"]->get<float>() > 3)
+      current_zoom_speed = (zoom_speed);
+     
+    (*uniform)["zoom"]->set<float>((*uniform)["zoom"]->get<float>() - (*uniform)["zoom"]->get<float>() * current_zoom_speed);
+  }
 
   (*uniform)["z"]->set<glm::vec2>(z);
   (*uniform)["maxIter"]->set<int>(maxIter);
@@ -64,10 +80,10 @@ int main(){
   malgenbrot->getUniforms().emplace_back(uniform);
 
   // uniform default values
-  (*uniform)["z"]->set<glm::vec2>({0.0f, 0.5f});
+  (*uniform)["z"]->set<glm::vec2>({0.394f, 0.355f});
   (*uniform)["maxIter"]->set<int>(500);
   (*uniform)["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
-  (*uniform)["world_pos"]->set<glm::vec2>({0.0f, 0.0f});
+  (*uniform)["world_pos"]->set<glm::vec2>({20.0f, 0.0f});
   (*uniform)["zoom"]->set<float>(3.0f);
   (*uniform)["window_ratio"]->set<glm::vec2>({
     window->getWindowData()->width,
