@@ -1,12 +1,9 @@
 #include "OpenGL_Renderer.h"
 #include "Gui.h"
 #include "Mandelbrot.h"
-
 #include <chrono>
 
-////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
-std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
-CW::Renderer::ComputeShader* data_pass = nullptr;
+CW::Renderer::Uniform uniform;
 std::chrono::duration<float> delta_time;
 bool update = true;
 
@@ -16,24 +13,29 @@ std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWind
   if(delta_time.count() >= 0.0f) 
     ImGui::Text("FPS: %.f", 1.0f / delta_time.count());
 
-  if(ImGui::InputFloat2("Z_0", &data[0], "%.3f")) update = true;
-  if(ImGui::SliderFloat2("Z_0 Sidler", &data[0], -3, 3, "%.3f")) update = true;
-  if(ImGui::InputFloat3("colors", &data[3], "%.3f")) update = true;
-  if(ImGui::ColorPicker3("colors", &data[3])){
+  glm::vec2 z = uniform["z"]->get<glm::vec2>(); 
+  int maxIter = uniform["maxIter"]->get<int>();
+  glm::vec3 colors = uniform["colors"]->get<glm::vec3>();
+
+  if(ImGui::InputFloat2("Z_0", &z[0], "%.3f")) update = true;
+  if(ImGui::SliderFloat2("Z_0 Sidler", &z[0], -3, 3, "%.3f")) update = true;
+  if(ImGui::InputFloat3("colors", &colors[0], "%.3f")) update = true;
+  if(ImGui::ColorPicker3("colors", &colors[0])){
     for(int i = 0; i < 3; i++){
-      if(data[3 + i] >1) data[3 + i] /= 255;
-      data[3 + i] *= 255;
+      if(colors[0] >1) colors[0] /= 255;
+      colors[0] *= 255;
     }
     
     update = true;
   }
 
-  int maxIter = static_cast<int>(data[2]);
   if(ImGui::InputInt("MaxIter", &maxIter)) update = true;
-  data[2] = static_cast<float>(maxIter);
 
   if(update){
-    data_pass->run(data);
+    uniform["z"]->set<glm::vec2>(z);
+    uniform["maxIter"]->set<int>(maxIter);
+    uniform["colors"]->set<glm::vec3>(colors);
+    uniform.compile();
     update = false;
   }
 
@@ -61,12 +63,13 @@ int main(){
   CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
   gui->addWindow("Settings", renderSettingsWindow);
   
-  // compile compute shader
-  data_pass = new CW::Renderer::ComputeShader(Mandelbrot::compute); 
-  data_pass->run(data);
-  
-  // compile vertex and fragment shader
-  CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+  // compile drawShader
+  uniform["z"]->set<glm::vec2>({0.0f, 0.5f});
+  uniform["maxIter"]->set<int>(500);
+  uniform["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
+  uniform.compile();
+  CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment, &uniform);
+
 
   // create viewport mesh
   std::vector<GLfloat> vertices = {
@@ -88,8 +91,9 @@ int main(){
   // main loop
   while(window_renderer->getWindowData()->should_close){
     window_renderer->beginFrame();
-    malgenbrot.render();
+    malgenbrot.bind();
     mesh.render();
+    malgenbrot.unbind();
 
     gui->render();
     window_renderer->windowEvents();
@@ -101,7 +105,6 @@ int main(){
   };
 
   // clean up
-  delete data_pass;
   delete gui;
   delete window_renderer;
   

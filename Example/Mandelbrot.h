@@ -16,20 +16,18 @@ std::string fragment = R"(
 
 out vec4 FragColor;
 
-layout(std430, binding = 0) buffer ColorBuffer {
-    vec2 data[];
-};
+uniform vec3 colors;
+uniform int maxIter;
+uniform vec2 z;
 
 void main() {
-    int maxIter = int(data[1].x);
     vec2 a1 = (gl_FragCoord.xy / vec2(800.0, 600.0)) * 3.0 - vec2(2.0, 1.5);
-    vec2 c = data[0];
-    if (data[0].x == 0.0f && data[0].y == 0.0f){
-        a1 = data[0];
+    vec2 c = z;
+    if (z.x == 0.0f && z.y == 0.0f){
+        a1 = z;
         c = (gl_FragCoord.xy / vec2(800.0, 600.0)) * 3.0 - vec2(2.0, 1.5);
     }
     vec2 a2 = a1;
-    vec3 colors = {data[1].y, data[2].x, data[2].y};
     
     int j = 0;
     for(int i = 0; i < maxIter; i++){
@@ -52,23 +50,8 @@ void main() {
     );
 
     float smoothColor = smoothstep(0.0, 1.0, length(a2));
+    
     FragColor = vec4(color * smoothColor, 1.0);
 }
 )";
-
-
-
-std::string compute = R"(
-#version 430 core
-
-layout(std430, binding = 0) buffer InputBuffer {
-    vec2 data[];  // Input data
-};
-
-void main() {
-    uint idx = gl_GlobalInvocationID.x;
-    data[idx] = data[idx];
-}
-)";
-
 };

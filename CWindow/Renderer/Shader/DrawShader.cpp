@@ -1,8 +1,7 @@
 #include "DrawShader.h"
 
-CW::Renderer::DrawShader::DrawShader(const std::string &vertex, const std::string &fragment){
-  this->vertex = vertex;
-  this->fragment = fragment;
+CW::Renderer::DrawShader::DrawShader(const std::string &vertex, const std::string &fragment, const CW::Renderer::Uniform* uniform)
+  :vertex(vertex), fragment(fragment), uniform(uniform) {
   compile();
 }
 
@@ -10,9 +9,18 @@ CW::Renderer::DrawShader::~DrawShader(){
   destroy();
 }
 
-void CW::Renderer::DrawShader::render() {
+void CW::Renderer::DrawShader::bind() {
   if(!is_compiled) compile();
   glUseProgram(compiledShader);
+  if(uniform && uniform->getUBO()) {
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform->getUBO());  
+    uniform->bind(compiledShader);
+  };
+};
+
+void CW::Renderer::DrawShader::unbind(){
+  glUseProgram(0); 
+  glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0);
 }
 
 void CW::Renderer::DrawShader::compile() {
