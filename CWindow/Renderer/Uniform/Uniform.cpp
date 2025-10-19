@@ -1,8 +1,7 @@
 #include "Uniform.h"
 
-CW::Renderer::Uniform::Uniform(std::unordered_map<std::string, UniformData>* data){
-  if(data)
-    this->data = *data; 
+CW::Renderer::Uniform::Uniform() { 
+  compile();
 };
 
 CW::Renderer::Uniform::~Uniform() {
@@ -10,7 +9,8 @@ CW::Renderer::Uniform::~Uniform() {
 };
 
 void CW::Renderer::Uniform::compile() {
-  if(UBO) destroy();
+  if(UBO) 
+    destroy();
 
   glGenBuffers(1, &UBO);
   glBindBuffer(GL_UNIFORM_BUFFER, UBO);
@@ -33,11 +33,11 @@ void CW::Renderer::Uniform::compile() {
 }
 
 void CW::Renderer::Uniform::destroy() {
-  if (UBO != 0) {
+  if (UBO) {
     glDeleteBuffers(1, &UBO);
     UBO = 0;
-  }
-}
+  };
+};
 
 bool CW::Renderer::Uniform::contains(const std::string &name){
   return data.contains(name);

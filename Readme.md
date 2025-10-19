@@ -189,6 +189,7 @@ You can access InputData by ```renderer->getWindowData()```
 * is_focused
 * is_minimize
 * is_maximize
+* delta_time
 
 
 ## InputData

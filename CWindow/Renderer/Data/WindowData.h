@@ -23,6 +23,7 @@ struct WindowData{
   bool is_mouse_over = false; 
   bool is_keyboard_input_enabled = true;
   float opacity = 1.0f;
+  float delta_time = 0.0f;
   unsigned int width;
   unsigned int height;
   unsigned int x;
@@ -32,6 +33,5 @@ struct WindowData{
   std::chrono::high_resolution_clock::time_point on_time;
   unsigned int monitor;
   unsigned int monitor_count;
-  std::chrono::duration<float> delta_time;
 };
 };

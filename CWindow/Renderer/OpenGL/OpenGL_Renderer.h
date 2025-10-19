@@ -13,11 +13,13 @@
 #include <vector>
 #include <stdexcept>
 #include <functional>
+#include <chrono>
 
 namespace CW::Renderer{
 class Renderer : public iRenderer {
 private:
   APIWindow* window;
+  std::chrono::time_point<std::chrono::high_resolution_clock> last_time = std::chrono::high_resolution_clock::now();
   
   WindowData windowData;
   InputData inputData;

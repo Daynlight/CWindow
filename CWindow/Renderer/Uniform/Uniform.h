@@ -37,7 +37,7 @@ private:
   std::unordered_map<std::string, UniformData> data;
 
 public:
-  Uniform(std::unordered_map<std::string, UniformData>* data = nullptr);
+  Uniform();
   ~Uniform();
   void compile();
   void destroy();
