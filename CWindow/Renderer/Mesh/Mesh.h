@@ -10,13 +10,16 @@ namespace CW::Renderer{
 class Mesh{
 private:
   GLuint VAO, VBO, EBO;
-  unsigned int indices_amount = 0;
+  std::vector<GLfloat> vertices;
+  std::vector<GLuint> indices;
+
+private:
+  void compile();
+  void destroy();
 
 public:
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
   ~Mesh();
   void render();
-  void bind(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
-  void unbind();
 };
 };
