@@ -12,15 +12,15 @@ CW::Renderer::Uniform* uniform  = nullptr;
 
 
 
-std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](CW::Renderer::iRenderer *renderer){
+std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](CW::Renderer::iRenderer *window){
   glm::vec2 z = (*uniform)["z"]->get<glm::vec2>(); 
   int maxIter = (*uniform)["maxIter"]->get<int>();
   glm::vec3 colors = (*uniform)["colors"]->get<glm::vec3>();
 
   ImGui::Begin("Settings", nullptr);
 
-  if(renderer->getWindowData()->delta_time >= 0.0f) 
-    ImGui::Text("FPS: %.f", 1.0f / renderer->getWindowData()->delta_time);
+  if(window->getWindowData()->delta_time >= 0.0f) 
+    ImGui::Text("FPS: %.f", 1.0f / window->getWindowData()->delta_time);
 
   ImGui::InputFloat2("Z_0", &z[0], "%.3f");
   ImGui::SliderFloat2("Z_0 Sidler", &z[0], -3, 3, "%.3f");
