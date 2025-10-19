@@ -1,8 +1,7 @@
 #include "ComputeShader.h"
 
-CW::Renderer::ComputeShader::ComputeShader(const std::string &compute_shader, bool save_on_gup){
-  this->compute_shader = compute_shader;
-  this->save_on_gup = save_on_gup;
+CW::Renderer::ComputeShader::ComputeShader(const std::string &compute_shader, bool save_on_gup)
+  :compute_shader(compute_shader), save_on_gup(save_on_gup){
   compile();
 }
 
@@ -28,15 +27,20 @@ void CW::Renderer::ComputeShader::compile() {
   const char* computeShaderData = compute_shader.c_str();
   glShaderSource(computeShaderPart, 1, &computeShaderData, nullptr);
   glCompileShader(computeShaderPart);
+
   compiledShader = glCreateProgram();
   glAttachShader(compiledShader, computeShaderPart);
   glLinkProgram(compiledShader);
+  
   glDeleteShader(computeShaderPart);
   is_compiled = true;
 }
 
 void CW::Renderer::ComputeShader::destroy() {
   glDeleteProgram(compiledShader);
-  if (pointsSSBO) glDeleteBuffers(1, &pointsSSBO);
+  
+  if (pointsSSBO) 
+    glDeleteBuffers(1, &pointsSSBO);
+
   is_compiled = false;
 };

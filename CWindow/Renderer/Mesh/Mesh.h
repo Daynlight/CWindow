@@ -13,13 +13,13 @@ private:
   std::vector<GLfloat> vertices;
   std::vector<GLuint> indices;
 
-private:
-  void compile();
-  void destroy();
-
 public:
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
   ~Mesh();
+
   void render();
+
+  void compile();
+  void destroy();
 };
 };
