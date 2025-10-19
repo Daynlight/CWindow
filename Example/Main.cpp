@@ -71,10 +71,10 @@ int main(){
   // create viewport mesh
   CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
   {
-    -1.0f,  1.0f,
-    -1.0f, -1.0f,
-    1.0f,  1.0f,
-    1.0f, -1.0f,
+    -1.0f,  1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f,
+    1.0f,  1.0f, 0.0f,
+    1.0f, -1.0f, 0.0f,
   }, 
   {
     0, 1, 2,
