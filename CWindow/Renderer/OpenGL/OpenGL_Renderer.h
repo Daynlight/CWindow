@@ -4,6 +4,7 @@
 #include "../Mesh/Mesh.h"
 #include "../Shader/DrawShader.h"
 #include "../Shader/ComputeShader.h"
+#include "../Uniform/Uniform.h"
 #include "../Data/WindowData.h"
 #include "../Data/InputData.h"
 
