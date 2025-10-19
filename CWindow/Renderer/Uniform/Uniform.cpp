@@ -18,15 +18,14 @@ void CW::Renderer::Uniform::compile() {
   unsigned int bufferSize = 0;
   unsigned int offset = 0;
 
-  for (const auto& el : data) {
-      bufferSize += el.second.size;
-  }
+  for (const auto& el : data)
+      bufferSize += sizeof(el.second.type);
 
   glBufferData(GL_UNIFORM_BUFFER, bufferSize, nullptr, GL_DYNAMIC_DRAW);
 
   for (auto& el : data) {
-      glBufferSubData(GL_UNIFORM_BUFFER, offset, el.second.size, &el.second.value);
-      offset += el.second.size;
+      glBufferSubData(GL_UNIFORM_BUFFER, offset, sizeof(el.second.type), &el.second.value);
+      offset += sizeof(el.second.type);
   }
 
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -38,10 +37,6 @@ void CW::Renderer::Uniform::destroy() {
     UBO = 0;
   };
 };
-
-bool CW::Renderer::Uniform::contains(const std::string &name){
-  return data.contains(name);
-}
 
 void CW::Renderer::Uniform::bind(GLuint& shader) const{
   for (auto& el : data) {
@@ -66,12 +61,8 @@ void CW::Renderer::Uniform::bind(GLuint& shader) const{
   };
 };
 
-GLuint CW::Renderer::Uniform::getUBO() const {
-  return UBO;
-}
-
 CW::Renderer::UniformData *CW::Renderer::Uniform::operator[](const std::string &name){
-  if(!contains(name))
+  if(!data.contains(name))
     data[name] = CW::Renderer::UniformData();
 
   return &(data[name]);

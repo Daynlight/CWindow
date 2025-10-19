@@ -5,6 +5,7 @@
 
 
 CW::Renderer::iRenderer* window = nullptr;
+CW::Gui::iGui* gui = nullptr;
 CW::Renderer::DrawShader* malgenbrot = nullptr;
 CW::Renderer::Uniform* uniform  = nullptr;
 
@@ -54,7 +55,7 @@ int main(){
   window->setWindowTitle("Malgenbrota and Julia");
   
   // init gui and add Settings Window
-  CW::Gui::iGui* gui = new CW::Gui::Gui(window);
+  gui = new CW::Gui::Gui(window);
   gui->addWindow("Settings", renderSettingsWindow);
   
   // compile uniform and malgenbrota shader
@@ -67,17 +68,17 @@ int main(){
   (*uniform)["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
 
   // create viewport mesh
-  std::vector<GLfloat> vertices = {
+  CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
+  {
     -1.0f,  1.0f,
     -1.0f, -1.0f,
     1.0f,  1.0f,
     1.0f, -1.0f,
-  };
-  std::vector<GLuint> indices = {
+  }, 
+  {
     0, 1, 2,
     1, 3, 2
-  };
-  CW::Renderer::Mesh viewport = CW::Renderer::Mesh(vertices, indices);
+  });
   
   // main loop
   while(window->getWindowData()->should_close){

@@ -10,17 +10,15 @@ CW::Renderer::DrawShader::~DrawShader(){
 }
 
 void CW::Renderer::DrawShader::bind() {
-  if(!is_compiled) compile();
+  if(!is_compiled) 
+    compile();
   glUseProgram(compiledShader);
-  if(uniform && uniform->getUBO()) {
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uniform->getUBO());  
+  if(uniform) 
     uniform->bind(compiledShader);
-  };
 };
 
 void CW::Renderer::DrawShader::unbind(){
-  glUseProgram(0); 
-  glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0);
+  glUseProgram(0);
 }
 
 void CW::Renderer::DrawShader::compile() {
