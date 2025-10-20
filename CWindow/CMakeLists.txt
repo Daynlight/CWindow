@@ -8,6 +8,11 @@ set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Root directory of the proje
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pg")
+  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -pg")
+endif()
+
 
 
 ############# [Set Variables] #############

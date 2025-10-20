@@ -62,8 +62,9 @@ void CW::Renderer::Renderer::maximizeSwitch() {
 
 
 
-CW::Renderer::Renderer::Renderer() { 
-  createWindow(); 
+CW::Renderer::Renderer::Renderer(bool windowless) { 
+  if(!windowless) createWindow(); 
+  else windowLessRenderer();
   createRenderer();
 };
 
@@ -144,6 +145,31 @@ void CW::Renderer::Renderer::createWindow()
     scroll_y = yOffset;
   });
 }
+
+void CW::Renderer::Renderer::windowLessRenderer() {
+  if (!glfwInit()) {
+    windowData.should_close = false;
+    throw std::runtime_error("Can't initialize GLFW");
+  }
+
+  // Tell GLFW to make the window invisible
+  glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+  // Create a tiny, hidden window just for the context
+  window = glfwCreateWindow(1, 1, "", nullptr, nullptr);
+  if (!window) {
+    windowData.should_close = false;
+    glfwTerminate();
+    throw std::runtime_error("Can't create hidden window for headless renderer");
+  }
+
+  glfwMakeContextCurrent(window); // Make context current
+}
+
 
 APIWindow* CW::Renderer::Renderer::getWindow() {
   return window;

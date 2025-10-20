@@ -24,17 +24,19 @@ private:
   APIWindow* window;
   std::chrono::time_point<std::chrono::high_resolution_clock> last_time = std::chrono::high_resolution_clock::now();
   
+  bool windowless = false;
   WindowData windowData;
   InputData inputData;
   
 public:
-  Renderer();
+  Renderer(bool windowless = false);
   ~Renderer();
 
   const WindowData* getWindowData();
   const InputData* getInputData();
   
   void createWindow();
+  void windowLessRenderer();
   APIWindow* getWindow();
   void createRenderer();
   void beginFrame();

@@ -4,7 +4,7 @@
 
 
 int main(){
-  CW::Renderer::iRenderer* window = new CW::Renderer::Renderer();
+  CW::Renderer::iRenderer* window = new CW::Renderer::Renderer(true);
   
   // init window and renderer
   window->setVsync(0);
