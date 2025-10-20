@@ -488,7 +488,7 @@ int main(){
 ## Libraries
 * [glfw](https://github.com/glfw/glfw)
 * [glad](https://glad.dav1d.de/)
-* [imgui](https://github.com/ocornut/imgui)
+* [imgui](https://github.com/ocornut/imgui/tree/docking)
 * [glm](https://github.com/g-truc/glm)
 
 
