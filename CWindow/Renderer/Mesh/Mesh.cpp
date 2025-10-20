@@ -1,15 +1,16 @@
 #include "Mesh.h"
 
 CW::Renderer::Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices) 
-  :vertices(vertices), indices(indices) {
-  compile();
-};
+  :vertices(vertices), indices(indices) {};
 
 CW::Renderer::Mesh::~Mesh() {
  destroy();
 };
 
 void CW::Renderer::Mesh::render() {
+  if(!VAO)
+    compile();
+
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);

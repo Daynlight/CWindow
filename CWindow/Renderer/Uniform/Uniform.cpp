@@ -1,8 +1,6 @@
 #include "Uniform.h"
 
-CW::Renderer::Uniform::Uniform() { 
-  compile();
-};
+CW::Renderer::Uniform::Uniform() { };
 
 CW::Renderer::Uniform::~Uniform() {
   destroy();
@@ -38,7 +36,10 @@ void CW::Renderer::Uniform::destroy() {
   };
 };
 
-void CW::Renderer::Uniform::bind(GLuint& shader) const{
+void CW::Renderer::Uniform::bind(GLuint& shader) const {
+  if(!UBO) 
+    const_cast<CW::Renderer::Uniform*>(this)->compile();
+  
   for (auto& el : data) {
     GLuint loc = glGetUniformLocation(shader, el.first.c_str());
 
@@ -50,9 +51,21 @@ void CW::Renderer::Uniform::bind(GLuint& shader) const{
       glm::vec3 data = std::get<glm::vec3>(el.second.value);
       glUniform3fv(loc, 1, &data[0]);
     }
+    else if(el.second.type == &typeid(glm::dvec2)){
+      glm::dvec2 data = std::get<glm::dvec2>(el.second.value);
+      glUniform2dv(loc, 1, &data[0]);
+    }
+    else if(el.second.type == &typeid(glm::dvec3)){
+      glm::dvec3 data = std::get<glm::dvec3>(el.second.value);
+      glUniform3dv(loc, 1, &data[0]);
+    }
     else if(el.second.type == &typeid(float)){
       float data = std::get<float>(el.second.value);
       glUniform1fv(loc, 1, &data); 
+    }
+    else if(el.second.type == &typeid(double)){
+      double data = std::get<double>(el.second.value);
+      glUniform1dv(loc, 1, &data);
     }
     else if(el.second.type == &typeid(int)){
       int data = std::get<int>(el.second.value);

@@ -11,18 +11,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 ############# [Set Variables] #############
-# [OPENGL/VULKAN/DIRECTX/METAL]
+# [OPENGL/VULKAN/DIRECTX]
 if(NOT DEFINED RENDERER)
   set(RENDERER "OPENGL")
 endif() 
-# [UNIX/WIN32/MACOS]
+# [UNIX/WIN32]
 if(NOT DEFINED PLATFORM)
   if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     set(PLATFORM "WIN32")
   elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(PLATFORM "UNIX")
-  elseif(${CMAKE_SYSTEM_NAME} STREQUAL "macOS")
-    set(PLATFORM "MACOS")
   else()
     message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
   endif()

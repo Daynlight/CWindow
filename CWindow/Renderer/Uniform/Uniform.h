@@ -9,7 +9,7 @@
 #include <typeinfo>
 
 namespace CW::Renderer{
-using DataVariants = std::variant<int, float, glm::vec2, glm::vec3>;
+using DataVariants = std::variant<int, float, double, glm::vec2, glm::vec3, glm::dvec2, glm::dvec3>;
 struct UniformData{
   DataVariants value = 0.0f;
   const std::type_info* type = &typeid(float);
@@ -32,14 +32,13 @@ class Uniform{
 private:
   GLuint UBO;
   std::unordered_map<std::string, UniformData> data;
-
-private:
-  void compile();
-  void destroy();
-
+  
 public:
   Uniform();
   ~Uniform();
+
+  void compile();
+  void destroy();
 
   void bind(GLuint& shader) const;
   UniformData* operator[](const std::string& name);

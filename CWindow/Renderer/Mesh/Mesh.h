@@ -16,9 +16,9 @@ public:
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
   ~Mesh();
 
-  void render();
-
   void compile();
   void destroy();
+  
+  void render();
 };
 };
