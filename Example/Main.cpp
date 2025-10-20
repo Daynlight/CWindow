@@ -10,18 +10,18 @@ CW::Renderer::DrawShader* malgenbrot = nullptr;
 CW::Renderer::Uniform* uniform  = nullptr;
 
 
-const float scroll_sensitivity = 0.02f; 
-const float sensitivity = 20.0f;
-glm::vec2 last_world_pos;
-glm::vec2 last_mouse_pos;
+const double scroll_sensitivity = 0.02f; 
+const double sensitivity = 20.0f;
+glm::dvec2 last_world_pos;
+glm::dvec2 last_mouse_pos;
 bool animation = false;
-const float zoom_speed = 0.005;
-float current_zoom_speed = 0.005;
+const double zoom_speed = 0.005;
+double current_zoom_speed = 0.005;
 
 
 
 std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](CW::Renderer::iRenderer *window){
-  glm::vec2 z = (*uniform)["z"]->get<glm::vec2>(); 
+  glm::dvec2 z = (*uniform)["z"]->get<glm::dvec2>(); 
   int maxIter = (*uniform)["maxIter"]->get<int>();
   glm::vec3 colors = (*uniform)["colors"]->get<glm::vec3>();
   colors /= 255;
@@ -31,8 +31,8 @@ std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](C
   if(window->getWindowData()->delta_time >= 0.0f) 
     ImGui::Text("FPS: %.f", 1.0f / window->getWindowData()->delta_time);
 
-  ImGui::InputFloat2("Z_0", &z[0], "%.3f");
-  ImGui::SliderFloat2("Z_0 Sidler", &z[0], -3, 3, "%.3f");
+  // ImGui::InputFloat2("Z_0", &z[0], "%.3f");
+  // ImGui::SliderFloat2("Z_0 Sidler", &z[0], -3, 3, "%.3f");
 
   ImGui::InputFloat3("colors", &colors[0], "%.3f");
   ImGui::ColorPicker3("colors", &colors[0]);
@@ -45,16 +45,16 @@ std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](C
   ImGui::End();
 
   if(animation){
-    if((*uniform)["zoom"]->get<float>() < 0.002) 
+    if((*uniform)["zoom"]->get<double>() < 0.002) 
       current_zoom_speed = -1 * (zoom_speed);
 
-    if((*uniform)["zoom"]->get<float>() > 3)
+    if((*uniform)["zoom"]->get<double>() > 3)
       current_zoom_speed = (zoom_speed);
      
-    (*uniform)["zoom"]->set<float>((*uniform)["zoom"]->get<float>() - (*uniform)["zoom"]->get<float>() * current_zoom_speed);
+    (*uniform)["zoom"]->set<double>((*uniform)["zoom"]->get<double>() - (*uniform)["zoom"]->get<double>() * current_zoom_speed);
   }
 
-  (*uniform)["z"]->set<glm::vec2>(z);
+  (*uniform)["z"]->set<glm::dvec2>(z);
   (*uniform)["maxIter"]->set<int>(maxIter);
   (*uniform)["colors"]->set<glm::vec3>(colors * 255.0f);
 };
@@ -82,12 +82,12 @@ int main(){
   malgenbrot->getUniforms().emplace_back(uniform);
 
   // uniform default values
-  (*uniform)["z"]->set<glm::vec2>({0.394f, 0.355f});
+  (*uniform)["z"]->set<glm::dvec2>({0.394f, 0.355f});
   (*uniform)["maxIter"]->set<int>(500);
   (*uniform)["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
-  (*uniform)["world_pos"]->set<glm::vec2>({20.0f, 0.0f});
-  (*uniform)["zoom"]->set<float>(3.0f);
-  (*uniform)["window_ratio"]->set<glm::vec2>({
+  (*uniform)["world_pos"]->set<glm::dvec2>({20.0f, 0.0f});
+  (*uniform)["zoom"]->set<double>(3.0f);
+  (*uniform)["window_ratio"]->set<glm::dvec2>({
     window->getWindowData()->width,
     window->getWindowData()->height
   });
@@ -121,28 +121,28 @@ int main(){
 
 
     if(window->getInputData()->right_mouse_button_is_down){
-      (*uniform)["z"]->set<glm::vec2>({
+      (*uniform)["z"]->set<glm::dvec2>({
         3 * (window->getWindowData()->width / 2 - window->getInputData()->mouse_x) / window->getWindowData()->width, 
         3 * (window->getWindowData()->height / 2 - window->getInputData()->mouse_y) / window->getWindowData()->height
       });
     }
 
     if(window->getInputData()->scroll_is_down){
-      (*uniform)["world_pos"]->set<glm::vec2>({
-        last_world_pos.x - (window->getInputData()->mouse_x - last_mouse_pos.x) * (*uniform)["zoom"]->get<float>(),
-        last_world_pos.y + (window->getInputData()->mouse_y - last_mouse_pos.y) * (*uniform)["zoom"]->get<float>()
+      (*uniform)["world_pos"]->set<glm::dvec2>({
+        last_world_pos.x - (window->getInputData()->mouse_x - last_mouse_pos.x) * (*uniform)["zoom"]->get<double>(),
+        last_world_pos.y + (window->getInputData()->mouse_y - last_mouse_pos.y) * (*uniform)["zoom"]->get<double>()
       });
     }
     else{
-      last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
+      last_world_pos = (*uniform)["world_pos"]->get<glm::dvec2>();
       last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
     };
 
 
-    float zoom = (*uniform)["zoom"]->get<float>();
+    double zoom = (*uniform)["zoom"]->get<double>();
     zoom += window->getInputData()->scroll_y * scroll_sensitivity * zoom;
-    zoom = glm::clamp(zoom, 0.000001f, 10.0f);
-    (*uniform)["zoom"]->set<float>(zoom);
+    // zoom = glm::clamp(zoom, 0.000001f, 10.0f);
+    (*uniform)["zoom"]->set<double>(zoom);
 
     gui->render();
     window->windowEvents();

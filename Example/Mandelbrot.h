@@ -18,10 +18,10 @@ out vec4 FragColor;
 
 uniform vec3 colors;
 uniform int maxIter;
-uniform vec2 z;
-uniform vec2 world_pos;
-uniform float zoom;
-uniform vec2 window_ratio;
+uniform dvec2 z;
+uniform dvec2 world_pos;
+uniform double zoom;
+uniform dvec2 window_ratio;
 
 
 void main() {
