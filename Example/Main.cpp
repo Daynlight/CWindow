@@ -1,7 +1,6 @@
 #include "OpenGL_Renderer.h"
 #include "Gui.h"
 #include "Mandelbrot.h"
-#include <chrono>
 
 
 CW::Renderer::iRenderer* window = nullptr;
