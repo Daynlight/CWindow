@@ -3,9 +3,6 @@
 #include "Shaders.h"
 
 
-CW::Renderer::iRenderer* window = nullptr;
-
-
 int main(){
   CW::Renderer::iRenderer* window = new CW::Renderer::Renderer();
   
