@@ -62,7 +62,10 @@ void CW::Renderer::Renderer::maximizeSwitch() {
 
 
 
-CW::Renderer::Renderer::Renderer() {};
+CW::Renderer::Renderer::Renderer() { 
+  createWindow(); 
+  createRenderer();
+};
 
 CW::Renderer::Renderer::~Renderer() {
   windowData.should_close = false;

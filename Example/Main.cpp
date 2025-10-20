@@ -67,8 +67,6 @@ int main(){
   CW::Renderer::iRenderer* window = new CW::Renderer::Renderer();
   
   // init window and renderer
-  window->createWindow();
-  window->createRenderer();
   window->setVsync(0);
   window->setWindowTitle("Malgenbrota and Julia");
   
