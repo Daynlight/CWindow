@@ -274,7 +274,6 @@ You can access InputData by ```renderer->getInputData()```
 3. vertices and indices are required
 4. automatically compiled when used and don't compiled before
 
-
 ### Data Stored
 1. vertices (vec3)
 2. indices (int)
