@@ -11,6 +11,7 @@ private:
   GLuint VAO, VBO, EBO;
   std::vector<GLfloat> vertices;
   std::vector<GLuint> indices;
+  bool is_compiled = false;
 
 public:
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);

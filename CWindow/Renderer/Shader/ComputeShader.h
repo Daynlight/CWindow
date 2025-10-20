@@ -11,6 +11,7 @@ private:
   GLuint SSBO;
   GLuint compiledShader;
   std::string compute_shader = "";
+  bool is_compiled = false;
   bool save_on_gup = false;
 
 public:
