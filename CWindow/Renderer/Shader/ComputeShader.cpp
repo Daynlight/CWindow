@@ -8,7 +8,7 @@ CW::Renderer::ComputeShader::~ComputeShader() {
 }
 
 void CW::Renderer::ComputeShader::run(std::vector<float> data, std::vector<float>* return_data) {
-  if(!compiledShader)
+  if(!SSBO)
     compile();
     
   glUseProgram(compiledShader);
@@ -40,7 +40,6 @@ void CW::Renderer::ComputeShader::compile() {
   glLinkProgram(compiledShader);
   
   glDeleteShader(computeShaderPart);
-  is_compiled = true;
 }
 
 void CW::Renderer::ComputeShader::destroy() {
@@ -49,5 +48,4 @@ void CW::Renderer::ComputeShader::destroy() {
   if (SSBO) 
     glDeleteBuffers(1, &SSBO);
 
-  is_compiled = false;
 };

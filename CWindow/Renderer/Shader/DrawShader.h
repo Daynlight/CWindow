@@ -14,7 +14,6 @@ private:
   GLuint compiledShader;
   std::string vertex = "";
   std::string fragment = "";
-  bool is_compiled = false;
   std::vector<const CW::Renderer::Uniform*> uniforms;
 
 public:

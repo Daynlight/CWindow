@@ -8,7 +8,7 @@ CW::Renderer::DrawShader::~DrawShader(){
 }
 
 void CW::Renderer::DrawShader::bind() {
-  if(!is_compiled) 
+  if(!compiledShader) 
     compile();
   
   glUseProgram(compiledShader);
@@ -42,12 +42,10 @@ void CW::Renderer::DrawShader::compile() {
 
   glDeleteShader(vertexShaderPart);
   glDeleteShader(fragmentShaderPart);
-  is_compiled = true;
 }
 
 void CW::Renderer::DrawShader::destroy(){
   glDeleteProgram(compiledShader);
-  is_compiled = false;
 }
 
 std::vector<const CW::Renderer::Uniform *> &CW::Renderer::DrawShader::getUniforms(){
@@ -56,10 +54,8 @@ std::vector<const CW::Renderer::Uniform *> &CW::Renderer::DrawShader::getUniform
 
 void CW::Renderer::DrawShader::setVertexShader(const std::string &shader){
   vertex = shader;
-  compile();
 }
 
 void CW::Renderer::DrawShader::setFragmentShader(const std::string &shader){
   fragment = shader;
-  compile();
 }
