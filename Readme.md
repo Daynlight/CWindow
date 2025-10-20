@@ -86,13 +86,11 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 ### Platforms
 1. WIN32 - windows platform
 2. UNIX - linux platform
-3. MACOS - mac platform
 
 ### Renderers
 1. OPENGL - OpenGL (glad 4.3, glfw cross-platform)
 2. DIRECTX - directx 12 (windows only)
 3. VULKAN - vulkan renderer (cross-platform)
-4. METAL - macos renderer (macos only)
 
 ### Default and Detection
 1. Platform is detected in cmake

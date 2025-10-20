@@ -45,16 +45,6 @@ set(libs
   setupapi
 )
 
-### MACOS
-elseif(PLATFORM STREQUAL "MACOS")
-set(libs 
-  glfw 
-  glm
-  Cocoa
-  OpenGL
-  CoreFoundation
-)
-
 else()
   message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
 endif()
