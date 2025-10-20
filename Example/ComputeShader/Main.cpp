@@ -1,6 +1,6 @@
 #include "OpenGL_Renderer.h"
 #include "Gui.h"
-#include "Mandelbrot.h"
+#include "Shaders.h"
 
 
 CW::Renderer::iRenderer* window = nullptr;
