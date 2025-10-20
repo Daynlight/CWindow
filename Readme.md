@@ -208,6 +208,7 @@ int main(){
 ### Info 
 1. Platform is detected automatically
 2. When Renderer Initialized auto window creation and renderer
+3. On creation you can pass ```true``` for windowless renderer'a
 
 ### Editing Window
 1. You can edit, name, size, position, mode by functions in renderer class
