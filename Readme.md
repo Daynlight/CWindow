@@ -305,12 +305,13 @@ You can access InputData by ```renderer->getInputData()```
 3. Is automatically compiled when ran
 4. On Run you must provide data and threads along X axi
 5. Optional you can provide threads along Y and Z axis
+6. ```run()``` and ```get()``` is templated
 
 ### Functions
 * compile();
 * destroy();
-* run(std::vector<T> data, unsigned int x, unsigned int y = 1, unsigned int z = 1);
-* std::vector<T> get();
+* run(std::vector data, unsigned int x, unsigned int y = 1, unsigned int z = 1);
+* std::vector get();
 
 
 
