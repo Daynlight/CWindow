@@ -35,24 +35,25 @@ swapping window etc. Good to use in simple project or just learning shaders and 
     - [Info](#info-2)
     - [Editing Window](#editing-window)
     - [Window loop](#window-loop)
-    - [getting window ref](#getting-window-ref)
+    - [Getting window ref](#getting-window-ref)
   - [WindowData](#windowdata)
     - [Info](#info-3)
     - [Data Access](#data-access)
   - [InputData](#inputdata)
     - [Info](#info-4)
     - [Data Access](#data-access-1)
+  - [Uniform](#uniform)
+  - [DrawShader](#drawshader)
+  - [ComputeShader](#computeshader)
   - [Mesh](#mesh)
     - [Info](#info-5)
     - [Data Stored](#data-stored)
     - [Mesh control](#mesh-control)
     - [Render](#render)
-  - [Uniform](#uniform)
-  - [DrawShader](#drawshader)
-  - [ComputeShader](#computeshader)
   - [Implemented optimizations](#implemented-optimizations)
   - [Full Example](#full-example)
   - [Features](#features)
+  - [Libraries](#libraries)
   - [License](#license)
 
 ## Screenshots
@@ -224,7 +225,7 @@ int main(){
 * swapBuffer();   -- swapping window frame
 * windowEvents(); -- is used to update WindowData and InputData
 
-### getting window ref
+### Getting window ref
 * APIWindow* getWindow(); -- where APIWindow is your Renderer Window
 
 
@@ -260,12 +261,25 @@ You can access InputData by ```renderer->getInputData()```
 
 
 
+## Uniform
+
+
+
+## DrawShader
+
+
+
+## ComputeShader
+
+
+
 ## Mesh
 ### Info
 1. Mesh store data for rendering
 2. When some data is not provided then automatically didn't add to shader
 3. vertices and indices are required
 4. automatically compiled when used and don't compiled before
+
 
 ### Data Stored
 1. vertices (vec3)
@@ -286,23 +300,14 @@ You can access InputData by ```renderer->getInputData()```
 
 
 
-## Uniform
-
-
-
-## DrawShader
-
-
-
-## ComputeShader
-
-
-
 ## Implemented optimizations
 - Unordered _map for window fast look up
 - On run shader compilation and reusing it
 - Mesh and Shader lifetime control by ```compile``` and ```destroy```
 - Mesh and Shader auto compile when used
+- Storing Data every ```windowEvent()``` instead of running all api commands 
+
+
 
 ## Full Example
 ```cpp
@@ -466,9 +471,27 @@ int main(){
 
 ## Features
 * Automatic Uniform parameters binding to shader
-* Modular Shaders, Uniform and Shader
 * Autocompletion when Mesh, Uniform or Shader used
 * Platform detection
+* Creating window and renderer
+* Creating Modular Shader
+* Creating Modular Meshes
+* Creating Modular Uniform list with references by name
+* Binding Uniforms to shader and using as ```uniform vec2 name```
+* Compute Shader form computation on gpu
+* Editing Window
+* Getting user input
+* Getting window parameters and store it at once
+
+
+
+## Libraries
+* [glfw](https://github.com/glfw/glfw)
+* [glad](https://glad.dav1d.de/)
+* [imgui](https://github.com/ocornut/imgui)
+* [glm](https://github.com/g-truc/glm)
+
+
 
 ## License
 [GNU GENERAL PUBLIC LICENSE Version 2, June 1991](LICENSE)
