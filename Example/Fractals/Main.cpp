@@ -3,6 +3,7 @@
 #include "Shaders.h"
 
 
+
 const float scroll_sensitivity = 0.02f; 
 const float sensitivity = 20.0f;
 const float zoom_speed = 0.005;
@@ -11,6 +12,7 @@ glm::vec2 last_world_pos;
 glm::vec2 last_mouse_pos;
 bool animation = false;
 float current_zoom_speed = 0.005;
+
 
 
 
@@ -67,7 +69,7 @@ int main(){
   
   // create uniform and malgenbrota shader
   CW::Renderer::Uniform uniform;
-  CW::Renderer::DrawShader malgenbrot(Mandelbrot::vertex, Mandelbrot::fragment);
+  CW::Renderer::DrawShader malgenbrot(Fractal::vertex, Fractal::fragment);
   malgenbrot.getUniforms().emplace_back(&uniform);
   
   // uniform default values

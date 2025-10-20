@@ -1,7 +1,7 @@
 #pragma once
 #include "string"
 
-namespace Mandelbrot{
+namespace Fractal{
 std::string vertex = R"(
 #version 430 core
 
