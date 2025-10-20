@@ -1,14 +1,14 @@
 #include "ComputeShader.h"
 
 CW::Renderer::ComputeShader::ComputeShader(const std::string &compute_shader, bool save_on_gup)
-  :compute_shader(compute_shader), save_on_gup(save_on_gup){ };
+  :compute_shader(compute_shader), save_on_gup(save_on_gup), is_compiled(false) { };
 
 CW::Renderer::ComputeShader::~ComputeShader() {
   destroy();
 }
 
 void CW::Renderer::ComputeShader::run(std::vector<float> data, std::vector<float>* return_data) {
-  if(!compiledShader)
+  if(!is_compiled)
     compile();
     
   glUseProgram(compiledShader);
@@ -44,8 +44,7 @@ void CW::Renderer::ComputeShader::compile() {
 }
 
 void CW::Renderer::ComputeShader::destroy() {
-  glDeleteProgram(compiledShader);
-  
+  glDeleteProgram(compiledShader);  
   if (SSBO) 
     glDeleteBuffers(1, &SSBO);
 

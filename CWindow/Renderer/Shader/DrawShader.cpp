@@ -1,7 +1,7 @@
 #include "DrawShader.h"
 
 CW::Renderer::DrawShader::DrawShader(const std::string &vertex, const std::string &fragment)
-  :vertex(vertex), fragment(fragment) { };
+  :vertex(vertex), fragment(fragment), is_compiled(false) { };
 
 CW::Renderer::DrawShader::~DrawShader(){
   destroy();
@@ -56,10 +56,10 @@ std::vector<const CW::Renderer::Uniform *> &CW::Renderer::DrawShader::getUniform
 
 void CW::Renderer::DrawShader::setVertexShader(const std::string &shader){
   vertex = shader;
-  compile();
+  is_compiled = false;
 }
 
 void CW::Renderer::DrawShader::setFragmentShader(const std::string &shader){
   fragment = shader;
-  compile();
+  is_compiled = false;
 }

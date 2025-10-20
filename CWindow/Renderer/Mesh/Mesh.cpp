@@ -1,14 +1,14 @@
 #include "Mesh.h"
 
 CW::Renderer::Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices) 
-  :vertices(vertices), indices(indices) {};
+  :vertices(vertices), indices(indices), is_compiled(false) {};
 
 CW::Renderer::Mesh::~Mesh() {
  destroy();
 };
 
 void CW::Renderer::Mesh::render() {
-  if(!VAO)
+  if(!is_compiled)
     compile();
 
   glBindVertexArray(VAO);
@@ -38,10 +38,14 @@ void CW::Renderer::Mesh::compile() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  
+  is_compiled = true;
 };
 
 void CW::Renderer::Mesh::destroy() {
   if (EBO) glDeleteBuffers(1, &EBO);
   if (VBO) glDeleteBuffers(1, &VBO);
   if (VAO) glDeleteBuffers(1, &VAO);
+
+  is_compiled = false;
 };
