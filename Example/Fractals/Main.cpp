@@ -1,7 +1,6 @@
-#include "OpenGL_Renderer.h"
+#include "Renderer.h"
 #include "Gui.h"
 #include "Shaders.h"
-
 
 
 const float scroll_sensitivity = 0.02f; 
