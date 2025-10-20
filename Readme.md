@@ -14,8 +14,10 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   - [Installation](#installation)
     - [1. clone repo with submodules](#1-clone-repo-with-submodules)
     - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
-    - [3. compile via cmake with parameters for platform and renderer](#3-compile-via-cmake-with-parameters-for-platform-and-renderer)
-    - [4. Run your executable](#4-run-your-executable)
+    - [3 Add CWindow to your cmake project](#3-add-cwindow-to-your-cmake-project)
+    - [4.1 compile via cmake](#41-compile-via-cmake)
+    - [4.2 compile via cmake with parameters for platform and renderer](#42-compile-via-cmake-with-parameters-for-platform-and-renderer)
+    - [5 Run your executable](#5-run-your-executable)
   - [Configurations flags](#configurations-flags)
     - [Platforms](#platforms)
     - [Renderers](#renderers)
@@ -29,12 +31,25 @@ swapping window etc. Good to use in simple project or just learning shaders and 
       - [Info](#info-1)
       - [Example Window](#example-window)
     - [Full Example of Usage](#full-example-of-usage)
-  - [WindowData](#windowdata)
+  - [Renderer Usage](#renderer-usage)
     - [Info](#info-2)
+    - [Editing Window](#editing-window)
+    - [Window loop](#window-loop)
+    - [getting window ref](#getting-window-ref)
+  - [WindowData](#windowdata)
+    - [Info](#info-3)
     - [Data Access](#data-access)
   - [InputData](#inputdata)
-    - [Info](#info-3)
+    - [Info](#info-4)
     - [Data Access](#data-access-1)
+  - [Mesh](#mesh)
+    - [Info](#info-5)
+    - [Data Stored](#data-stored)
+    - [Mesh control](#mesh-control)
+    - [Render](#render)
+  - [Uniform](#uniform)
+  - [DrawShader](#drawshader)
+  - [ComputeShader](#computeshader)
   - [Implemented optimizations](#implemented-optimizations)
   - [Full Example](#full-example)
   - [Features](#features)
@@ -69,15 +84,35 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   git submodule init
   git submodule update
 ```
-### 3. compile via cmake with parameters for platform and renderer
+### 3 Add CWindow to your cmake project
+```cmake
+  cmake_minimum_required(VERSION 3.15)
+
+  project(Example LANGUAGES CXX C)
+
+  add_subdirectory(CWindow/CWindow)
+
+  set(src "Main.cpp")
+  set(headers "Mandelbrot.h")
+
+  add_executable(Example ${src})
+  target_link_libraries(Example CWindow)
+```
+### 4.1 compile via cmake
+```bash
+  mkdir build/
+  cd build/
+  cmake ..
+```
+### 4.2 compile via cmake with parameters for platform and renderer
 ```bash
   mkdir build/
   cd build/
   cmake .. -DRENDERER="DIRECTX" -DPLATFORM="WIN32"
 ```
-### 4. Run your executable
+### 5 Run your executable
 ```bash
-  ./CWindow.exe
+  ./Example.exe
 ```
 
 
@@ -101,7 +136,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 ## Gui Usage
 ### Initialization
 1. Initialize renderer and window
-2. Initialize gui here you can provide custom gui style with ImGuiIo usage
+2. Initialize gui. Here you can provide custom gui style with ImGuiIo parameter
 
 ### Workspace
 #### Info
@@ -121,8 +156,8 @@ gui->setWorkspace([](std::function<void()> render_windows){
 
 ### Adding Window
 #### Info
-1. You need to specify unique name for renderer window it is use for fast look up
-2. If you want update it you need pass same name with new parameters
+1. You need to specify unique name for renderer window. It is used for fast look up
+2. If you want update it you need add window with same name
 3. You can provide custom destruction function as second param
 
 #### Example Window
@@ -169,10 +204,29 @@ int main(){
 ```
 
 
-<!-- 
-## Renderer Usage
 
- -->
+## Renderer Usage
+### Info 
+1. Platform is detected automatically
+2. When Renderer Initialized auto window creation and renderer
+
+### Editing Window
+1. You can edit, name, size, position, mode by functions in renderer class
+
+* setWindowMode(CW::Renderer::WindowMode mode);
+* setWindowTitle(const std::string& title);
+* setVsync(bool vsync);
+* minimizedSwitch();
+* maximizeSwitch();
+
+### Window loop
+* beginFrame();   -- starting new frame
+* swapBuffer();   -- swapping window frame
+* windowEvents(); -- is used to update WindowData and InputData
+
+### getting window ref
+* APIWindow* getWindow(); -- where APIWindow is your Renderer Window
+
 
 
 ## WindowData
@@ -206,18 +260,49 @@ You can access InputData by ```renderer->getInputData()```
 
 
 
-<!-- ## Build-in Shaders
+## Mesh
+### Info
+1. Mesh store data for rendering
+2. When some data is not provided then automatically didn't add to shader
+3. vertices and indices are required
+4. automatically compiled when used and don't compiled before
+
+### Data Stored
+1. vertices (vec3)
+2. indices (int)
+3. normals (vec3)
+
+### Mesh control
+* compile();
+* destroy(); 
+* render();   -- used for rendering on viewport used with DrawShader
+
+### Render
+```cpp
+  malgenbrot->bind();   -- shader
+  viewport.render();    -- mesh
+  malgenbrot->unbind(); -- shader
+```
 
 
 
-## Build-in Matrices -->
+## Uniform
+
+
+
+## DrawShader
+
+
+
+## ComputeShader
 
 
 
 ## Implemented optimizations
 - Unordered _map for window fast look up
 - On run shader compilation and reusing it
-- Mesh VAO Life time control
+- Mesh and Shader lifetime control by ```compile``` and ```destroy```
+- Mesh and Shader auto compile when used
 
 ## Full Example
 ```cpp
@@ -225,102 +310,153 @@ You can access InputData by ```renderer->getInputData()```
 #include "Gui.h"
 #include "Mandelbrot.h"
 
-#include <chrono>
 
-////////////////////////// z_0.x, z_0.y, maxIter, red,   green,  blue //////////////////////////
-std::vector<float> data = {0.0f,  0.0f,  500,     20.0f, 100.0f, 5.0f}; 
-CW::Renderer::ComputeShader* data_pass = nullptr;
-std::chrono::duration<float> delta_time;
-bool update = true;
+CW::Renderer::iRenderer* window = nullptr;
+CW::Gui::iGui* gui = nullptr;
+CW::Renderer::DrawShader* malgenbrot = nullptr;
+CW::Renderer::Uniform* uniform  = nullptr;
 
-std::function<void(CW::Renderer::iRenderer *window_renderer)> renderSettingsWindow = [](CW::Renderer::iRenderer *renderer){
+
+const float scroll_sensitivity = 0.02f; 
+const float sensitivity = 20.0f;
+glm::vec2 last_world_pos;
+glm::vec2 last_mouse_pos;
+bool animation = false;
+const float zoom_speed = 0.005;
+float current_zoom_speed = 0.005;
+
+
+
+std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow = [](CW::Renderer::iRenderer *window){
+  glm::vec2 z = (*uniform)["z"]->get<glm::vec2>(); 
+  int maxIter = (*uniform)["maxIter"]->get<int>();
+  glm::vec3 colors = (*uniform)["colors"]->get<glm::vec3>();
+  colors /= 255;
+
   ImGui::Begin("Settings", nullptr);
 
-  if(delta_time.count() >= 0.0f) 
-    ImGui::Text("FPS: %.f", 1.0f / delta_time.count());
+  if(window->getWindowData()->delta_time >= 0.0f) 
+    ImGui::Text("FPS: %.f", 1.0f / window->getWindowData()->delta_time);
 
-  if(ImGui::InputFloat2("Z_0", &data[0], "%.3f")) update = true;
-  if(ImGui::SliderFloat2("Z_0 Sidler", &data[0], -3, 3, "%.3f")) update = true;
-  if(ImGui::InputFloat3("colors", &data[3], "%.3f")) update = true;
-  if(ImGui::ColorPicker3("colors", &data[3])){
-    for(int i = 0; i < 3; i++){
-      if(data[3 + i] >1) data[3 + i] /= 255;
-      data[3 + i] *= 255;
-    }
-    
-    update = true;
-  }
+  ImGui::InputFloat2("Z_0", &z[0], "%.3f");
+  ImGui::SliderFloat2("Z_0 Sidler", &z[0], -3, 3, "%.3f");
 
-  int maxIter = static_cast<int>(data[2]);
-  if(ImGui::InputInt("MaxIter", &maxIter)) update = true;
-  data[2] = static_cast<float>(maxIter);
+  ImGui::InputFloat3("colors", &colors[0], "%.3f");
+  ImGui::ColorPicker3("colors", &colors[0]);
 
-  if(update){
-    data_pass->run(data);
-    update = false;
-  }
+  ImGui::InputInt("MaxIter", &maxIter);
+  
+  if(ImGui::Button("Animation")) 
+    animation = !animation;
 
   ImGui::End();
+
+  if(animation){
+    if((*uniform)["zoom"]->get<float>() < 0.002) 
+      current_zoom_speed = -1 * (zoom_speed);
+
+    if((*uniform)["zoom"]->get<float>() > 3)
+      current_zoom_speed = (zoom_speed);
+     
+    (*uniform)["zoom"]->set<float>((*uniform)["zoom"]->get<float>() - (*uniform)["zoom"]->get<float>() * current_zoom_speed);
+  }
+
+  (*uniform)["z"]->set<glm::vec2>(z);
+  (*uniform)["maxIter"]->set<int>(maxIter);
+  (*uniform)["colors"]->set<glm::vec3>(colors * 255.0f);
 };
 
 
 
 int main(){
-  CW::Renderer::iRenderer* window_renderer = new CW::Renderer::Renderer();
+  CW::Renderer::iRenderer* window = new CW::Renderer::Renderer();
   
   // init window and renderer
-  window_renderer->createWindow();
-  window_renderer->createRenderer();
-  window_renderer->setVsync(0);
-  window_renderer->setWindowTitle("Malgenbrota and Julia");
+  window->setVsync(0);
+  window->setWindowTitle("Malgenbrota and Julia");
   
   // init gui and add Settings Window
-  CW::Gui::iGui* gui = new CW::Gui::Gui(window_renderer);
+  gui = new CW::Gui::Gui(window);
   gui->addWindow("Settings", renderSettingsWindow);
   
-  // compile compute shader
-  data_pass = new CW::Renderer::ComputeShader(Mandelbrot::compute); 
-  data_pass->run(data);
-  
-  // compile vertex and fragment shader
-  CW::Renderer::DrawShader malgenbrot = CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+  // create uniform and malgenbrota shader
+  uniform = new CW::Renderer::Uniform();
+  malgenbrot = new CW::Renderer::DrawShader(Mandelbrot::vertex, Mandelbrot::fragment);
+  malgenbrot->getUniforms().emplace_back(uniform);
 
+  // uniform default values
+  (*uniform)["z"]->set<glm::vec2>({0.394f, 0.355f});
+  (*uniform)["maxIter"]->set<int>(500);
+  (*uniform)["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
+  (*uniform)["world_pos"]->set<glm::vec2>({20.0f, 0.0f});
+  (*uniform)["zoom"]->set<float>(3.0f);
+  (*uniform)["window_ratio"]->set<glm::vec2>({
+    window->getWindowData()->width,
+    window->getWindowData()->height
+  });
+
+  
   // create viewport mesh
-  std::vector<GLfloat> vertices = {
-    // Positions
-    -1.0f,  1.0f,  // Top-left
-    -1.0f, -1.0f,  // Bottom-left
-    1.0f,  1.0f,  // Top-right
-    1.0f, -1.0f,  // Bottom-right
-  };
-  std::vector<GLuint> indices = {
-    0, 1, 2,  // First triangle
-    1, 3, 2   // Second triangle
-  };
-  CW::Renderer::Mesh mesh = CW::Renderer::Mesh(vertices, indices);
+  CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
+  {
+    -1.0f,  1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f,
+    1.0f,  1.0f, 0.0f,
+    1.0f, -1.0f, 0.0f,
+  }, 
+  {
+    0, 1, 2,
+    1, 3, 2
+  });
 
-
-  auto last_time = std::chrono::high_resolution_clock::now();
-  
   // main loop
-  while(window_renderer->getWindowData()->should_close){
-    window_renderer->beginFrame();
-    malgenbrot.render();
-    mesh.render();
+  while(window->getWindowData()->should_close){
+    window->beginFrame();
+
+    malgenbrot->bind();
+    viewport.render();
+    malgenbrot->unbind();
+
+  (*uniform)["window_ratio"]->set<glm::vec2>({
+    window->getWindowData()->width,
+    window->getWindowData()->height
+  });
+
+
+    if(window->getInputData()->right_mouse_button_is_down){
+      (*uniform)["z"]->set<glm::vec2>({
+        3 * (window->getWindowData()->width / 2 - window->getInputData()->mouse_x) / window->getWindowData()->width, 
+        3 * (window->getWindowData()->height / 2 - window->getInputData()->mouse_y) / window->getWindowData()->height
+      });
+    }
+
+    if(window->getInputData()->scroll_is_down){
+      (*uniform)["world_pos"]->set<glm::vec2>({
+        last_world_pos.x - (window->getInputData()->mouse_x - last_mouse_pos.x) * (*uniform)["zoom"]->get<float>(),
+        last_world_pos.y + (window->getInputData()->mouse_y - last_mouse_pos.y) * (*uniform)["zoom"]->get<float>()
+      });
+    }
+    else{
+      last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
+      last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
+    };
+
+
+    float zoom = (*uniform)["zoom"]->get<float>();
+    zoom += window->getInputData()->scroll_y * scroll_sensitivity * zoom;
+    zoom = glm::clamp(zoom, 0.000001f, 10.0f);
+    (*uniform)["zoom"]->set<float>(zoom);
 
     gui->render();
-    window_renderer->windowEvents();
-    window_renderer->swapBuffer();
-
-    auto new_time = std::chrono::high_resolution_clock::now();
-    delta_time = new_time - last_time;
-    last_time = new_time;
+    window->windowEvents();
+    window->swapBuffer();
   };
 
   // clean up
-  delete data_pass;
+  delete uniform;
+  delete malgenbrot;
   delete gui;
-  delete window_renderer;
+  delete window;
   
   return 0;
 }
@@ -329,9 +465,10 @@ int main(){
 
 
 ## Features
-* Used unordered_map for window fast look up
-
-
+* Automatic Uniform parameters binding to shader
+* Modular Shaders, Uniform and Shader
+* Autocompletion when Mesh, Uniform or Shader used
+* Platform detection
 
 ## License
 [GNU GENERAL PUBLIC LICENSE Version 2, June 1991](LICENSE)
