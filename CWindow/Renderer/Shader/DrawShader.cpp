@@ -1,9 +1,7 @@
 #include "DrawShader.h"
 
 CW::Renderer::DrawShader::DrawShader(const std::string &vertex, const std::string &fragment)
-  :vertex(vertex), fragment(fragment) {
-  compile();
-}
+  :vertex(vertex), fragment(fragment) { };
 
 CW::Renderer::DrawShader::~DrawShader(){
   destroy();

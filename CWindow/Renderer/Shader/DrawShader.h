@@ -17,17 +17,16 @@ private:
   bool is_compiled = false;
   std::vector<const CW::Renderer::Uniform*> uniforms;
 
-private:
-  void compile();
-  void destroy();
-
 public:
   DrawShader(const std::string& vertex, const std::string& fragment);
   ~DrawShader();
 
+  void compile();
+  void destroy();
+
   void bind();
   void unbind();
-  
+
   void setVertexShader(const std::string& shader);
   void setFragmentShader(const std::string& shader);
   

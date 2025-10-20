@@ -1,15 +1,16 @@
 #include "ComputeShader.h"
 
 CW::Renderer::ComputeShader::ComputeShader(const std::string &compute_shader, bool save_on_gup)
-  :compute_shader(compute_shader), save_on_gup(save_on_gup){
-  compile();
-}
+  :compute_shader(compute_shader), save_on_gup(save_on_gup){ };
 
 CW::Renderer::ComputeShader::~ComputeShader() {
   destroy();
 }
 
 void CW::Renderer::ComputeShader::run(std::vector<float> data, std::vector<float>* return_data) {
+  if(!compiledShader)
+    compile();
+    
   glUseProgram(compiledShader);
     
   glGenBuffers(1, &SSBO);

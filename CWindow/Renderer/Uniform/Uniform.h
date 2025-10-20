@@ -32,14 +32,13 @@ class Uniform{
 private:
   GLuint UBO;
   std::unordered_map<std::string, UniformData> data;
-
-private:
-  void compile();
-  void destroy();
-
+  
 public:
   Uniform();
   ~Uniform();
+
+  void compile();
+  void destroy();
 
   void bind(GLuint& shader) const;
   UniformData* operator[](const std::string& name);

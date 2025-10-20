@@ -1,8 +1,6 @@
 #include "Uniform.h"
 
-CW::Renderer::Uniform::Uniform() { 
-  compile();
-};
+CW::Renderer::Uniform::Uniform() { };
 
 CW::Renderer::Uniform::~Uniform() {
   destroy();
@@ -38,7 +36,10 @@ void CW::Renderer::Uniform::destroy() {
   };
 };
 
-void CW::Renderer::Uniform::bind(GLuint& shader) const{
+void CW::Renderer::Uniform::bind(GLuint& shader) const {
+  if(!UBO) 
+    const_cast<CW::Renderer::Uniform*>(this)->compile();
+  
   for (auto& el : data) {
     GLuint loc = glGetUniformLocation(shader, el.first.c_str());
 
