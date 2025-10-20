@@ -44,12 +44,14 @@ swapping window etc. Good to use in simple project or just learning shaders and 
     - [Data Access](#data-access-1)
   - [Uniform](#uniform)
   - [DrawShader](#drawshader)
-  - [ComputeShader](#computeshader)
   - [Mesh](#mesh)
     - [Info](#info-5)
     - [Data Stored](#data-stored)
     - [Mesh control](#mesh-control)
     - [Render](#render)
+  - [ComputeShader](#computeshader)
+    - [Info](#info-6)
+    - [Functions](#functions)
   - [Implemented optimizations](#implemented-optimizations)
   - [Full Example](#full-example)
   - [Features](#features)
@@ -269,10 +271,6 @@ You can access InputData by ```renderer->getInputData()```
 
 
 
-## ComputeShader
-
-
-
 ## Mesh
 ### Info
 1. Mesh store data for rendering
@@ -297,6 +295,23 @@ You can access InputData by ```renderer->getInputData()```
   viewport.render();    -- mesh
   malgenbrot->unbind(); -- shader
 ```
+
+
+
+## ComputeShader
+### Info
+1. It is used for computing data on GPU
+2. You need to provide compute shader on creation
+3. Is automatically compiled when ran
+4. On Run you must provide data and threads along X axi
+5. Optional you can provide threads along Y and Z axis
+
+### Functions
+* compile();
+* destroy();
+* run(std::vector<T> data, unsigned int x, unsigned int y = 1, unsigned int z = 1);
+* std::vector<T> get();
+
 
 
 
