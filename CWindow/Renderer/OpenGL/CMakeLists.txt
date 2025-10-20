@@ -5,6 +5,7 @@ set(src
   "../Mesh/Mesh.cpp"
   "../Shader/DrawShader.cpp"
   "../Shader/ComputeShader.cpp"
+  "../Shader/ComputeShader.hpp"
   "../Uniform/Uniform.cpp"
   ${ROOT_DIR}/vendor/glad/glad-4.3/src/glad.c
 )
