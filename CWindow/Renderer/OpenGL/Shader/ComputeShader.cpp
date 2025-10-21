@@ -8,6 +8,9 @@ CW::Renderer::ComputeShader::~ComputeShader() {
 }
 
 void CW::Renderer::ComputeShader::compile() {
+  if(is_compiled) 
+    destroy();
+    
   GLuint computeShaderPart = glCreateShader(GL_COMPUTE_SHADER);
   const char* computeShaderData = compute_shader.c_str();
   glShaderSource(computeShaderPart, 1, &computeShaderData, nullptr);

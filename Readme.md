@@ -63,10 +63,13 @@ swapping window etc. Good to use in simple project or just learning shaders and 
     - [Info](#info-7)
     - [Data Stored](#data-stored)
     - [Mesh control](#mesh-control)
-    - [Render](#render)
+    - [Render Example](#render-example)
+    - [Full Viewport Example](#full-viewport-example)
   - [ComputeShader](#computeshader)
     - [Info](#info-8)
-    - [Functions](#functions)
+    - [Basic Usage](#basic-usage)
+    - [Data Processing Example](#data-processing-example)
+    - [Available Functions](#available-functions)
   - [Implemented optimizations](#implemented-optimizations)
   - [Full Example](#full-example)
   - [Features](#features)
@@ -221,26 +224,47 @@ int main(){
 
 ## Renderer Usage
 ### Info 
-1. Platform is detected automatically
-2. When Renderer Initialized auto window creation and renderer
-3. On creation you can pass ```true``` for windowless renderer'a
+1. Platform is detected automatically.
+2. When Renderer is initialized, auto window creation and renderer setup occur.
+3. On creation, you can pass `true` for a windowless renderer.
 
 ### Editing Window
-1. You can edit, name, size, position, mode by functions in renderer class
+You can edit the window properties using the following functions:
 
-* setWindowMode(CW::Renderer::WindowMode mode);
-* setWindowTitle(const std::string& title);
-* setVsync(bool vsync);
-* minimizedSwitch();
-* maximizeSwitch();
+```cpp
+// Set window mode (e.g., fullscreen, windowed)
+renderer.setWindowMode(CW::Renderer::WindowMode::FULLSCREEN);
+
+// Set window title
+renderer.setWindowTitle("My Application Title");
+
+// Enable or disable vertical sync
+renderer.setVsync(true);
+
+// Minimize or maximize the window
+renderer.minimizedSwitch();
+renderer.maximizeSwitch();
+```
 
 ### Window loop
-* beginFrame();   -- starting new frame
-* swapBuffer();   -- swapping window frame
-* windowEvents(); -- is used to update WindowData and InputData
+The main loop of your application should include the following steps:
+
+```cpp
+// Start a new frame
+renderer.beginFrame();   
+
+// Handle window events (input, resizing, etc.)
+renderer.windowEvents(); 
+
+// Swap the buffers to display the rendered frame
+renderer.swapBuffer();  
+```
 
 ### Getting window ref
-* APIWindow* getWindow(); -- where APIWindow is your Renderer Window
+You can get a reference to Renderer window
+```cpp
+APIWindow* windowRef = renderer.getWindow(); // where APIWindow is your Renderer Window
+```
 
 
 
@@ -403,10 +427,10 @@ shader.unbind();
 
 ## Mesh
 ### Info
-1. Mesh store data for rendering
-2. When some data is not provided then automatically didn't add to shader
+1. Mesh stores data for rendering
+2. When some data is not provided then automatically doesn't push it to GPU
 3. vertices and indices are required
-4. automatically compiled when used and don't compiled before
+4. automatically compiled when used and doesn't compile before
 
 ### Data Stored
 1. vertices (vec3)
@@ -414,15 +438,44 @@ shader.unbind();
 <!-- 3. normals (vec3) -->
 
 ### Mesh control
-* compile();
-* destroy(); 
-* render();   -- used for rendering on viewport used with DrawShader
+* compile()
+* destroy()
+* render()
 
-### Render
+### Render Example
 ```cpp
-  malgenbrot.bind();   -- shader
-  viewport.render();   -- mesh
-  malgenbrot.unbind(); -- shader
+// Create mesh with vertices and indices
+CW::Renderer::Mesh mesh({
+  // Vertices (vec3)
+  -0.5f, -0.5f, 0.0f,  // bottom left
+   0.5f, -0.5f, 0.0f,  // bottom right 
+   0.0f,  0.5f, 0.0f   // top
+}, {
+  // Indices
+  0, 1, 2  // triangle
+});
+
+// Render cycle
+shader.bind();
+mesh.render();
+shader.unbind();
+```
+
+### Full Viewport Example
+```cpp
+// Create full viewport quad mesh
+CW::Renderer::Mesh viewport({
+  -1.0f,  1.0f, 0.0f,  // top left
+  -1.0f, -1.0f, 0.0f,  // bottom left
+   1.0f,  1.0f, 0.0f,  // top right
+   1.0f, -1.0f, 0.0f   // bottom right
+}, {
+  0, 1, 2,  // first triangle
+  1, 3, 2   // second triangle
+});
+
+// Render mesh
+viewport.render();
 ```
 
 
@@ -432,16 +485,54 @@ shader.unbind();
 1. It is used for computing data on GPU
 2. You need to provide compute shader on creation
 3. Is automatically compiled when ran
-4. On Run you must provide data and threads along X axi
+4. On Run you must provide data and threads along X axis
 5. Optional you can provide threads along Y and Z axis
-6. ```run()``` and ```get()``` is templated
+6. `run()` and `get()` are templated functions
 
-### Functions
-* compile();
-* destroy();
-* run(std::vector data, unsigned int x, unsigned int y = 1, unsigned int z = 1);
-* std::vector get();
+### Basic Usage
+```cpp
+// Create a compute shader
+CW::Renderer::ComputeShader computeShader(R"(
+    #version 430
+    layout(local_size_x = 1) in;
+    
+    layout(std430, binding = 0) buffer DataBuffer {
+        float data[];
+    };
+    
+    void main() {
+        uint index = gl_GlobalInvocationID.x;
+        data[index] = data[index] * 2.0; // Double each value
+    }
+)");
+```
 
+### Data Processing Example
+```cpp
+// Prepare input data
+std::vector<float> inputData = {1.0f, 2.0f, 3.0f, 4.0f};
+
+// Run computation with 4 threads
+computeShader.run<float>(inputData, 4);
+
+// Get results
+std::vector<float> results = computeShader.get<float>();
+```
+
+### Available Functions
+```cpp
+void compile();   // Manually compile shader
+void destroy();   // Free resources
+
+template<typename T>
+void run(std::vector<T> data,   // Input data
+         unsigned int x,        // X threads
+         unsigned int y = 1,    // Y threads (optional)
+         unsigned int z = 1);   // Z threads (optional)
+
+template<typename T>
+std::vector<T> get();    // Get results
+```
 
 
 

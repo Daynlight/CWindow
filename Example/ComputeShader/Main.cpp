@@ -26,7 +26,7 @@ int main(){
       printf(", %.f", el);
     init = false;
   }
-  printf("]");
+  printf("]\n");
 
   
   return 0;
