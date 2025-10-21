@@ -43,14 +43,29 @@ swapping window etc. Good to use in simple project or just learning shaders and 
     - [Info](#info-4)
     - [Data Access](#data-access-1)
   - [Uniform](#uniform)
-  - [DrawShader](#drawshader)
-  - [Mesh](#mesh)
     - [Info](#info-5)
+    - [Usage](#usage)
+      - [Creating Uniform](#creating-uniform)
+      - [Setting Values](#setting-values)
+      - [Getting Values](#getting-values)
+    - [Supported Types](#supported-types)
+    - [Memory Management](#memory-management)
+  - [DrawShader](#drawshader)
+    - [Info](#info-6)
+    - [Usage](#usage-1)
+      - [Creating DrawShader](#creating-drawshader)
+      - [Binding Uniforms](#binding-uniforms)
+      - [Rendering](#rendering)
+    - [Hot-Reloading](#hot-reloading)
+    - [Memory Management](#memory-management-1)
+    - [Example](#example)
+  - [Mesh](#mesh)
+    - [Info](#info-7)
     - [Data Stored](#data-stored)
     - [Mesh control](#mesh-control)
     - [Render](#render)
   - [ComputeShader](#computeshader)
-    - [Info](#info-6)
+    - [Info](#info-8)
     - [Functions](#functions)
   - [Implemented optimizations](#implemented-optimizations)
   - [Full Example](#full-example)
@@ -261,10 +276,128 @@ You can access InputData by ```renderer->getInputData()```
 
 
 ## Uniform
+### Info
+1. Uniform stores shader variables that can be modified from CPU
+2. Variables are automatically bound to shader when shader is bound
+3. Uniform compiles automatically when used first time
+4. Can store multiple types of data (int, float, double, vec2, vec3, dvec2, dvec3)
+
+### Usage
+#### Creating Uniform
+```cpp
+CW::Renderer::Uniform uniform;
+```
+
+#### Setting Values
+```cpp
+// Using operator[] and set<T>
+uniform["variableName"]->set<float>(1.0f);
+uniform["position"]->set<glm::vec2>({x, y});
+uniform["color"]->set<glm::vec3>({r, g, b});
+```
+
+#### Getting Values
+```cpp
+// Using operator[] and get<T>
+float value = uniform["variableName"]->get<float>();
+glm::vec2 position = uniform["position"]->get<glm::vec2>();
+glm::vec3 color = uniform["color"]->get<glm::vec3>();
+```
+
+### Supported Types
+- `int`
+- `float`
+- `double` 
+- `glm::vec2` (2D vector)
+- `glm::vec3` (3D vector)
+- `glm::dvec2` (2D double vector)
+- `glm::dvec3` (3D double vector)
+
+### Memory Management
+* `compile()` - Manually compile uniform buffer (called automatically when needed)
+* `destroy()` - Free uniform buffer resources
+
 
 
 
 ## DrawShader
+### Info
+1. DrawShader combines vertex and fragment shaders for rendering
+2. Automatically compiles when first used via `bind()`
+3. Supports multiple uniform bindings
+4. Provides shader hot-reloading via `setVertexShader()` and `setFragmentShader()`
+
+### Usage
+#### Creating DrawShader
+```cpp
+// Initialize with vertex and fragment shader sources
+CW::Renderer::DrawShader shader(vertexSource, fragmentSource);
+```
+
+#### Binding Uniforms
+```cpp
+// Create uniform and add to shader
+CW::Renderer::Uniform uniform;
+shader.getUniforms().emplace_back(&uniform);
+
+// Set uniform values
+uniform["position"]->set<glm::vec2>({0.0f, 0.0f});
+```
+
+#### Rendering
+```cpp
+// Basic render cycle
+shader.bind();      // Automatically compiles and binds uniforms
+mesh.render();      // Render associated mesh
+shader.unbind();    // Unbind shader
+```
+
+### Hot-Reloading
+```cpp
+// Update shaders at runtime
+shader.setVertexShader(newVertexSource);    // Update vertex shader
+shader.setFragmentShader(newFragmentSource); // Update fragment shader
+// Next bind() will recompile automatically
+```
+
+### Memory Management
+* `compile()` - Manually compile shader (called automatically by bind)
+* `destroy()` - Free shader resources
+* `bind()` - Activate shader and bind uniforms
+* `unbind()` - Deactivate shader
+
+### Example
+```cpp
+// Create shader with sources
+CW::Renderer::DrawShader shader(
+    R"(
+        #version 430
+        layout(location = 0) in vec3 aPos;
+        void main() {
+            gl_Position = vec4(aPos, 1.0);
+        }
+    )",
+    R"(
+        #version 430
+        uniform vec3 color;
+        out vec4 FragColor;
+        void main() {
+            FragColor = vec4(color, 1.0);
+        }
+    )"
+);
+
+// Add uniform
+CW::Renderer::Uniform uniform;
+uniform["color"]->set<glm::vec3>({1.0f, 0.0f, 0.0f});
+shader.getUniforms().emplace_back(&uniform);
+
+// Render cycle
+shader.bind();
+mesh.render();
+shader.unbind();
+```
+
 
 
 
