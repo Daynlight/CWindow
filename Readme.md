@@ -75,6 +75,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   - [Features](#features)
   - [Libraries](#libraries)
   - [License](#license)
+  - [Prerequisites](#prerequisites)
 
 ## Screenshots
 
@@ -726,3 +727,12 @@ int main(){
 
 ## License
 [GNU GENERAL PUBLIC LICENSE Version 2, June 1991](LICENSE)
+
+
+
+
+## Prerequisites
+- CMake 3.15 or higher
+- C++ compiler with C++17 support
+- OpenGL 4.3 compatible graphics card
+- Git (for cloning with submodules)
