@@ -5,4 +5,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 add_subdirectory(CWindow)
-add_subdirectory(Example)
+add_subdirectory(Example/Fractals)
+add_subdirectory(Example/DrawShaderAndMesh)
+add_subdirectory(Example/ComputeShader)

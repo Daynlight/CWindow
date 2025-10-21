@@ -33,3 +33,5 @@ public:
   std::vector<const CW::Renderer::Uniform*>& getUniforms();
 };
 };
+
+#include "ComputeShader.hpp"
