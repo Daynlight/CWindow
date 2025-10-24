@@ -109,6 +109,7 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
 
 
 
+
   if(zoom_animation){
     if((*uniform)["zoom"]->get<float>() < 0.002) 
       current_zoom_speed = -1 * (zoom_speed);
@@ -124,6 +125,7 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
       current_z_speed = -1.0f * current_z_speed;
     z += current_z_speed;
   }
+
 
 
   (*uniform)["z_0"]->set<glm::vec2>(z);
@@ -167,6 +169,7 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
     (*uniform)["zoom"]->set<float>(zoom);
 
     
+
 
     (*uniform)["world_pos"]->set<glm::vec2>({
       (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Right")
@@ -235,6 +238,7 @@ int main(){
     1, 3, 2
   });
 
+  
   
 
   // main loop
