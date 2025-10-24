@@ -65,6 +65,20 @@ int malgenbrot(vec2 pixel){
     return i;
 };
 
+vec3 colorsByIter(int iter){
+    float t = float(iter) / float(maxIter);
+
+    if (iter == maxIter) {
+        return vec3(0.0, 0.0, 0.0);
+    }
+
+    float r = 0.5 + 0.5 * sin(t * colors.x + 0.0);
+    float g = 0.5 + 0.5 * cos(t * colors.y + 2.0);
+    float b = 0.5 + 0.5 * sin(t * colors.z + 4.0);
+
+    return vec3(r, g, b);
+};
+
 
 void main() {
     // seting window size
@@ -76,15 +90,9 @@ void main() {
     if(mode == 0) i = malgenbrot(pixel);
     else i = julia(pixel);
 
-    float t = float(i) / float(maxIter); 
-    vec3 color = vec3(
-        0.5 + 0.5 * sin(t * colors.x + 0.0),
-        0.5 + 0.5 * cos(t * colors.y + 1.0),
-        0.5 + 0.5 * sin(t * colors.z + 2.0)
-    );
 
     
-    FragColor = vec4(color, 1.0);
-}
+    FragColor = vec4(colorsByIter(i), 1.0);
+};
 )";
 };

@@ -6,7 +6,9 @@
 
 const float scroll_sensitivity = 0.02f; 
 const float sensitivity = 20.0f;
-const float keyboard_sensitivity = 5.0f;
+const float keyboard_sensitivity = 4.0f;
+const float keyboard_scroll_sensitivity = 0.005f;
+
 const float zoom_speed = 0.005f;
 const glm::vec2 z_speed = {0.004f, 0.002f};
 const float max_z_dot = 1;
@@ -67,8 +69,11 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
   ImGui::Separator();
   ImGui::Text("Presets");
       
-  if(ImGui::Button("Malgenbrot/Julia"))
-    mode = !mode;
+  if(ImGui::Button("Malgenbrot"))
+    mode = 0;
+
+  if(ImGui::Button("Julia"))
+    mode = 1;
 
   if(ImGui::Button("Julia: 0.35 + 0.35i")){
     mode = 1;
@@ -172,15 +177,15 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
 
 
     (*uniform)["world_pos"]->set<glm::vec2>({
-      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Right")
-                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Left"),
-      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Up")
-                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Down")
+      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Right")
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Left"),
+      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Up")
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Down")
     });
   
     (*uniform)["zoom"]->set<float>(
-      (*uniform)["zoom"]->get<float>() + scroll_sensitivity * window->getInputData()->is_bind_down("Increase Zoom") * (*uniform)["zoom"]->get<float>() 
-                                       - scroll_sensitivity * window->getInputData()->is_bind_down("Decrease Zoom") * (*uniform)["zoom"]->get<float>()
+      (*uniform)["zoom"]->get<float>() + keyboard_scroll_sensitivity * window->getInputData()->is_bind_down("Increase Zoom") * (*uniform)["zoom"]->get<float>() 
+                                       - keyboard_scroll_sensitivity * window->getInputData()->is_bind_down("Decrease Zoom") * (*uniform)["zoom"]->get<float>()
     );
 };
 
@@ -204,9 +209,9 @@ int main(){
   // uniform default values
   uniform["z_0"]->set<glm::vec2>({0.394f, 0.355f});
   uniform["mode"]->set<int>(0);
-  uniform["maxIter"]->set<int>(500);
+  uniform["maxIter"]->set<int>(300);
   uniform["colors"]->set<glm::vec3>({20.0f, 100.0f, 5.0f});
-  uniform["world_pos"]->set<glm::vec2>({20.0f, 0.0f});
+  uniform["world_pos"]->set<glm::vec2>({-100.0f, 0.0f});
   uniform["zoom"]->set<float>(3.0f);
   uniform["window_ratio"]->set<glm::vec2>({
     window.getWindowData()->width,
@@ -214,10 +219,10 @@ int main(){
   });
 
   // set binds
-  window.setBind("Up", 'W');
-  window.setBind("Down", 'S');
-  window.setBind("Left", 'A');
-  window.setBind("Right", 'D');
+  window.setBind("Move Up", 'W');
+  window.setBind("Move Down", 'S');
+  window.setBind("Move Left", 'A');
+  window.setBind("Move Right", 'D');
   window.setBind("Increase Zoom", '-');
   window.setBind("Decrease Zoom", '=');
 
