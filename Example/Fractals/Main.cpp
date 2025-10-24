@@ -61,7 +61,7 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
 
 
 
-inline void movement(CW::Renderer::iRenderer *window, CW::Renderer::Uniform* uniform){
+inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Uniform* uniform){
 
     (*uniform)["window_ratio"]->set<glm::vec2>({
       window->getWindowData()->width,
@@ -159,7 +159,7 @@ int main(){
     viewport.render();
     malgenbrot.unbind();
 
-    movement(&window, &uniform);
+    windowMovement(&window, &uniform);
 
     gui.render();
     window.windowEvents();
