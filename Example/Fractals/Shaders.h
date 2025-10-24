@@ -16,49 +16,75 @@ std::string fragment = R"(
 
 out vec4 FragColor;
 
+uniform vec2 world_pos;
+uniform vec2 window_ratio;
+
+uniform vec2 z_0;
 uniform vec3 colors;
 uniform int maxIter;
-uniform vec2 z;
-uniform vec2 world_pos;
 uniform float zoom;
-uniform vec2 window_ratio;
+
+uniform int mode;
+
+
+int julia(vec2 pixel){
+    int i = 0;
+    vec2 a1 = pixel;
+    vec2 a2 = pixel;
+
+    while(i < maxIter){
+        a2.x = a1.x * a1.x - a1.y * a1.y + z_0.x;
+        a2.y = 2.0 * a1.x * a1.y + z_0.y;   
+        
+        if (dot(a2, a2) > 4.0)
+            break;
+
+        a1 = a2;
+        i++;
+    };
+
+    return i;
+};
+
+int malgenbrot(vec2 pixel){
+    int i = 0;
+    vec2 a1 = pixel;
+    vec2 a2 = pixel;
+
+    while(i < maxIter){
+        a2.x = a1.x * a1.x - a1.y * a1.y + pixel.x;
+        a2.y = 2.0 * a1.x * a1.y + pixel.y;   
+        
+        if (dot(a2, a2) > 4.0)
+            break;
+
+        a1 = a2;
+        i++;
+    };
+
+    return i;
+};
 
 
 void main() {
+    // seting window size
     float ratio = window_ratio.y / window_ratio.x;
-    vec2 a1 = ((gl_FragCoord.xy - window_ratio / 2) / window_ratio) * zoom + world_pos / window_ratio;
-    a1.y = a1.y * ratio;
+    vec2 pixel = ((gl_FragCoord.xy - window_ratio / 2) / window_ratio) * zoom + world_pos / window_ratio;
+    pixel.y = pixel.y * ratio;
     
-    vec2 c = z;
-    if (z.x == 0.0f && z.y == 0.0f){
-        a1 = z;
-        c = a1;
-    }
-    vec2 a2 = a1;
-    
-    int j = 0;
-    for(int i = 0; i < maxIter; i++){
-        a2.x = a1.x * a1.x - a1.y * a1.y + c.x;  // Real part of (a1 * a1 + c)
-        a2.y = 2.0 * a1.x * a1.y + c.y;   
-        
-        if (length(a2) > 2.0f){
-            break;
-        };
+    int i = 0; 
+    if(mode == 0) i = malgenbrot(pixel);
+    else i = julia(pixel);
 
-        a1 = a2;
-        j = j + 1;
-    };
-
-    float t = float(j) / float(maxIter); 
+    float t = float(i) / float(maxIter); 
     vec3 color = vec3(
         0.5 + 0.5 * sin(t * colors.x + 0.0),
         0.5 + 0.5 * cos(t * colors.y + 1.0),
         0.5 + 0.5 * sin(t * colors.z + 2.0)
     );
 
-    float smoothColor = smoothstep(0.0, 1.0, length(a2));
     
-    FragColor = vec4(color * smoothColor, 1.0);
+    FragColor = vec4(color, 1.0);
 }
 )";
 };
