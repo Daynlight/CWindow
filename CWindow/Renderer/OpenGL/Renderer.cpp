@@ -107,6 +107,15 @@ void CW::Renderer::Renderer::windowEvents() {
   std::chrono::duration<float> delta = new_time - last_time;
   windowData.delta_time = delta.count();
   last_time = new_time;
+
+
+  inputData.keys_down.clear();
+  
+  for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key) {
+    if (glfwGetKey(window, key) == GLFW_PRESS) {
+      inputData.keys_down[static_cast<char>(key)] = true;
+    }
+  };
 }
 
 const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {

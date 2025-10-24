@@ -6,6 +6,7 @@
 
 const float scroll_sensitivity = 0.02f; 
 const float sensitivity = 20.0f;
+const float keyboard_sensitivity = 5.0f;
 const float zoom_speed = 0.005;
 
 glm::vec2 last_world_pos;
@@ -60,6 +61,54 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
 
 
 
+inline void movement(CW::Renderer::iRenderer *window, CW::Renderer::Uniform* uniform){
+
+    (*uniform)["window_ratio"]->set<glm::vec2>({
+      window->getWindowData()->width,
+      window->getWindowData()->height
+    });
+
+    if(window->getInputData()->right_mouse_button_is_down){
+      (*uniform)["z"]->set<glm::vec2>({
+        3 * (window->getWindowData()->width / 2 - window->getInputData()->mouse_x) / window->getWindowData()->width, 
+        3 * (window->getWindowData()->height / 2 - window->getInputData()->mouse_y) / window->getWindowData()->height
+      });
+    }
+
+    if(window->getInputData()->scroll_is_down){
+      (*uniform)["world_pos"]->set<glm::vec2>({
+        last_world_pos.x - (window->getInputData()->mouse_x - last_mouse_pos.x) * (*uniform)["zoom"]->get<float>(),
+        last_world_pos.y + (window->getInputData()->mouse_y - last_mouse_pos.y) * (*uniform)["zoom"]->get<float>()
+      });
+    }
+    else{
+      last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
+      last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
+    };
+    
+    (*uniform)["world_pos"]->set<glm::vec2>({
+      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('D')
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('A'),
+      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('W')
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('S')
+    });
+  
+    (*uniform)["zoom"]->set<float>(
+      (*uniform)["zoom"]->get<float>() + scroll_sensitivity * window->getInputData()->is_key_down('=') * (*uniform)["zoom"]->get<float>() 
+                                       - scroll_sensitivity * window->getInputData()->is_key_down('-') * (*uniform)["zoom"]->get<float>()
+    );
+
+    float zoom = (*uniform)["zoom"]->get<float>();
+    zoom += window->getInputData()->scroll_y * scroll_sensitivity * zoom;
+    zoom = glm::clamp(zoom, 0.000001f, 10.0f);
+    (*uniform)["zoom"]->set<float>(zoom);
+};
+
+
+
+
+
+
 
 int main(){
   // init window and renderer
@@ -110,35 +159,7 @@ int main(){
     viewport.render();
     malgenbrot.unbind();
 
-    uniform["window_ratio"]->set<glm::vec2>({
-      window.getWindowData()->width,
-      window.getWindowData()->height
-    });
-
-
-    if(window.getInputData()->right_mouse_button_is_down){
-      uniform["z"]->set<glm::vec2>({
-        3 * (window.getWindowData()->width / 2 - window.getInputData()->mouse_x) / window.getWindowData()->width, 
-        3 * (window.getWindowData()->height / 2 - window.getInputData()->mouse_y) / window.getWindowData()->height
-      });
-    }
-
-    if(window.getInputData()->scroll_is_down){
-      uniform["world_pos"]->set<glm::vec2>({
-        last_world_pos.x - (window.getInputData()->mouse_x - last_mouse_pos.x) * uniform["zoom"]->get<float>(),
-        last_world_pos.y + (window.getInputData()->mouse_y - last_mouse_pos.y) * uniform["zoom"]->get<float>()
-      });
-    }
-    else{
-      last_world_pos = uniform["world_pos"]->get<glm::vec2>();
-      last_mouse_pos = {window.getInputData()->mouse_x, window.getInputData()->mouse_y};
-    };
-
-
-    float zoom = uniform["zoom"]->get<float>();
-    zoom += window.getInputData()->scroll_y * scroll_sensitivity * zoom;
-    zoom = glm::clamp(zoom, 0.000001f, 10.0f);
-    uniform["zoom"]->set<float>(zoom);
+    movement(&window, &uniform);
 
     gui.render();
     window.windowEvents();
