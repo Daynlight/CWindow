@@ -85,23 +85,25 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
       last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
       last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
     };
-    
-    (*uniform)["world_pos"]->set<glm::vec2>({
-      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('D')
-                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('A'),
-      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('W')
-                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_key_down('S')
-    });
-  
-    (*uniform)["zoom"]->set<float>(
-      (*uniform)["zoom"]->get<float>() + scroll_sensitivity * window->getInputData()->is_key_down('=') * (*uniform)["zoom"]->get<float>() 
-                                       - scroll_sensitivity * window->getInputData()->is_key_down('-') * (*uniform)["zoom"]->get<float>()
-    );
 
     float zoom = (*uniform)["zoom"]->get<float>();
     zoom += window->getInputData()->scroll_y * scroll_sensitivity * zoom;
     zoom = glm::clamp(zoom, 0.000001f, 10.0f);
     (*uniform)["zoom"]->set<float>(zoom);
+
+    
+
+    (*uniform)["world_pos"]->set<glm::vec2>({
+      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Right")
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Left"),
+      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Up")
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Down")
+    });
+  
+    (*uniform)["zoom"]->set<float>(
+      (*uniform)["zoom"]->get<float>() + scroll_sensitivity * window->getInputData()->is_bind_down("Increase Zoom") * (*uniform)["zoom"]->get<float>() 
+                                       - scroll_sensitivity * window->getInputData()->is_bind_down("Decrease Zoom") * (*uniform)["zoom"]->get<float>()
+    );
 };
 
 
@@ -131,6 +133,14 @@ int main(){
     window.getWindowData()->width,
     window.getWindowData()->height
   });
+
+  // set binds
+  window.setBind("Up", 'W');
+  window.setBind("Down", 'S');
+  window.setBind("Left", 'A');
+  window.setBind("Right", 'D');
+  window.setBind("Increase Zoom", '-');
+  window.setBind("Decrease Zoom", '=');
 
   // init gui and add Settings Window
   CW::Gui::Gui gui(&window);

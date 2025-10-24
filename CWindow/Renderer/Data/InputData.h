@@ -18,5 +18,11 @@ struct InputData{
     auto it = keys_down.find(key);
     return it != keys_down.end() && it->second;
   };
+
+  std::unordered_map<std::string, char> binds;
+  bool is_bind_down(const std::string& bind) const {
+    auto it = binds.find(bind);
+    return it != binds.end() && is_key_down(it->second);  
+  };
 };
 };

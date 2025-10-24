@@ -110,7 +110,7 @@ void CW::Renderer::Renderer::windowEvents() {
 
 
   inputData.keys_down.clear();
-  
+
   for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key) {
     if (glfwGetKey(window, key) == GLFW_PRESS) {
       inputData.keys_down[static_cast<char>(key)] = true;
@@ -124,6 +124,10 @@ const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
 
 const CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
   return &inputData;
+}
+
+void CW::Renderer::Renderer::setBind(const std::string &action, char key){
+  inputData.binds[action] = key;
 }
 
 void CW::Renderer::Renderer::createWindow()
