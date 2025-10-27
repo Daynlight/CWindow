@@ -7,12 +7,12 @@ set(src
   "Shader/ComputeShader.cpp"
   "Shader/ComputeShader.hpp"
   "Uniform/Uniform.cpp"
-  ${ROOT_DIR}/vendor/glad/glad-4.3/src/glad.c
+  ${ROOT_DIR}/vendor/glad/src/glad.c
 )
 set(headers
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_DIR}
-  ${ROOT_DIR}/vendor/glad/glad-4.3/include/  
+  ${ROOT_DIR}/vendor/glad/include/  
   ${ROOT_DIR}/vendor/glfw/include/
   ${ROOT_DIR}/vendor/glm/glm/
 )

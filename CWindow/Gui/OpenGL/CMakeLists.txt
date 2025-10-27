@@ -15,7 +15,7 @@ set(headers
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_DIR}
   ${ROOT_DIR}/Renderer/
-  ${ROOT_DIR}/vendor/glad/glad-4.3/include/  
+  ${ROOT_DIR}/vendor/glad/include/  
   ${ROOT_DIR}/vendor/glfw/include/
   ${ROOT_DIR}/vendor/glm/glm/
   ${ROOT_DIR}/vendor/imgui/
