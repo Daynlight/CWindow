@@ -8,3 +8,7 @@
 [submodule "CWindow/vendor/glfw"]
 	path = CWindow/vendor/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "CWindow/vendor/glad"]
+	path = CWindow/vendor/glad
+	url = https://github.com/Dav1dde/glad
+	branch = master
