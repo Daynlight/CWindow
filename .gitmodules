@@ -5,9 +5,9 @@
 	path = CWindow/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
-[submodule "CWindow/vendor/glad"]
-	path = CWindow/vendor/glad
-	url = https://github.com/Daynlight/glad.git
+# [submodule "CWindow/vendor/glad"]
+# 	path = CWindow/vendor/glad
+# 	url = https://github.com/Daynlight/glad.git
 [submodule "CWindow/vendor/glfw"]
 	path = CWindow/vendor/glfw
 	url = https://github.com/glfw/glfw.git
