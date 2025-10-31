@@ -131,8 +131,7 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
     z += current_z_speed;
   }
 
-
-
+  
   (*uniform)["z_0"]->set<glm::vec2>(z);
   (*uniform)["maxIter"]->set<int>(maxIter);
   (*uniform)["colors"]->set<glm::vec3>(colors * 255.0f);

@@ -2,6 +2,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include <unordered_map>
 #include <string>
@@ -9,7 +10,11 @@
 #include <typeinfo>
 
 namespace CW::Renderer{
-using DataVariants = std::variant<int, float, double, glm::vec2, glm::vec3, glm::dvec2, glm::dvec3>;
+using DataVariants = std::variant<int, glm::ivec2, glm::ivec3, glm::ivec4,
+                                  float, glm::vec2, glm::vec3, glm::vec4, 
+                                  double, glm::dvec2, glm::dvec3, glm::dvec4, 
+                                  glm::mat2, glm::mat3, glm::mat4>;
+
 struct UniformData{
   DataVariants value = 0.0f;
   const std::type_info* type = &typeid(float);
@@ -42,5 +47,14 @@ public:
 
   void bind(GLuint& shader) const;
   UniformData* operator[](const std::string& name);
+  void clear();
+  void remove(const std::string& name);
+  template<typename T>
+  void set(const std::string& name, T value);
+};
+
+template <typename T>
+inline void Uniform::set(const std::string &name, T value){
+  this->operator[](name)->set<T>(value);
 };
 };
