@@ -53,6 +53,8 @@ public:
   void maximize(bool maximize);
   void setPosition(int x, int y);
   void setSize(int width, int height);
+  void setCursorVisibility(bool visible);
+  void setCursorOn(bool on);
   void close();
 };
 };

@@ -22,6 +22,7 @@ return [](CW::Renderer::iRenderer *window){
   ImGui::Text("is maximized, %d", window->getWindowData()->is_maximize);
   ImGui::Text("is minimized, %d", window->getWindowData()->is_minimize);
   ImGui::Text("is focused, %d", window->getWindowData()->is_focused);
+  ImGui::Text("is cursor visible, %d", window->getWindowData()->is_cursor_visible);
   ImGui::Text("delta time, %f", window->getWindowData()->delta_time);
 
 
@@ -46,9 +47,13 @@ return [](CW::Renderer::iRenderer *window){
   if(ImGui::Button("Fullscreen mode")) window->setWindowMode(CW::Renderer::FULLSCREEN);
   if(ImGui::Button("Maximize")) window->maximize(!window->getWindowData()->is_maximize);
   if(ImGui::Button("Minimize")) window->minimize(!window->getWindowData()->is_minimize);
+  
 
-
-  };
+  ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+  if(ImGui::Button("Cursor Visibility")) window->setCursorVisibility(!window->getWindowData()->is_cursor_visible);
+  ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+  if(ImGui::Button("Cursor On")) window->setCursorOn(!window->getWindowData()->is_cursor_on);
+};
 };
 
 
@@ -64,6 +69,9 @@ int main(){
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
+
+    if(window.getInputData()->is_key_down('q')) window.setCursorVisibility(!window.getWindowData()->is_cursor_visible);
+    if(window.getInputData()->is_key_down('e')) window.setCursorOn(!window.getWindowData()->is_cursor_on);
 
     gui.render();
     window.windowEvents();

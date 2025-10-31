@@ -21,6 +21,7 @@ struct WindowData{
   
   
   bool is_cursor_visible = true;
+  bool is_cursor_on = true;
   bool is_resizing = false;
   bool is_dragging = false;
   bool is_mouse_over = false; 
