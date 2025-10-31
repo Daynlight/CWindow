@@ -77,7 +77,6 @@ void CW::Renderer::Renderer::windowEvents() {
   int width, height, x, y;
   GLFWmonitor* monitor = glfwGetWindowMonitor(window);
   bool decorated = glfwGetWindowAttrib(window, GLFW_DECORATED);
-  bool iconfied = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
   bool maximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
 
   glfwGetFramebufferSize(window, &width, &height);
@@ -86,7 +85,7 @@ void CW::Renderer::Renderer::windowEvents() {
   
   if(!windowData.should_close) windowData.should_close = glfwWindowShouldClose(window);
   
-  if (iconfied && decorated)
+  if (decorated)
     windowData.window_mode = WindowMode::WINDOW;
   if (maximized && !decorated)
     windowData.window_mode = WindowMode::BORDERLESS; 
@@ -98,7 +97,7 @@ void CW::Renderer::Renderer::windowEvents() {
   };
 
   windowData.is_focused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
-  windowData.is_minimize = iconfied;
+  windowData.is_minimize = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
   windowData.is_maximize = maximized;
   
   windowData.width = width;

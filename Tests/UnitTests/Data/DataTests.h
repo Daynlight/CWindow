@@ -1,6 +1,8 @@
 #include "Renderer.h"
+#include <unistd.h>
 
-void dataWindowShouldClose(int *total, int *passed){
+
+void dataWindowShouldCloseTests(int *total, int *passed){
   CW::Renderer::Renderer window = CW::Renderer::Renderer();
   window.windowEvents();
   
@@ -15,7 +17,7 @@ void dataWindowShouldClose(int *total, int *passed){
   else printf("Fail on: window.getWindowData()->should_close == 1\n");
 };
 
-void dataWindowVsync(int *total, int *passed){
+void dataWindowVsyncTests(int *total, int *passed){
   CW::Renderer::Renderer window = CW::Renderer::Renderer();
   window.windowEvents();
   
@@ -24,14 +26,15 @@ void dataWindowVsync(int *total, int *passed){
   else printf("Fail on: window.getWindowData()->vsync == 0\n");
 
   window.setVsync(1);
+  sleep(1);
   window.windowEvents();
   
   (*total)++;
   if(window.getWindowData()->vsync == 1) (*passed)++;
-  else printf("Fail on: window.getWindowData()->vsync == 60\n");
+  else printf("Fail on: window.getWindowData()->vsync == 1\n");
 };
 
-void dataWindowModes(int *total, int *passed){
+void dataWindowModesTests(int *total, int *passed){
   CW::Renderer::Renderer window = CW::Renderer::Renderer();
   window.windowEvents();
   
@@ -40,6 +43,7 @@ void dataWindowModes(int *total, int *passed){
   else printf("window.getWindowData()->window_mode == CW::Renderer::WINDOW\n");
 
   window.setWindowMode(CW::Renderer::BORDERLESS);
+  sleep(1);
   window.windowEvents();
   
   (*total)++;
@@ -47,6 +51,7 @@ void dataWindowModes(int *total, int *passed){
   else printf("window.getWindowData()->window_mode == CW::Renderer::BORDERLESS\n");
 
   window.setWindowMode(CW::Renderer::FULLSCREEN);
+  sleep(1);
   window.windowEvents();
   
   (*total)++;
@@ -54,7 +59,7 @@ void dataWindowModes(int *total, int *passed){
   else printf("window.getWindowData()->window_mode == CW::Renderer::FULLSCREEN\n");
 };
 
-void dataWindowTitleTest(int *total, int *passed){
+void dataWindowTitleTests(int *total, int *passed){
   std::string title = "Data Example 123 \b \n adas";
   CW::Renderer::Renderer window = CW::Renderer::Renderer();
   window.setWindowTitle(title);
@@ -65,9 +70,56 @@ void dataWindowTitleTest(int *total, int *passed){
   else printf("Fail on: window.getWindowData()->title == title\n");
 };
 
+void dataWindowMinimizedTests(int *total, int *passed){
+  CW::Renderer::Renderer window = CW::Renderer::Renderer();
+  window.windowEvents();
+  
+  (*total)++;
+  if(window.getWindowData()->is_minimize == 0) (*passed)++;
+  else printf("Fail on: window.getWindowData()->is_minimize == 0\n");
 
+  window.minimize(1);
+  sleep(1);
+  window.windowEvents();
 
+  (*total)++;
+  if(window.getWindowData()->is_minimize == 1) (*passed)++;
+  else printf("Fail on: window.getWindowData()->is_minimize == 1\n");
+};
 
+void dataWindowMaximizedTests(int *total, int *passed){
+  CW::Renderer::Renderer window = CW::Renderer::Renderer();
+  window.windowEvents();
+  
+  (*total)++;
+  if(window.getWindowData()->is_maximize == 0) (*passed)++;
+  else printf("Fail on: window.getWindowData()->is_maximize == 0\n");
+
+  window.maximize(1);
+  sleep(1);
+  window.windowEvents();
+
+  (*total)++;
+  if(window.getWindowData()->is_maximize == 1) (*passed)++;
+  else printf("Fail on: window.getWindowData()->is_maximize == 1\n");
+};
+
+void dataWindowFocusTests(int *total, int *passed){
+  CW::Renderer::Renderer window = CW::Renderer::Renderer();
+  window.windowEvents();
+  
+  (*total)++;
+  if(window.getWindowData()->is_focused == 1) (*passed)++;
+  else printf("Fail on: window.getWindowData()->is_focused == 1\n");
+
+  window.minimize(1);
+  sleep(1);
+  window.windowEvents();  
+
+  (*total)++;
+  if(window.getWindowData()->is_focused == 0) (*passed)++;
+  else printf("Fail on: window.getWindowData()->is_focused == 0\n");
+};
 
 
 
@@ -76,10 +128,13 @@ void data_run_all(){
   int passed = 0;
 
   printf("/////// data tests: /////// \n");
-  dataWindowTitleTest(&total, &passed);
-  dataWindowShouldClose(&total, &passed);
-  dataWindowVsync(&total, &passed);
-  dataWindowModes(&total, &passed);
+  dataWindowTitleTests(&total, &passed);
+  dataWindowShouldCloseTests(&total, &passed);
+  dataWindowVsyncTests(&total, &passed);
+  dataWindowModesTests(&total, &passed);
+  dataWindowMinimizedTests(&total, &passed);
+  dataWindowMaximizedTests(&total, &passed);
+  dataWindowFocusTests(&total, &passed);
 
   printf("%d/%d passed\n", passed, total);
 }
