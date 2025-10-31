@@ -23,6 +23,7 @@ return [](CW::Renderer::iRenderer *window){
   ImGui::Text("is minimized, %d", window->getWindowData()->is_minimize);
   ImGui::Text("is focused, %d", window->getWindowData()->is_focused);
   ImGui::Text("is cursor visible, %d", window->getWindowData()->is_cursor_visible);
+  ImGui::Text("is cursor on, %d", window->getWindowData()->is_cursor_on);
   ImGui::Text("delta time, %f", window->getWindowData()->delta_time);
 
 

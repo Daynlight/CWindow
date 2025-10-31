@@ -80,17 +80,29 @@ void CW::Renderer::Renderer::setSize(int width, int height) {
 }
 
 void CW::Renderer::Renderer::setCursorVisibility(bool visible) {
-  if(visible)
+  if(visible){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-  else
+    windowData.is_cursor_visible = 1;
+    windowData.is_cursor_on = 1;
+  }
+  else{
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    windowData.is_cursor_visible = 0;
+    windowData.is_cursor_on = 1;
+  }
 }
 
 void CW::Renderer::Renderer::setCursorOn(bool on) {
-  if(on)
+  if(on){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-  else
+    windowData.is_cursor_on = 1;
+    windowData.is_cursor_visible = 1;
+  }
+  else{
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+      windowData.is_cursor_on = 0;
+    windowData.is_cursor_visible = 0;
+  }
 };
 
 void CW::Renderer::Renderer::close(){
@@ -132,15 +144,19 @@ void CW::Renderer::Renderer::windowEvents() {
   windowData.is_minimize = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
   windowData.is_maximize = maximized;
 
-  if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
+  if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL){
     windowData.is_cursor_visible = 1;
-  else if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_HIDDEN)
+    windowData.is_cursor_on = 1;
+  }
+  else if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_HIDDEN){
     windowData.is_cursor_visible = 0;
-
-  if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
-    windowData.is_cursor_visible = 1;
-  else if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
+    windowData.is_cursor_on = 1;
+  }
+  else if(glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED){
+    windowData.is_cursor_on = 0;
     windowData.is_cursor_visible = 0;
+  }
+    
   
   windowData.width = width;
   windowData.height = height;
