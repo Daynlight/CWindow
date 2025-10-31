@@ -180,15 +180,15 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
 
     //////////// keyboard ////////////
     (*uniform)["world_pos"]->set<glm::vec2>({
-      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Right")
-                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Left"),
-      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Up")
-                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Down")
+      (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_keyboard_bind_down("Move Right")
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_keyboard_bind_down("Move Left"),
+      (*uniform)["world_pos"]->get<glm::vec2>().y + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_keyboard_bind_down("Move Up")
+                                                  - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_keyboard_bind_down("Move Down")
     });
   
     (*uniform)["zoom"]->set<float>(
-      (*uniform)["zoom"]->get<float>() + keyboard_scroll_sensitivity * window->getInputData()->is_bind_down("Increase Zoom") * (*uniform)["zoom"]->get<float>() 
-                                       - keyboard_scroll_sensitivity * window->getInputData()->is_bind_down("Decrease Zoom") * (*uniform)["zoom"]->get<float>()
+      (*uniform)["zoom"]->get<float>() + keyboard_scroll_sensitivity * window->getInputData()->is_keyboard_bind_down("Increase Zoom") * (*uniform)["zoom"]->get<float>() 
+                                       - keyboard_scroll_sensitivity * window->getInputData()->is_keyboard_bind_down("Decrease Zoom") * (*uniform)["zoom"]->get<float>()
     );
 
 

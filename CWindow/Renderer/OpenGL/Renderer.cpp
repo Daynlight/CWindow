@@ -130,7 +130,7 @@ const CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
 }
 
 void CW::Renderer::Renderer::setBind(const std::string &action, char key){
-  inputData.binds[action] = key;
+  inputData.keyboard_binds[action] = key;
 }
 
 void CW::Renderer::Renderer::createWindow()
