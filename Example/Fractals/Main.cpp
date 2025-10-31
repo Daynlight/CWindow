@@ -32,8 +32,6 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
   colors /= 255;
   int mode = (*uniform)["mode"]->get<int>();
 
-  ImGui::Begin("Settings", nullptr);
-
   if(window->getWindowData()->delta_time >= 0.0f) 
   ImGui::Text("FPS: %.f", 1.0f / window->getWindowData()->delta_time);
   
@@ -110,7 +108,6 @@ inline std::function<void(CW::Renderer::iRenderer *window)> renderSettingsWindow
     z = {0.0f, -0.8f};
   }
 
-  ImGui::End();
 
 
 

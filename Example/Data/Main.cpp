@@ -3,7 +3,6 @@
 
 inline std::function<void(CW::Renderer::iRenderer *window)> dataWindow(){
 return [](CW::Renderer::iRenderer *window){
-  ImGui::Begin("Data Window", nullptr);
 
   ImGui::SeparatorText("Info");
   ImGui::Text("fps, %f", window->getWindowData()->delta_time != 0 ? floor(1 / window->getWindowData()->delta_time) : 0.0f);
@@ -49,9 +48,12 @@ return [](CW::Renderer::iRenderer *window){
   if(ImGui::Button("Minimize")) window->minimize(!window->getWindowData()->is_minimize);
 
 
-  ImGui::End();
   };
 };
+
+
+
+
 
 int main(){
   CW::Renderer::Renderer window;

@@ -56,8 +56,11 @@ void CW::Gui::Gui::render() const {
   ImGui::NewFrame();
 
   workspace([this](){
-    for(auto& window : windows)
+    for(auto& window : windows){
+      ImGui::Begin(window.first.c_str(), nullptr);
       window.second.onRender(renderer);
+      ImGui::End();
+    };
   });
   
   ImGui::Render();
