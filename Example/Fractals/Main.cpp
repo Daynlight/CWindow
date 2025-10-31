@@ -149,6 +149,8 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
       window->getWindowData()->height
     });
 
+
+    //////////// mouse/touchpad ////////////
     if(window->getInputData()->right_mouse_button_is_down){
       (*uniform)["z_0"]->set<glm::vec2>({
         3 * (window->getWindowData()->width / 2 - window->getInputData()->mouse_x) / window->getWindowData()->width, 
@@ -156,6 +158,7 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
       });
     }
 
+    //////////// mouse ////////////
     if(window->getInputData()->scroll_is_down){
       (*uniform)["world_pos"]->set<glm::vec2>({
         last_world_pos.x - (window->getInputData()->mouse_x - last_mouse_pos.x) * (*uniform)["zoom"]->get<float>(),
@@ -165,16 +168,10 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
     else{
       last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
       last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
-    };
+    };  
+      
 
-    float zoom = (*uniform)["zoom"]->get<float>();
-    zoom += window->getInputData()->scroll_y * scroll_sensitivity * zoom;
-    zoom = glm::clamp(zoom, 0.000001f, 10.0f);
-    (*uniform)["zoom"]->set<float>(zoom);
-
-    
-
-
+    //////////// keyboard ////////////
     (*uniform)["world_pos"]->set<glm::vec2>({
       (*uniform)["world_pos"]->get<glm::vec2>().x + keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Right")
                                                   - keyboard_sensitivity * (*uniform)["zoom"]->get<float>() * window->getInputData()->is_bind_down("Move Left"),
@@ -186,6 +183,13 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
       (*uniform)["zoom"]->get<float>() + keyboard_scroll_sensitivity * window->getInputData()->is_bind_down("Increase Zoom") * (*uniform)["zoom"]->get<float>() 
                                        - keyboard_scroll_sensitivity * window->getInputData()->is_bind_down("Decrease Zoom") * (*uniform)["zoom"]->get<float>()
     );
+
+
+    //////////// postprocess ////////////
+    float zoom = (*uniform)["zoom"]->get<float>();
+    zoom += window->getInputData()->mouse_scroll_y * scroll_sensitivity * zoom;
+    zoom = glm::clamp(zoom, 0.0001f, 10.0f);
+    (*uniform)["zoom"]->set<float>(zoom);
 };
 
 
