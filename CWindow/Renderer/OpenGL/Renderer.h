@@ -51,6 +51,8 @@ public:
   void setVsync(bool vsync);
   void minimize(bool minimize);
   void maximize(bool maximize);
+  void setPosition(int x, int y);
+  void setSize(int width, int height);
   void close();
 };
 };

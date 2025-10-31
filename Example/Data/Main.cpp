@@ -17,6 +17,8 @@ return [](CW::Renderer::iRenderer *window){
   if(window->getWindowData()->window_mode == CW::Renderer::WINDOW) ImGui::Text("window_mode: Window");
   if(window->getWindowData()->window_mode == CW::Renderer::BORDERLESS) ImGui::Text("window_mode: Borderless");
   if(window->getWindowData()->window_mode == CW::Renderer::FULLSCREEN) ImGui::Text("window_mode: Fullscreen");
+  ImGui::Text("window pos, [%d, %d]", window->getWindowData()->x, window->getWindowData()->y);
+  ImGui::Text("window size, [%d, %d]", window->getWindowData()->width, window->getWindowData()->height);
   ImGui::Text("title, %s", window->getWindowData()->title.c_str());
   ImGui::Text("is maximized, %d", window->getWindowData()->is_maximize);
   ImGui::Text("is minimized, %d", window->getWindowData()->is_minimize);
@@ -29,9 +31,17 @@ return [](CW::Renderer::iRenderer *window){
 
   if(ImGui::Button("Should close")) window->close();
   if(ImGui::Button("vsync")) window->setVsync(!window->getWindowData()->vsync);
+
+  glm::ivec2 pos = {window->getWindowData()->x, window->getWindowData()->y};
+  if(ImGui::InputInt2("window pos: ", &pos[0])) window->setPosition(pos.x, pos.y);
+  
+  glm::ivec2 size = {window->getWindowData()->width, window->getWindowData()->height};
+  if(ImGui::SliderInt2("window size: ", &size[0], 10, 1920)) window->setSize(size.x, size.y);
+
   std::string title = window->getWindowData()->title;
   title.resize(255, '\0');
   if(ImGui::InputText("Title: ", &title[0], title.size())) window->setWindowTitle(title.c_str());
+  
   if(ImGui::Button("Window mode")) window->setWindowMode(CW::Renderer::WINDOW);
   if(ImGui::Button("Borderless mode")) window->setWindowMode(CW::Renderer::BORDERLESS);
   if(ImGui::Button("Fullscreen mode")) window->setWindowMode(CW::Renderer::FULLSCREEN);

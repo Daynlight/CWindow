@@ -71,6 +71,14 @@ void CW::Renderer::Renderer::maximize(bool maximize) {
   }
 };
 
+void CW::Renderer::Renderer::setPosition(int x, int y) {
+  glfwSetWindowPos(window, x, y);
+}
+
+void CW::Renderer::Renderer::setSize(int width, int height) {
+  glfwSetWindowSize(window, width, height);
+};
+
 void CW::Renderer::Renderer::close(){
   windowData.should_close = 1;
 };
