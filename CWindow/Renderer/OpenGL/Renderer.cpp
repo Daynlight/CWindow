@@ -8,14 +8,14 @@ void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
   
   switch (new_mode) {
     case WindowMode::FULLSCREEN:
-      glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
+      glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
       glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
       windowData.window_mode = WindowMode::FULLSCREEN;
       break;
 
     case WindowMode::BORDERLESS:
+    glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
       glfwSetWindowMonitor(window, nullptr, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
-      glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
       windowData.window_mode = WindowMode::BORDERLESS;
       break;
     
@@ -69,30 +69,38 @@ void CW::Renderer::Renderer::maximize(bool maximize) {
 
 
 
-CW::Renderer::Renderer::Renderer(bool windowless) { 
-  if(!windowless) createWindow(); 
-  else windowLessRenderer();
-  createRenderer();
-};
-
-CW::Renderer::Renderer::~Renderer() {
-  windowData.should_close = false;
-  if (window) glfwDestroyWindow(window);
-  glfwTerminate();
-};
 
 void CW::Renderer::Renderer::windowEvents() {
   glfwPollEvents();
 
   // Update Window Info
   int width, height, x, y;
+  GLFWmonitor* monitor = glfwGetWindowMonitor(window);
+  bool decorated = glfwGetWindowAttrib(window, GLFW_DECORATED);
+  bool iconfied = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
+  bool maximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
+
   glfwGetFramebufferSize(window, &width, &height);
   glfwGetWindowPos(window, &x, &y);
   glViewport(0, 0, windowData.width, windowData.height);
+  
   if(!windowData.should_close) windowData.should_close = glfwWindowShouldClose(window);
+  
+  if (iconfied && decorated)
+    windowData.window_mode = WindowMode::WINDOW;
+  if (maximized && !decorated)
+    windowData.window_mode = WindowMode::BORDERLESS; 
+  if(!decorated && maximized){
+    if(monitor)
+      windowData.window_mode = WindowMode::FULLSCREEN;
+    else
+      windowData.window_mode = WindowMode::WINDOW;
+  };
+
   windowData.is_focused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
-  windowData.is_minimize = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
-  windowData.is_maximize = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
+  windowData.is_minimize = iconfied;
+  windowData.is_maximize = maximized;
+  
   windowData.width = width;
   windowData.height = height;
   windowData.x = x;
@@ -126,6 +134,23 @@ void CW::Renderer::Renderer::windowEvents() {
       inputData.keys_down[static_cast<char>(key)] = true;
     };
   };
+};
+
+
+
+
+
+
+CW::Renderer::Renderer::Renderer(bool windowless) { 
+  if(!windowless) createWindow(); 
+  else windowLessRenderer();
+  createRenderer();
+};
+
+CW::Renderer::Renderer::~Renderer() {
+  windowData.should_close = false;
+  if (window) glfwDestroyWindow(window);
+  glfwTerminate();
 };
 
 const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
