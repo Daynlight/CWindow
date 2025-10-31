@@ -229,12 +229,12 @@ int main(){
   });
 
   // set binds
-  window.setBind("Move Up", 'W');
-  window.setBind("Move Down", 'S');
-  window.setBind("Move Left", 'A');
-  window.setBind("Move Right", 'D');
-  window.setBind("Increase Zoom", '-');
-  window.setBind("Decrease Zoom", '=');
+  window.setKeyboardBind("Move Up", 'W');
+  window.setKeyboardBind("Move Down", 'S');
+  window.setKeyboardBind("Move Left", 'A');
+  window.setKeyboardBind("Move Right", 'D');
+  window.setKeyboardBind("Increase Zoom", '-');
+  window.setKeyboardBind("Decrease Zoom", '=');
 
   // init gui and add Settings Window
   CW::Gui::Gui gui(&window);
