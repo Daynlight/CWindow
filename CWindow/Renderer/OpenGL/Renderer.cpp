@@ -54,8 +54,9 @@ void CW::Renderer::Renderer::setIcon(const std::string& path){
   icon.pixels = image;
 
   glfwSetWindowIcon(window, 1, &icon);
-
   stbi_image_free(image);
+
+  windowData.icon = path;
 }
 
 void CW::Renderer::Renderer::minimize(bool minimize) {

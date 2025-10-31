@@ -19,6 +19,7 @@ return [](CW::Renderer::iRenderer *window){
   ImGui::Text("window pos, [%d, %d]", window->getWindowData()->x, window->getWindowData()->y);
   ImGui::Text("window size, [%d, %d]", window->getWindowData()->width, window->getWindowData()->height);
   ImGui::Text("title, %s", window->getWindowData()->title.c_str());
+  ImGui::Text("icon path, %s", window->getWindowData()->icon.c_str());
   ImGui::Text("is maximized, %d", window->getWindowData()->is_maximize);
   ImGui::Text("is minimized, %d", window->getWindowData()->is_minimize);
   ImGui::Text("is focused, %d", window->getWindowData()->is_focused);
