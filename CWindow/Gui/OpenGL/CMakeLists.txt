@@ -18,6 +18,7 @@ set(headers
   ${ROOT_DIR}/vendor/glad/include/  
   ${ROOT_DIR}/vendor/glfw/include/
   ${ROOT_DIR}/vendor/glm/glm/
+  ${ROOT_DIR}/vendor/stb/
   ${ROOT_DIR}/vendor/imgui/
   ${ROOT_DIR}/vendor/imgui/backends/
 )

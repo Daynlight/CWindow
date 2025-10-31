@@ -12,3 +12,6 @@
 	path = CWindow/vendor/glad
 	url = https://github.com/Dav1dde/glad
 	branch = c
+[submodule "CWindow/vendor/stb"]
+	path = CWindow/vendor/stb
+	url = https://github.com/nothings/stb.git

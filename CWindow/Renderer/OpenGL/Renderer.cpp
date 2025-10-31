@@ -40,6 +40,20 @@ void CW::Renderer::Renderer::setWindowTitle(const std::string& title){
   windowData.title = title;
 }
 
+void CW::Renderer::Renderer::setIcon(const std::string *path){
+  int width, height, channels;
+  unsigned char* image = stbi_load(path->c_str(), &width, &height, &channels, 0);
+  
+  GLFWimage icon;
+  icon.width = width;
+  icon.height = height;
+  icon.pixels = image;
+
+  glfwSetWindowIcon(window, 1, &icon);
+
+  stbi_image_free(image);
+}
+
 void CW::Renderer::Renderer::minimize(bool minimize) {
   if(minimize){
     glfwIconifyWindow(window);
@@ -156,7 +170,6 @@ void CW::Renderer::Renderer::windowEvents() {
     windowData.is_cursor_on = 0;
     windowData.is_cursor_visible = 0;
   }
-    
   
   windowData.width = width;
   windowData.height = height;
@@ -249,7 +262,7 @@ void CW::Renderer::Renderer::createWindow(){
     scroll_x = xOffset;
     scroll_y = yOffset;
   });
-}
+};
 
 void CW::Renderer::Renderer::windowLessRenderer() {
   if (!glfwInit()) {

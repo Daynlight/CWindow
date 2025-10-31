@@ -13,6 +13,7 @@
 #include "../Data/InputData.h"
 
 #include "glad/glad.h"
+#include "stb_image.h"
 
 #include <vector>
 #include <stdexcept>
@@ -48,6 +49,7 @@ public:
   
   void setWindowMode(CW::Renderer::WindowMode mode);
   void setWindowTitle(const std::string& title);
+  void setIcon(const std::string* path);
   void setVsync(bool vsync);
   void minimize(bool minimize);
   void maximize(bool maximize);

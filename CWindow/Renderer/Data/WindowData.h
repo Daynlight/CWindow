@@ -18,23 +18,12 @@ struct WindowData{
   bool is_minimize = false;
   bool is_maximize = false;
   float delta_time = 0.0f;
-  
-  
   bool is_cursor_visible = true;
   bool is_cursor_on = true;
-  bool is_resizing = false;
-  bool is_dragging = false;
-  bool is_mouse_over = false; 
-  bool is_keyboard_input_enabled = true;
-  float opacity = 1.0f;
   unsigned int width;
   unsigned int height;
   unsigned int x;
   unsigned int y;
   std::string icon;
-  float aspect_ratio;
-  std::chrono::high_resolution_clock::time_point on_time;
-  unsigned int monitor;
-  unsigned int monitor_count;
 };
 };

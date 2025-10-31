@@ -7,6 +7,7 @@ set(src
   "Shader/ComputeShader.cpp"
   "Shader/ComputeShader.hpp"
   "Uniform/Uniform.cpp"
+  ${ROOT_DIR}/vendor/stb/deprecated/stb_image.c
   ${ROOT_DIR}/vendor/glad/src/glad.c
 )
 set(headers
@@ -15,6 +16,7 @@ set(headers
   ${ROOT_DIR}/vendor/glad/include/  
   ${ROOT_DIR}/vendor/glfw/include/
   ${ROOT_DIR}/vendor/glm/glm/
+  ${ROOT_DIR}/vendor/stb/
 )
 
 ############# [Set Files] #############
