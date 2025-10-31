@@ -257,7 +257,7 @@ int main(){
   
 
   // main loop
-  while(window.getWindowData()->should_close){
+  while(!window.getWindowData()->should_close){
     window.beginFrame();
 
     malgenbrot.bind();

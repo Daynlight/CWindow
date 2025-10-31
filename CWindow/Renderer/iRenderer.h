@@ -30,5 +30,6 @@ public:
   virtual void setVsync(bool vsync) = 0;
   virtual void minimize(bool minimize) = 0;
   virtual void maximize(bool maximize) = 0;
+  virtual void close() = 0;
 };
 };

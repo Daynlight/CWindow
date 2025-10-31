@@ -21,8 +21,9 @@ void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
     
     default:
       glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
-      glfwSetWindowMonitor(window, nullptr, (windowData.x + windowData.width) / 2, (windowData.y + windowData.height) / 2, 
-      windowData.width / 2, windowData.height / 2, GLFW_DONT_CARE);
+      int monitor_w, monitor_h;
+      glfwGetMonitorPhysicalSize(monitor, &monitor_w, &monitor_h);
+      glfwSetWindowMonitor(window, nullptr, (monitor_w + 800) / 2, (monitor_h + 600) / 2, 800, 600, GLFW_DONT_CARE);
       windowData.window_mode = WindowMode::WINDOW;
       break;
   }
@@ -60,7 +61,12 @@ void CW::Renderer::Renderer::maximize(bool maximize) {
     windowData.is_maximize = 1;
   } 
   else {
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    int monitor_w, monitor_h;
+    glfwGetMonitorPhysicalSize(monitor, &monitor_w, &monitor_h);
     glfwRestoreWindow(window);
+    glfwSetWindowSize(window, 800, 600);
+    glfwSetWindowPos(window, (monitor_w + 800) / 2, (monitor_h + 600) / 2);
     windowData.is_maximize = 0;
   }
 };
@@ -148,6 +154,8 @@ CW::Renderer::Renderer::Renderer(bool windowless) {
   if(!windowless) createWindow(); 
   else windowLessRenderer();
   createRenderer();
+
+  setVsync(1);
 };
 
 CW::Renderer::Renderer::~Renderer() {
