@@ -16,6 +16,8 @@ struct InputData{
   bool back_mouse_button_is_down;
   bool forward_mouse_button_is_down;
 
+
+  
   std::unordered_map<char, bool> keys_down;
   bool is_key_down(char key) const {
     auto it = keys_down.find(key);
