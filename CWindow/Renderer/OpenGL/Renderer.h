@@ -37,6 +37,7 @@ public:
   const InputData* getInputData();
   void setKeyboardBind(const std::string& action, char key);
   
+  void close();
   void createWindow();
   void windowLessRenderer();
   APIWindow* getWindow();

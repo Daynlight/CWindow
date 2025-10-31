@@ -10,17 +10,20 @@ void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
     case WindowMode::FULLSCREEN:
       glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
       glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
+      windowData.window_mode = WindowMode::FULLSCREEN;
       break;
 
-    case WindowMode::BOARDLESS:
+    case WindowMode::BORDERLESS:
       glfwSetWindowMonitor(window, nullptr, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
       glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+      windowData.window_mode = WindowMode::BORDERLESS;
       break;
     
     default:
       glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
       glfwSetWindowMonitor(window, nullptr, (windowData.x + windowData.width) / 2, (windowData.y + windowData.height) / 2, 
       windowData.width / 2, windowData.height / 2, GLFW_DONT_CARE);
+      windowData.window_mode = WindowMode::WINDOW;
       break;
   }
   windowData.window_mode = new_mode;
@@ -86,7 +89,7 @@ void CW::Renderer::Renderer::windowEvents() {
   glfwGetFramebufferSize(window, &width, &height);
   glfwGetWindowPos(window, &x, &y);
   glViewport(0, 0, windowData.width, windowData.height);
-  windowData.should_close = !glfwWindowShouldClose(window);
+  if(!windowData.should_close) windowData.should_close = glfwWindowShouldClose(window);
   windowData.is_focused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
   windowData.is_minimize = glfwGetWindowAttrib(window, GLFW_ICONIFIED);
   windowData.is_maximize = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
@@ -136,6 +139,10 @@ const CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
 void CW::Renderer::Renderer::setKeyboardBind(const std::string &action, char key){
   inputData.keyboard_binds[action] = key;
 }
+
+void CW::Renderer::Renderer::close(){
+  windowData.should_close = 1;
+};
 
 void CW::Renderer::Renderer::createWindow()
 {

@@ -5,7 +5,7 @@
 namespace CW::Renderer{
 enum WindowMode{
   WINDOW = 0,
-  BOARDLESS = 1,
+  BORDERLESS = 1,
   FULLSCREEN = 3
 };
 
