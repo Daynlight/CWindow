@@ -37,19 +37,20 @@ public:
   const InputData* getInputData();
   void setKeyboardBind(const std::string& action, char key);
   
-  void close();
   void createWindow();
   void windowLessRenderer();
   APIWindow* getWindow();
   void createRenderer();
+  
   void beginFrame();
   void swapBuffer();
-  
   void windowEvents();
+  
   void setWindowMode(CW::Renderer::WindowMode mode);
   void setWindowTitle(const std::string& title);
   void setVsync(bool vsync);
   void minimize(bool minimize);
   void maximize(bool maximize);
+  void close();
 };
 };

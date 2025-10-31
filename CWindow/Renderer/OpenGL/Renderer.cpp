@@ -65,6 +65,10 @@ void CW::Renderer::Renderer::maximize(bool maximize) {
   }
 };
 
+void CW::Renderer::Renderer::close(){
+  windowData.should_close = 1;
+};
+
 
 
 
@@ -164,13 +168,7 @@ void CW::Renderer::Renderer::setKeyboardBind(const std::string &action, char key
   inputData.keyboard_binds[action] = key;
 }
 
-void CW::Renderer::Renderer::close(){
-  windowData.should_close = 1;
-};
-
-void CW::Renderer::Renderer::createWindow()
-{
-
+void CW::Renderer::Renderer::createWindow(){
   if(!glfwInit()) {
     windowData.should_close = false;
     glfwTerminate();
