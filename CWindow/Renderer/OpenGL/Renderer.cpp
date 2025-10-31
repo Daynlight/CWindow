@@ -40,9 +40,13 @@ void CW::Renderer::Renderer::setWindowTitle(const std::string& title){
   windowData.title = title;
 }
 
-void CW::Renderer::Renderer::setIcon(const std::string *path){
+
+// [FEATURE] To change when texture added
+void CW::Renderer::Renderer::setIcon(const std::string& path){
   int width, height, channels;
-  unsigned char* image = stbi_load(path->c_str(), &width, &height, &channels, 0);
+  unsigned char* image = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+  if(!image) return;
   
   GLFWimage icon;
   icon.width = width;

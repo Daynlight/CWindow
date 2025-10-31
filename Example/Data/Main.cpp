@@ -42,6 +42,11 @@ return [](CW::Renderer::iRenderer *window){
   std::string title = window->getWindowData()->title;
   title.resize(255, '\0');
   if(ImGui::InputText("Title: ", &title[0], title.size())) window->setWindowTitle(title.c_str());
+
+  std::string icon = window->getWindowData()->icon;
+  icon.resize(255, '\0');
+  if(ImGui::InputText("Icon: ", &icon[0], icon.size())) window->setIcon(icon);
+
   
   if(ImGui::Button("Window mode")) window->setWindowMode(CW::Renderer::WINDOW);
   if(ImGui::Button("Borderless mode")) window->setWindowMode(CW::Renderer::BORDERLESS);
