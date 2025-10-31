@@ -36,25 +36,29 @@ void CW::Renderer::Renderer::setWindowTitle(const std::string& title){
   windowData.title = title;
 }
 
-void CW::Renderer::Renderer::minimizedSwitch() {
-  if(windowData.is_minimize){
+void CW::Renderer::Renderer::minimize(bool minimize) {
+  if(minimize){
     glfwIconifyWindow(window);
+    windowData.is_minimize = 1;
   }
   else{
     glfwRestoreWindow(window);
+    windowData.is_minimize = 0;
   }
 }
 
-void CW::Renderer::Renderer::maximizeSwitch() {
+void CW::Renderer::Renderer::maximize(bool maximize) {
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-  if (windowData.is_maximize) {
+  if (maximize) {
     glfwSetWindowSize(window, mode->width, mode->height);
     glfwMaximizeWindow(window);
+    windowData.is_maximize = 1;
   } 
   else {
     glfwRestoreWindow(window);
+    windowData.is_maximize = 0;
   }
 };
 

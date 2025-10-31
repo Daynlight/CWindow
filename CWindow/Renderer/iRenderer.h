@@ -28,7 +28,7 @@ public:
   virtual void setWindowMode(CW::Renderer::WindowMode mode) = 0;
   virtual void setWindowTitle(const std::string& title) = 0;
   virtual void setVsync(bool vsync) = 0;
-  virtual void minimizedSwitch() = 0;
-  virtual void maximizeSwitch() = 0;
+  virtual void minimize(bool minimize) = 0;
+  virtual void maximize(bool maximize) = 0;
 };
 };
