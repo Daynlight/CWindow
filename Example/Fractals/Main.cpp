@@ -169,6 +169,13 @@ inline void windowMovement(CW::Renderer::iRenderer *window, CW::Renderer::Unifor
       last_world_pos = (*uniform)["world_pos"]->get<glm::vec2>();
       last_mouse_pos = {window->getInputData()->mouse_x, window->getInputData()->mouse_y};
     };  
+
+    if(window->getInputData()->forward_mouse_button_is_down)
+      (*uniform)["mode"]->set<int>(1);
+
+    if(window->getInputData()->back_mouse_button_is_down)
+      (*uniform)["mode"]->set<int>(0);
+
       
 
     //////////// keyboard ////////////

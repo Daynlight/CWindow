@@ -91,6 +91,12 @@ void CW::Renderer::Renderer::windowEvents() {
   windowData.x = x;
   windowData.y = y;
 
+  // get delta_time
+  std::chrono::time_point<std::chrono::high_resolution_clock> new_time = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<float> delta = new_time - last_time;
+  windowData.delta_time = delta.count();
+  last_time = new_time;
+
   // get mouse input
   double mouse_x, mouse_y;
   glfwGetCursorPos(window, &mouse_x, &mouse_y);
@@ -103,23 +109,16 @@ void CW::Renderer::Renderer::windowEvents() {
   inputData.scroll_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
   inputData.left_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   inputData.right_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-  inputData.back_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_8);
-  inputData.forward_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_7);
+  inputData.back_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_4);
+  inputData.forward_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_5);
 
   // get keyboard
   inputData.keys_down.clear();
   for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key) {
     if (glfwGetKey(window, key) == GLFW_PRESS) {
       inputData.keys_down[static_cast<char>(key)] = true;
-    }
+    };
   };
-
-  // get time_delta
-  std::chrono::time_point<std::chrono::high_resolution_clock> new_time = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<float> delta = new_time - last_time;
-  windowData.delta_time = delta.count();
-  last_time = new_time;
-
 };
 
 const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
