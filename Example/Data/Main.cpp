@@ -29,7 +29,7 @@ return [](CW::Renderer::iRenderer *window){
 
 
 
-  ImGui::SeparatorText("Get Input Data");
+  ImGui::SeparatorText("Get Mouse Input Data");
   
   ImGui::Text("mouse pos, [%d, %d]", window->getInputData()->mouse_x, window->getInputData()->mouse_y);
   ImGui::Text("mouse scroll, [%d, %d]", window->getInputData()->mouse_scroll_x, window->getInputData()->mouse_scroll_y);
@@ -40,6 +40,18 @@ return [](CW::Renderer::iRenderer *window){
   ImGui::Text("mouse back button is down, %d", window->getInputData()->back_mouse_button_is_down);
 
 
+
+
+  ImGui::SeparatorText("Get Pad Input Data");
+  ImGui::Text("pad move, [%f, %f]", window->getInputData()->pad_move_x, window->getInputData()->pad_move_y);
+  ImGui::Text("pad look, [%f, %f]", window->getInputData()->pad_view_x, window->getInputData()->pad_view_y);
+  ImGui::Text("pad touch, [%d, %d]", window->getInputData()->pad_move_down, window->getInputData()->pad_view_down);
+  ImGui::Text("pad tigers, [%f, %f]", window->getInputData()->pad_lt, window->getInputData()->pad_rt);
+  ImGui::Text("pad bumpers, [%d, %d]", window->getInputData()->pad_lb, window->getInputData()->pad_rb);
+  ImGui::Text("pad guide: %d share: %d menu: %d", window->getInputData()->pad_guide, window->getInputData()->pad_share, window->getInputData()->pad_menu);
+  ImGui::Text("pad buttons, x: %d y: %d a: %d b: %d", window->getInputData()->pad_x, window->getInputData()->pad_y, window->getInputData()->pad_a, window->getInputData()->pad_b);
+  ImGui::Text("pad dpad, l: %d r: %d u: %d d: %d", window->getInputData()->pad_d_left, window->getInputData()->pad_d_right, window->getInputData()->pad_d_up, window->getInputData()->pad_d_down);
+  
 
   ImGui::SeparatorText("Set Window Data");
 

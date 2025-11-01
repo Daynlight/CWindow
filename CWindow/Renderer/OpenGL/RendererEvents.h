@@ -202,6 +202,40 @@ void CW::Renderer::Renderer::windowEvents() {
   inputData.back_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_4);
   inputData.forward_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_5);
 
+  // get pad input
+  int axesCount;
+  int buttonCount;
+  const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
+  const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonCount);
+  inputData.pad_move_x = axes[0]; 
+  inputData.pad_move_y = -axes[1];
+  inputData.pad_view_x = axes[3];
+  inputData.pad_view_y = -axes[4]; 
+  inputData.pad_lt = (axes[2] + 1) / 2; 
+  inputData.pad_rt = (axes[5] + 1) / 2;
+  
+  inputData.pad_a = buttons[0];
+  inputData.pad_b = buttons[1];
+  inputData.pad_x = buttons[2];
+  inputData.pad_y = buttons[3];
+
+  inputData.pad_lb = buttons[4];
+  inputData.pad_rb = buttons[5];
+
+  inputData.pad_guide = buttons[8];
+  inputData.pad_share = buttons[6];
+  inputData.pad_menu = buttons[7];
+  inputData.pad_move_down = buttons[9];
+  inputData.pad_view_down = buttons[10];
+
+  inputData.pad_d_up = buttons[15];
+  inputData.pad_d_right = buttons[16];
+  inputData.pad_d_down = buttons[17];
+  inputData.pad_d_left = buttons[18];
+  
+  for (int i = 0; i < buttonCount; i++)
+    printf("Button %d = %d\n", i, buttons[i]);
+
   // get keyboard
   inputData.keys_down.clear();
   for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key) {
