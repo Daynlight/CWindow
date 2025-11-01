@@ -269,9 +269,87 @@ void CW::Renderer::Renderer::windowEvents() {
 
   // get keyboard
   inputData.keys_down.clear();
-  for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key) {
-    if (glfwGetKey(window, key) == GLFW_PRESS) {
-      inputData.keys_down[static_cast<char>(key)] = true;
-    };
-  };
+
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) inputData.keys_down["A"] = true;
+  if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) inputData.keys_down["B"] = true;
+  if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) inputData.keys_down["C"] = true;
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) inputData.keys_down["D"] = true;
+  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) inputData.keys_down["E"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) inputData.keys_down["F"] = true;
+  if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) inputData.keys_down["G"] = true;
+  if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) inputData.keys_down["H"] = true;
+  if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) inputData.keys_down["I"] = true;
+  if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) inputData.keys_down["J"] = true;
+  if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) inputData.keys_down["K"] = true;
+  if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) inputData.keys_down["L"] = true;
+  if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) inputData.keys_down["M"] = true;
+  if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) inputData.keys_down["N"] = true;
+  if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) inputData.keys_down["O"] = true;
+  if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) inputData.keys_down["P"] = true;
+  if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) inputData.keys_down["Q"] = true;
+  if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) inputData.keys_down["R"] = true;
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) inputData.keys_down["S"] = true;
+  if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) inputData.keys_down["T"] = true;
+  if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) inputData.keys_down["U"] = true;
+  if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) inputData.keys_down["V"] = true;
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) inputData.keys_down["W"] = true;
+  if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) inputData.keys_down["X"] = true;
+  if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) inputData.keys_down["Y"] = true;
+  if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) inputData.keys_down["Z"] = true;
+
+  if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) inputData.keys_down["0"] = true;
+  if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) inputData.keys_down["1"] = true;
+  if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) inputData.keys_down["2"] = true;
+  if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) inputData.keys_down["3"] = true;
+  if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) inputData.keys_down["4"] = true;
+  if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) inputData.keys_down["5"] = true;
+  if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) inputData.keys_down["6"] = true;
+  if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) inputData.keys_down["7"] = true;
+  if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS) inputData.keys_down["8"] = true;
+  if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS) inputData.keys_down["9"] = true;
+
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)        inputData.keys_down[" "] = true;
+  if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS)        inputData.keys_down[","] = true;
+  if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS)       inputData.keys_down["."] = true;
+  if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS)        inputData.keys_down["-"] = true;
+  if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS)        inputData.keys_down["="] = true;
+  if (glfwGetKey(window, GLFW_KEY_SLASH) == GLFW_PRESS)        inputData.keys_down["/"] = true;
+  if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS)    inputData.keys_down[";"] = true;
+  if (glfwGetKey(window, GLFW_KEY_APOSTROPHE) == GLFW_PRESS)   inputData.keys_down["'"] = true;
+  if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) inputData.keys_down["["] = true;
+  if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS)inputData.keys_down["]"] = true;
+  if (glfwGetKey(window, GLFW_KEY_BACKSLASH) == GLFW_PRESS)    inputData.keys_down["\\"] = true;
+  if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS) inputData.keys_down["`"] = true;
+
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)     inputData.keys_down["ESC"] = true;
+  if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)      inputData.keys_down["ENTER"] = true;
+  if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)        inputData.keys_down["TAB"] = true;
+  if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS)  inputData.keys_down["BACKSPACE"] = true;
+  if (glfwGetKey(window, GLFW_KEY_DELETE) == GLFW_PRESS)     inputData.keys_down["DELETE"] = true;
+  if (glfwGetKey(window, GLFW_KEY_INSERT) == GLFW_PRESS)     inputData.keys_down["INSERT"] = true;
+
+  if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)    inputData.keys_down["UP"] = true;
+  if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)  inputData.keys_down["DOWN"] = true;
+  if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)  inputData.keys_down["LEFT"] = true;
+  if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) inputData.keys_down["RIGHT"] = true;
+
+  if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)   inputData.keys_down["LSHIFT"] = true;
+  if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)  inputData.keys_down["RSHIFT"] = true;
+  if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) inputData.keys_down["LCTRL"] = true;
+  if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)inputData.keys_down["RCTRL"] = true;
+  if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)     inputData.keys_down["LALT"] = true;
+  if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)    inputData.keys_down["RALT"] = true;
+
+  if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)  inputData.keys_down["F1"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)  inputData.keys_down["F2"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)  inputData.keys_down["F3"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F4) == GLFW_PRESS)  inputData.keys_down["F4"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F5) == GLFW_PRESS)  inputData.keys_down["F5"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F6) == GLFW_PRESS)  inputData.keys_down["F6"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F7) == GLFW_PRESS)  inputData.keys_down["F7"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F8) == GLFW_PRESS)  inputData.keys_down["F8"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F9) == GLFW_PRESS)  inputData.keys_down["F9"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F10) == GLFW_PRESS) inputData.keys_down["F10"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F11) == GLFW_PRESS) inputData.keys_down["F11"] = true;
+  if (glfwGetKey(window, GLFW_KEY_F12) == GLFW_PRESS) inputData.keys_down["F12"] = true;
 };

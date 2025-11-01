@@ -48,13 +48,13 @@ struct InputData{
   bool pad_menu;
   
   
-  std::unordered_map<char, bool> keys_down;
-  bool is_key_down(char key) const {
+  std::unordered_map<std::string, bool> keys_down;
+  bool is_key_down(const std::string& key) const {
     auto it = keys_down.find(key);
     return it != keys_down.end() && it->second;
   };
 
-  std::unordered_map<std::string, char> keyboard_binds;
+  std::unordered_map<std::string, std::string> keyboard_binds;
   bool is_keyboard_bind_down(const std::string& bind) const {
     auto it = keyboard_binds.find(bind);
     return it != keyboard_binds.end() && is_key_down(it->second);  

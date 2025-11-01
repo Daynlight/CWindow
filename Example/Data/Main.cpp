@@ -106,6 +106,8 @@ int main(){
   while(!window.getWindowData()->should_close){
     window.beginFrame();
 
+    if(window.getInputData()->is_key_down("ESC")) window.setCursorVisibility(1);
+
     gui.render();
     window.windowEvents();
     window.swapBuffer();
