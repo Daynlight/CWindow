@@ -19,6 +19,7 @@ struct InputData{
   bool forward_mouse_button_is_down;
 
 
+  bool is_pad_present;
   float pad_move_x;
   float pad_move_y;
   float pad_view_x;
