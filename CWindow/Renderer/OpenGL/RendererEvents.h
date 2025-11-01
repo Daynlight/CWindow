@@ -131,6 +131,19 @@ void CW::Renderer::Renderer::close(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 void CW::Renderer::Renderer::windowEvents() {
   glfwPollEvents();
 
