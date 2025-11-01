@@ -190,10 +190,12 @@ void CW::Renderer::Renderer::windowEvents() {
   glfwGetCursorPos(window, &mouse_x, &mouse_y);
   inputData.mouse_x = mouse_x;
   inputData.mouse_y = mouse_y;
+  
   inputData.mouse_scroll_x = scroll_x;
   inputData.mouse_scroll_y = scroll_y;
   scroll_x = 0;
   scroll_y = 0;
+
   inputData.scroll_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
   inputData.left_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   inputData.right_mouse_button_is_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);

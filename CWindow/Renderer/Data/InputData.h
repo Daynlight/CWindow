@@ -5,14 +5,16 @@
 
 namespace CW::Renderer{
 struct InputData{
-  double mouse_x;
-  double mouse_y;
+  int mouse_x;
+  int mouse_y;
+
+  int mouse_scroll_x;
+  int mouse_scroll_y;
+
   bool scroll_is_down;
   bool left_mouse_button_is_down;
   bool right_mouse_button_is_down;
-  
-  double mouse_scroll_x;
-  double mouse_scroll_y;
+
   bool back_mouse_button_is_down;
   bool forward_mouse_button_is_down;
 

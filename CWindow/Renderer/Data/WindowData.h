@@ -27,3 +27,4 @@ struct WindowData{
   std::string icon;
 };
 };
+

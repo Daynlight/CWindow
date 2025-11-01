@@ -9,7 +9,7 @@ return [](CW::Renderer::iRenderer *window){
 
 
 
-  ImGui::SeparatorText("Get Data");
+  ImGui::SeparatorText("Get Window Data");
 
   ImGui::Text("should_close, %d", window->getWindowData()->should_close);
   ImGui::Text("is vsync, %d", window->getWindowData()->vsync);
@@ -29,7 +29,19 @@ return [](CW::Renderer::iRenderer *window){
 
 
 
-  ImGui::SeparatorText("SetData");
+  ImGui::SeparatorText("Get Input Data");
+  
+  ImGui::Text("mouse pos, [%d, %d]", window->getInputData()->mouse_x, window->getInputData()->mouse_y);
+  ImGui::Text("mouse scroll, [%d, %d]", window->getInputData()->mouse_scroll_x, window->getInputData()->mouse_scroll_y);
+  ImGui::Text("mouse right button is down, %d", window->getInputData()->right_mouse_button_is_down);
+  ImGui::Text("mouse left button is down, %d", window->getInputData()->left_mouse_button_is_down);
+  ImGui::Text("mouse scroll button is down, %d", window->getInputData()->scroll_is_down);
+  ImGui::Text("mouse forward button is down, %d", window->getInputData()->forward_mouse_button_is_down);
+  ImGui::Text("mouse back button is down, %d", window->getInputData()->back_mouse_button_is_down);
+
+
+
+  ImGui::SeparatorText("Set Window Data");
 
   if(ImGui::Button("Should close")) window->close();
   if(ImGui::Button("vsync")) window->setVsync(!window->getWindowData()->vsync);
@@ -76,9 +88,6 @@ int main(){
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
-
-    if(window.getInputData()->is_key_down('q')) window.setCursorVisibility(!window.getWindowData()->is_cursor_visible);
-    if(window.getInputData()->is_key_down('e')) window.setCursorOn(!window.getWindowData()->is_cursor_on);
 
     gui.render();
     window.windowEvents();
