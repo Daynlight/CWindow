@@ -8,12 +8,12 @@
 #include "Shader/ComputeShader.h"
 
 #include "Uniform/Uniform.h"
+#include "Texture/Texture.h"
 
 #include "../Data/WindowData.h"
 #include "../Data/InputData.h"
 
 #include "glad/glad.h"
-#include "stb_image.h"
 
 #include <vector>
 #include <stdexcept>

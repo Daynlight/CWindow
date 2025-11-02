@@ -11,11 +11,14 @@ private:
   GLuint VAO, VBO, EBO;
   std::vector<GLfloat> vertices;
   std::vector<GLuint> indices;
+  std::vector<GLfloat> textCords;
   bool is_compiled = false;
 
 public:
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
   ~Mesh();
+
+  void addTextCords(std::vector<GLfloat> textCords);
 
   void compile();
   void destroy();

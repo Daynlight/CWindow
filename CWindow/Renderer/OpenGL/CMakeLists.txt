@@ -7,6 +7,7 @@ set(src
   "Shader/ComputeShader.cpp"
   "Shader/ComputeShader.hpp"
   "Uniform/Uniform.cpp"
+  "Texture/Texture.cpp"
   ${ROOT_DIR}/vendor/stb/deprecated/stb_image.c
   ${ROOT_DIR}/vendor/glad/src/glad.c
 )

@@ -1,4 +1,5 @@
 #pragma once 
+#include "stb_image.h"
 
 void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
