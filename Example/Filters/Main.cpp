@@ -85,7 +85,7 @@ int main(){
   CW::Gui::Gui gui(&renderer);
 
   CW::Renderer::Texture texture;
-  if(texture.load("../Assets/image.png"))
+  if(texture.load("../Assets/image2.png"))
     return -1;
 
   CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
