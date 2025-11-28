@@ -6,7 +6,7 @@ int main(){
   CW::Renderer::Renderer window;
 
   CW::Renderer::Texture texture;
-  if(texture.load("icon.png"))
+  if(texture.load("../Assets/image.png"))
     return -1;
 
   CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
