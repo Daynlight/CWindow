@@ -23,9 +23,23 @@ in vec2 TexCoord;
 out vec4 FragColor;
 
 uniform sampler2D uTexture;
+uniform mat3 matrix;
+uniform ivec2 radius;
+
+vec2 texelSize = 1.0f / radius;
 
 void main() {
-  FragColor = texture(uTexture, TexCoord);
+  vec4 pixel = vec4(0.0f);
+
+  for(int i = 0; i < 3; i++){
+    for(int j = 0; j < 3; j++){
+      vec2 offset = vec2((i - 1) * texelSize.x, (j - 1) * texelSize.y);
+      pixel += matrix[j][i] * texture(uTexture, TexCoord + offset);
+    }
+  }
+
+
+  FragColor = pixel;
 };
 )";
 };
