@@ -22,7 +22,7 @@ void CW::Renderer::DrawShader::unbind(){
 }
 
 void CW::Renderer::DrawShader::compile() {
-  if(compiledShader) 
+  if(is_compiled) 
     destroy();
 
   GLuint vertexShaderPart = glCreateShader(GL_VERTEX_SHADER);
