@@ -19,7 +19,7 @@ void CW::Renderer::DrawShader::bind() {
 
 void CW::Renderer::DrawShader::unbind(){
   glUseProgram(0);
-}
+};
 
 void CW::Renderer::DrawShader::compile() {
   if(is_compiled) 
@@ -43,10 +43,13 @@ void CW::Renderer::DrawShader::compile() {
   glDeleteShader(vertexShaderPart);
   glDeleteShader(fragmentShaderPart);
   is_compiled = true;
-}
+};
 
 void CW::Renderer::DrawShader::destroy(){
-  glDeleteProgram(compiledShader);
+  if(compiledShader){
+    glDeleteProgram(compiledShader);
+    compiledShader = 0;
+  };
   is_compiled = false;
 }
 
