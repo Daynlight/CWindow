@@ -1,7 +1,10 @@
 #include "Mesh.h"
 
-CW::Renderer::Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices) 
-  :vertices(vertices), indices(indices), is_compiled(false) {};
+CW::Renderer::Mesh::Mesh(){
+};
+
+CW::Renderer::Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
+  : vertices(vertices), indices(indices), is_compiled(false) {};
 
 CW::Renderer::Mesh::~Mesh() {
  destroy();

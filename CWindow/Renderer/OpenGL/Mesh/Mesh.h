@@ -15,6 +15,7 @@ private:
   bool is_compiled = false;
 
 public:
+  Mesh();
   Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
   ~Mesh();
 
