@@ -14,6 +14,10 @@ void CW::Renderer::Mesh::addTextCords(std::vector<GLfloat> textCords) {
   this->textCords = textCords;
 };
 
+void CW::Renderer::Mesh::addColors(std::vector<GLfloat> colors) {
+  this->colors = colors;
+};
+
 void CW::Renderer::Mesh::render() {
   if(!is_compiled)
     compile();
