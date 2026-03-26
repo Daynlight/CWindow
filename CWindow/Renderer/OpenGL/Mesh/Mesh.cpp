@@ -17,13 +17,13 @@ void CW::Renderer::Mesh::addIndicies(std::vector<unsigned int> indices) {
   is_compiled = false;
 };
 
-void CW::Renderer::Mesh::render(const std::function<bool(const std::array<std::vector<GLfloat>, 2>)> &culling_function) {
+std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox(){
+  return culling_box;
+};
+
+void CW::Renderer::Mesh::render(){
   if(!is_compiled)
     compile();
-
-  if(culling_box_exists){
-    if(!culling_function(culling_box)) return;
-  };
 
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
