@@ -18,9 +18,9 @@ int main(){
   shader.getUniforms().emplace_back(&uniform);
 
   CW::Renderer::Mesh square;
-  square.addVertices(Mesh::vertices, 4);
+  square.addVertices(Mesh::vertices, 4, 0);
   square.addIndicies(Mesh::indicies);
-  square.addColors(Mesh::colors, 3);
+  square.addColors(Mesh::colors, 3, 1);
 
   float time = 0.0f;
 

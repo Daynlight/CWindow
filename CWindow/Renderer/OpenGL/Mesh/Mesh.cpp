@@ -18,6 +18,13 @@ void CW::Renderer::Mesh::addIndicies(std::vector<unsigned int> indices) {
   is_compiled = false;
 };
 
+void CW::Renderer::Mesh::addNormals(std::vector<GLfloat> normals, unsigned int dimension, unsigned int layout) {
+  this->normals = normals;
+  this->normals_dimension = dimension;
+  this->normals_id = layout;
+  is_compiled = false;
+};
+
 void CW::Renderer::Mesh::addColors(std::vector<GLfloat> colors, unsigned int dimension, unsigned int layout){
   this->colors = colors;
   this->color_dimension = dimension;
@@ -29,6 +36,13 @@ void CW::Renderer::Mesh::addTextCords(std::vector<GLfloat> textCords, unsigned i
   this->textCords = textCords;
   this->textCords_dimension = dimension;
   this->textCords_id = layout;
+  is_compiled = false;
+};
+
+void CW::Renderer::Mesh::addTextID(std::vector<GLuint> textID, unsigned int dimension, unsigned int layout) {
+  this->textID = textID;
+  this->textID_dimension = dimension;
+  this->textID_id = layout;
   is_compiled = false;
 };
 
@@ -57,13 +71,19 @@ void CW::Renderer::Mesh::compile() {
   
   for (size_t i = 0; i < vertices.size() / 4; ++i) {
     for(size_t j = 0; j < vertices_dimension; ++j)
-    bufferData.push_back(vertices[i * vertices_dimension + j]);
+      bufferData.push_back(vertices[i * vertices_dimension + j]);
     
+    for(size_t j = 0; j < normals_dimension; ++j)
+      bufferData.push_back(normals[i * normals_dimension + j]);
+
     for(size_t j = 0; j < color_dimension; ++j)
     bufferData.push_back(colors[i * color_dimension + j]);
     
     for(size_t j = 0; j < textCords_dimension; ++j)
-    bufferData.push_back(textCords[i * textCords_dimension + j]);
+      bufferData.push_back(textCords[i * textCords_dimension + j]);
+    
+    for(size_t j = 0; j < textID_dimension; ++j)
+      bufferData.push_back(textID[i * textID_dimension + j]);
   };
 
 
@@ -85,6 +105,13 @@ void CW::Renderer::Mesh::compile() {
 
   unsigned int offset = 3;
 
+  // Normals
+  if (normals_id) {
+    glVertexAttribPointer(normals_id, normals_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
+    glEnableVertexAttribArray(normals_id);  
+    offset += normals_dimension;
+  };
+
   // Colors
   if (color_id) {
     glVertexAttribPointer(color_id, color_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
@@ -97,6 +124,13 @@ void CW::Renderer::Mesh::compile() {
     glVertexAttribPointer(textCords_id, textCords_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
     glEnableVertexAttribArray(textCords_id);  
     offset += textCords_dimension;
+  };
+
+  // Texture ID
+  if (textID_id) {
+    glVertexAttribPointer(textID_id, textID_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
+    glEnableVertexAttribArray(textID_id);  
+    offset += textID_dimension;
   };
 
   glBindVertexArray(0);
