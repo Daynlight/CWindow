@@ -39,17 +39,17 @@ void CW::Renderer::Mesh::compile() {
 
 
   std::vector<GLfloat> bufferData;
-  unsigned int line_size = 3;
+  unsigned int line_size = 4;
   if(!colors.empty()) line_size += 3;
   if (!textCords.empty()) line_size += 2;
 
-  // Interleave positions + texCoords
   bufferData.reserve(vertices.size() + colors.size() + textCords.size());
   
-  for (size_t i = 0; i < vertices.size() / 3; ++i) {
-    bufferData.push_back(vertices[i * 3 + 0]);
-    bufferData.push_back(vertices[i * 3 + 1]);
-    bufferData.push_back(vertices[i * 3 + 2]);
+  for (size_t i = 0; i < vertices.size() / 4; ++i) {
+    bufferData.push_back(vertices[i * 4 + 0]);
+    bufferData.push_back(vertices[i * 4 + 1]);
+    bufferData.push_back(vertices[i * 4 + 2]);
+    bufferData.push_back(vertices[i * 4 + 3]);
     
     if(!colors.empty()){
       bufferData.push_back(colors[i * 3 + 0]);
