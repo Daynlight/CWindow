@@ -8,6 +8,7 @@ CW::Renderer::Mesh::~Mesh() {
 
 void CW::Renderer::Mesh::addVertices(std::vector<GLfloat> vertices, unsigned int dimension, unsigned int layout){
   addData<GLfloat>(vertices, dimension, layout, GL_FLOAT);
+  generateCullingBox(vertices, dimension);
   is_compiled = false;
 };
 
@@ -16,17 +17,45 @@ void CW::Renderer::Mesh::addIndicies(std::vector<unsigned int> indices) {
   is_compiled = false;
 };
 
-void CW::Renderer::Mesh::render() {
-  // [TODO] culling
+void CW::Renderer::Mesh::render(const std::function<bool(const std::array<std::vector<GLfloat>, 2>)> &culling_function) {
   if(!is_compiled)
     compile();
+
+  if(culling_box_exists){
+    if(!culling_function(culling_box)) return;
+  };
 
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 };
 
-void CW::Renderer::Mesh::compile() {
+void CW::Renderer::Mesh::generateCullingBox(std::vector<GLfloat> data, unsigned int dimension){
+  std::vector<GLfloat> vertex_max;
+  vertex_max.reserve(dimension);
+  std::vector<GLfloat> vertex_min;
+  vertex_min.reserve(dimension);
+  
+  for(int i = 0; i < dimension; i++){
+    vertex_max.emplace_back(data[i]);
+    vertex_min.emplace_back(data[i]);
+  };
+
+  for(int i = 1; i < data.size() / dimension; i++){
+    for(int j = 0; j < dimension; j++){
+      if(vertex_max[j] < data[dimension * i + j])
+        vertex_max[j] = data[dimension * i + j];
+      if(vertex_min[j] > data[dimension * i + j])
+        vertex_min[j] = data[dimension * i + j];
+    };
+  };
+
+  culling_box[0] = vertex_min;
+  culling_box[1] = vertex_max;
+  culling_box_exists = true;
+};
+
+void CW::Renderer::Mesh::compile(){
   if(indices.size() == 0) return;
   if (is_compiled) destroy();
 

@@ -1,16 +1,19 @@
 #include "Renderer.h"
-#include "Gui.h"
 #include "Shaders.h"
 #include "Mesh.h"
+#include "FreeCamera/FreeCamera.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "../vendor/glm/glm/gtx/euler_angles.hpp"
-
 
 
 
 int main(){
   CW::Renderer::Renderer window;
   window.setWindowTitle("Mesh Creation and Loading");
+  CW::Renderer::FreeCamera camera(&window);
+  window.setCursorVisibility(false);
+
+
 
   CW::Renderer::DrawShader shader(Shader::vertex, Shader::fragment);
   CW::Renderer::Uniform uniform;
@@ -23,20 +26,34 @@ int main(){
   square.addData<GLfloat>(Mesh::colors, 3, 1, GL_FLOAT);
 
   float time = 0.0f;
+  float cursor_visible_lock = 0.0f;
+  bool cursor_lock = false;
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
 
-    glm::mat4 transformation = glm::mat4(1.0);
-    transformation = glm::eulerAngleXYZ(10.0f, 20.0f, 0.0f);
-    transformation = glm::scale(transformation, glm::vec3(0.2f));
-    uniform["transformation"]->set<glm::mat4>(transformation);
+    time += window.getWindowData()->delta_time;
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = model * glm::eulerAngleXYZ(0.0f, time, 0.0f);
+    model = glm::scale(model, glm::vec3(0.1f));
+    glm::mat4 mvp = camera.transformation(&window) * model;
+    uniform["transformation"]->set<glm::mat4>(mvp);
+
+    if(window.getInputData()->is_key_down("ESC") && cursor_visible_lock <= 0.0f) {
+      cursor_lock = !cursor_lock;
+      cursor_visible_lock = 0.5f;
+    }
+    else if(cursor_visible_lock > 0.0f) cursor_visible_lock -= window.getWindowData()->delta_time;
+    if(cursor_lock) window.setCursorOn(true);
+    else window.setCursorOn(false);
 
     shader.bind();
     square.render();
     shader.unbind();
 
     window.windowEvents();
+    camera.event(&window);
     window.swapBuffer();
   };
 

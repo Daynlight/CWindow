@@ -5,6 +5,8 @@ set(src
   "Mesh/Mesh.cpp"
   "Mesh/Mesh.hpp"
   "Mesh/MeshData.h"
+  "FreeCamera/FreeCamera.cpp"
+  "FreeCamera/FreeCamera.h"
   "Shader/DrawShader.cpp"
   "Shader/ComputeShader.cpp"
   "Shader/ComputeShader.hpp"
