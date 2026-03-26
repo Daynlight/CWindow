@@ -20,7 +20,7 @@ int main(){
   CW::Renderer::Mesh square;
   square.addVertices(Mesh::vertices, 4, 0);
   square.addIndicies(Mesh::indicies);
-  square.addColors(Mesh::colors, 3, 1);
+  square.addData<GLfloat>(Mesh::colors, 3, 1, GL_FLOAT);
 
   float time = 0.0f;
 

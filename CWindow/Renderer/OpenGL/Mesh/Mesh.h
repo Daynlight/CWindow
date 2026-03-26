@@ -4,31 +4,19 @@
 #include "glm/glm.hpp"
 
 #include <vector>
+#include <unordered_map>
+#include <algorithm>
 
-// [TODO] Change all of this to dynamic pass
+#include "MeshData.h"
+
 
 namespace CW::Renderer{
 class Mesh{
 private:
   GLuint VAO, VBO, EBO;
-  std::vector<GLfloat> vertices;
   std::vector<GLuint> indices;
-  std::vector<GLfloat> normals;
-  std::vector<GLfloat> textCords;
-  std::vector<GLuint> textID;
-  std::vector<GLfloat> colors;
+  std::unordered_map<unsigned int, CW::Renderer::MeshData> data;
 
-  unsigned int vertices_dimension = 0;
-  unsigned int vertices_id = 0;
-  unsigned int normals_dimension = 0;
-  unsigned int normals_id = 0;
-  unsigned int textCords_dimension = 0;
-  unsigned int textCords_id = 0;
-  unsigned int textID_dimension = 0;
-  unsigned int textID_id = 0;
-  unsigned int color_dimension = 0;
-  unsigned int color_id = 0;
-  
   bool is_compiled = false;
 
 public:
@@ -37,10 +25,9 @@ public:
 
   void addVertices(std::vector<GLfloat> vertices, unsigned int dimension = 4, unsigned int layout = 0);
   void addIndicies(std::vector<GLuint> indices);
-  void addNormals(std::vector<GLfloat> normals, unsigned int dimension = 3, unsigned int layout = 1);
-  void addColors(std::vector<GLfloat> colors, unsigned int dimension = 3, unsigned int layout = 2);
-  void addTextCords(std::vector<GLfloat> textCords, unsigned int dimension = 2, unsigned int layout = 3);
-  void addTextID(std::vector<GLuint> textID, unsigned int dimension = 1, unsigned int layout = 4);
+
+  template<typename T>
+  void addData(std::vector<T> data, unsigned int dimension, unsigned int layout, GLenum type);
 
   void compile();
   void destroy();
@@ -48,3 +35,6 @@ public:
   void render();
 };
 };
+
+
+#include "Mesh.hpp"

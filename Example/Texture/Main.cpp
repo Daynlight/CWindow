@@ -21,13 +21,12 @@ int main(){
     1, 3, 2
   });
 
-  viewport.addTextCords(
-  {
+  viewport.addData<GLfloat>({
     0.0f, 1.0f,
     0.0f, 0.0f,
     1.0f, 1.0f,
     1.0f, 0.0f
-  });
+  }, 2, 1, GL_FLOAT);
 
   CW::Renderer::DrawShader texture_shader(Texture::vertex, Texture::fragment);
   CW::Renderer::Uniform uniform;

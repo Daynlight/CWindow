@@ -56,7 +56,7 @@ int main(){
     1.0f, 1.0f, 0.0f,
   };
 
-  square.addColors(colors);
+  square.addData<GLfloat>(colors, 3, 1, GL_FLOAT);
 
   float time = 0.0f;
 

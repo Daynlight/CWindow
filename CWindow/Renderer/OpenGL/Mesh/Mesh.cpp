@@ -6,43 +6,13 @@ CW::Renderer::Mesh::~Mesh() {
  destroy();
 }
 
-void CW::Renderer::Mesh::addVertices(std::vector<float> vertices, unsigned int dimension, unsigned int layout){
-  this->vertices = vertices;
-  this->vertices_dimension = dimension;
-  this->vertices_id = layout;
+void CW::Renderer::Mesh::addVertices(std::vector<GLfloat> vertices, unsigned int dimension, unsigned int layout){
+  addData<GLfloat>(vertices, dimension, layout, GL_FLOAT);
   is_compiled = false;
 };
 
 void CW::Renderer::Mesh::addIndicies(std::vector<unsigned int> indices) {
   this->indices = indices;
-  is_compiled = false;
-};
-
-void CW::Renderer::Mesh::addNormals(std::vector<GLfloat> normals, unsigned int dimension, unsigned int layout) {
-  this->normals = normals;
-  this->normals_dimension = dimension;
-  this->normals_id = layout;
-  is_compiled = false;
-};
-
-void CW::Renderer::Mesh::addColors(std::vector<GLfloat> colors, unsigned int dimension, unsigned int layout){
-  this->colors = colors;
-  this->color_dimension = dimension;
-  this->color_id = layout;
-  is_compiled = false;
-};
-
-void CW::Renderer::Mesh::addTextCords(std::vector<GLfloat> textCords, unsigned int dimension, unsigned int layout) {
-  this->textCords = textCords;
-  this->textCords_dimension = dimension;
-  this->textCords_id = layout;
-  is_compiled = false;
-};
-
-void CW::Renderer::Mesh::addTextID(std::vector<GLuint> textID, unsigned int dimension, unsigned int layout) {
-  this->textID = textID;
-  this->textID_dimension = dimension;
-  this->textID_id = layout;
   is_compiled = false;
 };
 
@@ -57,35 +27,35 @@ void CW::Renderer::Mesh::render() {
 };
 
 void CW::Renderer::Mesh::compile() {
-  if(vertices.size() == 0) return;
   if(indices.size() == 0) return;
-  if(vertices_dimension == 0) return;
-  // [TODO] check if id's are unique
-
   if (is_compiled) destroy();
-  
-  std::vector<GLfloat> bufferData;
-  unsigned int line_size = vertices_dimension + color_dimension + textCords_dimension;
 
-  bufferData.reserve(vertices.size() + colors.size() + textCords.size());
+  std::vector<char> bufferData;
+  unsigned int line_size = 0;
+  unsigned int total_size = 0;  
+  unsigned int offset = 0;
   
-  for (size_t i = 0; i < vertices.size() / 4; ++i) {
-    for(size_t j = 0; j < vertices_dimension; ++j)
-      bufferData.push_back(vertices[i * vertices_dimension + j]);
-    
-    for(size_t j = 0; j < normals_dimension; ++j)
-      bufferData.push_back(normals[i * normals_dimension + j]);
-
-    for(size_t j = 0; j < color_dimension; ++j)
-    bufferData.push_back(colors[i * color_dimension + j]);
-    
-    for(size_t j = 0; j < textCords_dimension; ++j)
-      bufferData.push_back(textCords[i * textCords_dimension + j]);
-    
-    for(size_t j = 0; j < textID_dimension; ++j)
-      bufferData.push_back(textID[i * textID_dimension + j]);
+  for(std::pair<const unsigned int, MeshData> &el : data){
+    line_size += el.second.getDimension() * el.second.getSizeOfElement();
+    total_size += el.second.getSize();
   };
 
+  unsigned int total_points = total_size / line_size;
+  
+  bufferData.reserve(total_size);
+
+  std::vector<unsigned int> keys;
+  keys.reserve(data.size());
+  for (const std::pair<const unsigned int, MeshData> &pair : data)
+      keys.push_back(pair.first);
+
+  std::sort(keys.begin(), keys.end());
+
+  for(size_t i = 0; i < total_points; ++i)
+    for(int k = 0; k < keys.size(); ++k)
+      for(size_t j = 0; j < data[keys[k]].getDimension() * data[keys[k]].getSizeOfElement(); ++j)
+        bufferData.push_back(data[keys[k]][i * data[keys[k]].getDimension() * data[keys[k]].getSizeOfElement() + j]);
+      
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -94,43 +64,14 @@ void CW::Renderer::Mesh::compile() {
   glBindVertexArray(VAO);
   
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, bufferData.size() * sizeof(GLfloat), bufferData.data(), GL_STATIC_DRAW);
-
+  glBufferData(GL_ARRAY_BUFFER, bufferData.size() * sizeof(char), bufferData.data(), GL_STATIC_DRAW);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
-  // Positions
-  glVertexAttribPointer(vertices_id, vertices_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)0);
-  glEnableVertexAttribArray(vertices_id);
-
-  unsigned int offset = 3;
-
-  // Normals
-  if (normals_id) {
-    glVertexAttribPointer(normals_id, normals_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
-    glEnableVertexAttribArray(normals_id);  
-    offset += normals_dimension;
-  };
-
-  // Colors
-  if (color_id) {
-    glVertexAttribPointer(color_id, color_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
-    glEnableVertexAttribArray(color_id);  
-    offset += color_dimension;
-  };
-
-  // Texture coordinates
-  if (textCords_id) {
-    glVertexAttribPointer(textCords_id, textCords_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
-    glEnableVertexAttribArray(textCords_id);  
-    offset += textCords_dimension;
-  };
-
-  // Texture ID
-  if (textID_id) {
-    glVertexAttribPointer(textID_id, textID_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
-    glEnableVertexAttribArray(textID_id);  
-    offset += textID_dimension;
+  for(int k = 0; k < keys.size(); k++){
+    glVertexAttribPointer(keys[k], data[keys[k]].getDimension(), data[keys[k]].getType(), GL_FALSE, line_size, (GLvoid*)(offset * sizeof(char)));
+    glEnableVertexAttribArray(keys[k]);
+    offset += data[keys[k]].getDimension() * data[keys[k]].getSizeOfElement();
   };
 
   glBindVertexArray(0);
@@ -143,7 +84,10 @@ void CW::Renderer::Mesh::compile() {
 void CW::Renderer::Mesh::destroy() {
   if (EBO) glDeleteBuffers(1, &EBO);
   if (VBO) glDeleteBuffers(1, &VBO);
-  if (VAO) glDeleteBuffers(1, &VAO);
+  if (VAO) glDeleteVertexArrays(1, &VAO);
+  VAO = 0;
+  VBO = 0;
+  EBO = 0;
 
   is_compiled = false;
 };
