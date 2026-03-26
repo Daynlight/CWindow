@@ -1,24 +1,39 @@
 #include "Mesh.h"
 
-CW::Renderer::Mesh::Mesh(){
-};
-
-CW::Renderer::Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
-  : vertices(vertices), indices(indices), is_compiled(false) {};
+CW::Renderer::Mesh::Mesh(){};
 
 CW::Renderer::Mesh::~Mesh() {
  destroy();
 }
 
-void CW::Renderer::Mesh::addTextCords(std::vector<GLfloat> textCords) {
-  this->textCords = textCords;
+void CW::Renderer::Mesh::addVertices(std::vector<float> vertices, unsigned int dimension, unsigned int layout){
+  this->vertices = vertices;
+  this->vertices_dimension = dimension;
+  this->vertices_id = layout;
+  is_compiled = false;
 };
 
-void CW::Renderer::Mesh::addColors(std::vector<GLfloat> colors) {
+void CW::Renderer::Mesh::addIndicies(std::vector<unsigned int> indices) {
+  this->indices = indices;
+  is_compiled = false;
+};
+
+void CW::Renderer::Mesh::addColors(std::vector<GLfloat> colors, unsigned int dimension, unsigned int layout){
   this->colors = colors;
+  this->color_dimension = dimension;
+  this->color_id = layout;
+  is_compiled = false;
+};
+
+void CW::Renderer::Mesh::addTextCords(std::vector<GLfloat> textCords, unsigned int dimension, unsigned int layout) {
+  this->textCords = textCords;
+  this->textCords_dimension = dimension;
+  this->textCords_id = layout;
+  is_compiled = false;
 };
 
 void CW::Renderer::Mesh::render() {
+  // [TODO] culling
   if(!is_compiled)
     compile();
 
@@ -28,42 +43,35 @@ void CW::Renderer::Mesh::render() {
 };
 
 void CW::Renderer::Mesh::compile() {
-  if (VAO) destroy();
+  if(vertices.size() == 0) return;
+  if(indices.size() == 0) return;
+  if(vertices_dimension == 0) return;
+  // [TODO] check if id's are unique
 
-  glGenBuffers(1, &VBO);
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &EBO);
-
-  glBindVertexArray(VAO);
-
-
-
+  if (is_compiled) destroy();
+  
   std::vector<GLfloat> bufferData;
-  unsigned int line_size = 4;
-  if(!colors.empty()) line_size += 3;
-  if (!textCords.empty()) line_size += 2;
+  unsigned int line_size = vertices_dimension + color_dimension + textCords_dimension;
 
   bufferData.reserve(vertices.size() + colors.size() + textCords.size());
   
   for (size_t i = 0; i < vertices.size() / 4; ++i) {
-    bufferData.push_back(vertices[i * 4 + 0]);
-    bufferData.push_back(vertices[i * 4 + 1]);
-    bufferData.push_back(vertices[i * 4 + 2]);
-    bufferData.push_back(vertices[i * 4 + 3]);
+    for(size_t j = 0; j < vertices_dimension; ++j)
+    bufferData.push_back(vertices[i * vertices_dimension + j]);
     
-    if(!colors.empty()){
-      bufferData.push_back(colors[i * 3 + 0]);
-      bufferData.push_back(colors[i * 3 + 1]);
-      bufferData.push_back(colors[i * 3 + 2]);
-    };
-
-    if (!textCords.empty()) {
-      bufferData.push_back(textCords[i * 2 + 0]);
-      bufferData.push_back(textCords[i * 2 + 1]);
-    };
+    for(size_t j = 0; j < color_dimension; ++j)
+    bufferData.push_back(colors[i * color_dimension + j]);
+    
+    for(size_t j = 0; j < textCords_dimension; ++j)
+    bufferData.push_back(textCords[i * textCords_dimension + j]);
   };
 
 
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+  glGenBuffers(1, &EBO);
+
+  glBindVertexArray(VAO);
   
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, bufferData.size() * sizeof(GLfloat), bufferData.data(), GL_STATIC_DRAW);
@@ -71,29 +79,24 @@ void CW::Renderer::Mesh::compile() {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
-  
-
   // Positions
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)0);
-  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(vertices_id, vertices_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)0);
+  glEnableVertexAttribArray(vertices_id);
 
-  unsigned int iter = 1;
   unsigned int offset = 3;
 
   // Colors
-  if (!colors.empty()) {
-    glVertexAttribPointer(iter, 3, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
-    glEnableVertexAttribArray(iter);  
-    iter++;
-    offset += 3;
+  if (color_id) {
+    glVertexAttribPointer(color_id, color_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
+    glEnableVertexAttribArray(color_id);  
+    offset += color_dimension;
   };
 
   // Texture coordinates
-  if (!textCords.empty()) {
-    glVertexAttribPointer(iter, 2, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
-    glEnableVertexAttribArray(iter);  
-    iter++;
-    offset += 2;
+  if (textCords_id) {
+    glVertexAttribPointer(textCords_id, textCords_dimension, GL_FLOAT, GL_FALSE, line_size * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
+    glEnableVertexAttribArray(textCords_id);  
+    offset += textCords_dimension;
   };
 
   glBindVertexArray(0);

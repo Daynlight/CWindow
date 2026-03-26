@@ -16,8 +16,8 @@ int main(){
   shader.getUniforms().emplace_back(&uniform);
 
   
-  CW::Renderer::Mesh square = CW::Renderer::Mesh(
-  {
+  CW::Renderer::Mesh square;
+  square.addVertices({
     -1.0f,  1.0f, -1.0f, 1.0f,
     -1.0f, -1.0f, -1.0f, 1.0f,
     1.0f,  1.0f, -1.0f, 1.0f,
@@ -26,8 +26,9 @@ int main(){
     -1.0f, -1.0f, 1.0f, 1.0f,
     1.0f,  1.0f, 1.0f, 1.0f,
     1.0f, -1.0f, 1.0f, 1.0f,
-  },
-  {
+  });
+
+  square.addIndicies({
     0, 1, 2,
     1, 3, 2,
     4, 5, 6,
@@ -42,7 +43,7 @@ int main(){
     3, 7, 5
   });
 
-  std::vector<GLfloat> colors = 
+  std::vector<float> colors = 
   {
     0.1f, 1.0f, 0.0f,
     1.0f, 0.0f, 1.0f,

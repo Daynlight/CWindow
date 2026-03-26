@@ -9,14 +9,14 @@ int main(){
   if(texture.load("../Assets/image.png"))
     return -1;
 
-  CW::Renderer::Mesh viewport = CW::Renderer::Mesh(
-  {
+  CW::Renderer::Mesh viewport;
+  viewport.addVertices({
     -1.0f,  1.0f, 0.0f,
     -1.0f, -1.0f, 0.0f,
     1.0f,  1.0f, 0.0f,
     1.0f, -1.0f, 0.0f,
-  }, 
-  {
+  });
+  viewport.addIndicies({
     0, 1, 2,
     1, 3, 2
   });
