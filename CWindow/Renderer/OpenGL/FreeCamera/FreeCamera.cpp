@@ -43,7 +43,8 @@ void CW::Renderer::FreeCamera::rotate(float xoffset, float yoffset) {
   if(pitch < -89.0f) pitch = -89.0f;
 
   updateDirection();
-}
+};
+
 
 void CW::Renderer::FreeCamera::updateDirection() {
   glm::vec3 dir;
@@ -51,4 +52,9 @@ void CW::Renderer::FreeCamera::updateDirection() {
   dir.y = sin(glm::radians(pitch));
   dir.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
   direction = glm::normalize(dir);
-}
+};
+
+void CW::Renderer::FreeCamera::resetMovement(CW::Renderer::Renderer* renderer){
+  lastMouseX = renderer->getInputData()->mouse_x;
+  lastMouseY = renderer->getInputData()->mouse_y;
+};

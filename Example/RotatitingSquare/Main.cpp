@@ -17,7 +17,8 @@ int main(){
 
   
   CW::Renderer::Mesh square;
-  square.addVertices({
+
+  std::vector<GLfloat> vertices({
     -1.0f,  1.0f, -1.0f, 1.0f,
     -1.0f, -1.0f, -1.0f, 1.0f,
     1.0f,  1.0f, -1.0f, 1.0f,
@@ -27,8 +28,9 @@ int main(){
     1.0f,  1.0f, 1.0f, 1.0f,
     1.0f, -1.0f, 1.0f, 1.0f,
   });
+  square.addVertices(vertices);
 
-  square.addIndicies({
+  std::vector<GLuint> indicies({
     0, 1, 2,
     1, 3, 2,
     4, 5, 6,
@@ -42,6 +44,7 @@ int main(){
     1, 3, 5,
     3, 7, 5
   });
+  square.addIndicies(indicies);
 
   std::vector<float> colors = 
   {

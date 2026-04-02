@@ -25,6 +25,7 @@ public:
   
   void rotate(float xoffset, float yoffset);
   void updateDirection();
+  void resetMovement(CW::Renderer::Renderer* renderer);
 
   void event(CW::Renderer::Renderer* renderer);
 
