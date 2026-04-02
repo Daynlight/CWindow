@@ -31,7 +31,7 @@ int main(){
     1.0f, 1.0f,
     1.0f, 0.0f
   });
-  viewport.addData<GLfloat>(idtx, 2, 1, GL_FLOAT);
+  viewport.setData<GLfloat>(idtx, 2, 1, GL_FLOAT);
 
   CW::Renderer::DrawShader texture_shader(Texture::vertex, Texture::fragment);
   CW::Renderer::Uniform uniform;

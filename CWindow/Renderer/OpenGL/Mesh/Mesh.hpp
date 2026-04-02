@@ -3,7 +3,7 @@
 
 
 template <typename T>
-inline void CW::Renderer::Mesh::addData(std::vector<T> data, unsigned int dimension, unsigned int layout, GLenum type){
+inline void CW::Renderer::Mesh::setData(std::vector<T> data, unsigned int dimension, unsigned int layout, GLenum type){
   const char* begin = reinterpret_cast<const char*>(data.data());
   const char* end   = begin + data.size() * sizeof(T);
 
