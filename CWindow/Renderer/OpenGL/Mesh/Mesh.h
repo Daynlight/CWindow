@@ -31,6 +31,10 @@ private:
 
   bool is_compiled = false;
 
+public:
+  Mesh() noexcept;
+  ~Mesh() noexcept;
+
 private:
   void generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension);
 
@@ -42,9 +46,6 @@ private:
   void closeBuffers() const noexcept;
 
 public:
-  Mesh() noexcept;
-  ~Mesh() noexcept;
-
   void addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension = 4, const unsigned int layout = 0);
   void addIndices(const std::vector<GLuint>& indices) noexcept;
 

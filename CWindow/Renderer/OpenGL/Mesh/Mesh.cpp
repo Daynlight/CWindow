@@ -16,38 +16,6 @@ CW::Renderer::Mesh::~Mesh() noexcept {
 
 
 
-void CW::Renderer::Mesh::addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension, const unsigned int layout){
-  if(dimension == 0) throw std::runtime_error("CW::Renderer::Mesh::addVertices: dimension == 0, no data to add");
-  culling_box_exists = false;
-
-  setData<GLfloat>(vertices, dimension, layout, GL_FLOAT);
-  generateCullingBox(vertices, dimension);
-  
-  is_compiled = false;
-};
-
-
-
-void CW::Renderer::Mesh::addIndices(const std::vector<unsigned int>& indices) noexcept {
-  this->indices = indices;
-
-  is_compiled = false;
-};
-
-
-
-void CW::Renderer::Mesh::removeData(const unsigned int layout) noexcept {
-  this->dataRegister.erase(layout);
-};
-
-
-
-void CW::Renderer::Mesh::clearData() noexcept {
-  this->dataRegister.clear();
-};
-
-
-
 void CW::Renderer::Mesh::generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension){
   if(dimension == 0) throw std::runtime_error("CW::Renderer::Mesh::generateCullingBox: dimension == 0, no data to calculate");
   
@@ -73,18 +41,6 @@ void CW::Renderer::Mesh::generateCullingBox(const std::vector<GLfloat>& data, co
   culling_box[0] = vertex_min;
   culling_box[1] = vertex_max;
   culling_box_exists = true;
-};
-
-
-
-bool CW::Renderer::Mesh::getCullingBoxExists() const noexcept {
-  return culling_box_exists;
-};
-
-
-
-std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const noexcept {
-  return culling_box;
 };
 
 
@@ -140,14 +96,6 @@ void CW::Renderer::Mesh::genBuffers(const std::vector<char>& bufferData) noexcep
 
 
 
-void CW::Renderer::Mesh::closeBuffers() const noexcept {
-  glBindVertexArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-};
-
-
-
 void CW::Renderer::Mesh::setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) const noexcept {
   unsigned int offset = 0;
 
@@ -161,15 +109,54 @@ void CW::Renderer::Mesh::setDataPositions(const std::vector<unsigned int>& keys,
 
 
 
-void CW::Renderer::Mesh::render() noexcept {
-  if(!is_compiled && indices.size() != 0 && !dataRegister.empty()) 
-    compile();
+void CW::Renderer::Mesh::closeBuffers() const noexcept {
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+};
 
-  if(VAO != 0){
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-  };
+
+
+void CW::Renderer::Mesh::addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension, const unsigned int layout){
+  if(dimension == 0) throw std::runtime_error("CW::Renderer::Mesh::addVertices: dimension == 0, no data to add");
+  culling_box_exists = false;
+
+  setData<GLfloat>(vertices, dimension, layout, GL_FLOAT);
+  generateCullingBox(vertices, dimension);
+  
+  is_compiled = false;
+};
+
+
+
+void CW::Renderer::Mesh::addIndices(const std::vector<unsigned int>& indices) noexcept {
+  this->indices = indices;
+
+  is_compiled = false;
+};
+
+
+
+void CW::Renderer::Mesh::removeData(const unsigned int layout) noexcept {
+  this->dataRegister.erase(layout);
+};
+
+
+
+void CW::Renderer::Mesh::clearData() noexcept {
+  this->dataRegister.clear();
+};
+
+
+
+bool CW::Renderer::Mesh::getCullingBoxExists() const noexcept {
+  return culling_box_exists;
+};
+
+
+
+std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const noexcept {
+  return culling_box;
 };
 
 
@@ -210,4 +197,17 @@ void CW::Renderer::Mesh::destroy() noexcept {
   EBO = 0;
 
   is_compiled = false;
+};
+
+
+
+void CW::Renderer::Mesh::render() noexcept {
+  if(!is_compiled && indices.size() != 0 && !dataRegister.empty()) 
+    compile();
+
+  if(VAO != 0){
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+  };
 };
