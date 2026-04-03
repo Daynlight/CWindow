@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.15)
 set(src 
   "Renderer.cpp"
   "Mesh/Mesh.cpp"
+  "Mesh/Mesh.hpp"
+  "Mesh/MeshData.h"
+  "Mesh/MeshData.cpp"
+  "FreeCamera/FreeCamera3D.cpp"
+  "FreeCamera/FreeCamera3D.h"
   "Shader/DrawShader.cpp"
   "Shader/ComputeShader.cpp"
   "Shader/ComputeShader.hpp"
