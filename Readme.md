@@ -781,3 +781,4 @@ int main(){
 * [Filters](https://github.com/Daynlight/Filters)
 * [Fractals](https://github.com/Daynlight/Fractals)
 * [Shader Editor](https://github.com/Daynlight/Shader_Editor)
+* [Graphite](https://github.com/Daynlight/Graphite)
