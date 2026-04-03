@@ -19,13 +19,12 @@ private:
   GLenum type = GL_FLOAT;
 
 public:
-  MeshData();
-  MeshData(std::vector<char> data, const unsigned int size, const unsigned int size_of_element, const unsigned int dimension, const GLenum type);
+  MeshData() noexcept;
+  MeshData(std::vector<char>& data, const unsigned int size, const unsigned int size_of_element, const unsigned int dimension, const GLenum type) noexcept;
 
   unsigned int getSize() const noexcept;
   unsigned int getSizeOfElement() const noexcept;
   unsigned int getDimension() const noexcept;
-  char operator[](const unsigned int index) const;
   const char* getRawData() const noexcept;
   GLenum getType() const noexcept;
 

@@ -6,11 +6,11 @@
 
 
 
-CW::Renderer::MeshData::MeshData(){};
+CW::Renderer::MeshData::MeshData() noexcept {};
 
 
 
-CW::Renderer::MeshData::MeshData(std::vector<char> data, const unsigned int size, const unsigned int size_of_element, const unsigned int dimension, const GLenum type)
+CW::Renderer::MeshData::MeshData(std::vector<char>& data, const unsigned int size, const unsigned int size_of_element, const unsigned int dimension, const GLenum type) noexcept
   : data(std::move(data)), dimension(dimension), size_of_element(size_of_element), size(size), type(type){};
 
 
@@ -29,12 +29,6 @@ unsigned int CW::Renderer::MeshData::getSizeOfElement() const noexcept {
 
 unsigned int CW::Renderer::MeshData::getDimension() const noexcept {
   return dimension;
-};
-
-
-
-char CW::Renderer::MeshData::operator[](const unsigned int index) const {
-  return data[index]; 
 };
 
 

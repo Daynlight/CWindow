@@ -6,17 +6,18 @@
 
 
 
-CW::Renderer::Mesh::Mesh(){};
+CW::Renderer::Mesh::Mesh() noexcept {};
 
 
 
-CW::Renderer::Mesh::~Mesh() {
+CW::Renderer::Mesh::~Mesh() noexcept {
  destroy();
 };
 
 
 
 void CW::Renderer::Mesh::addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension, const unsigned int layout){
+  if(dimension == 0) throw std::runtime_error("CW::Renderer::Mesh::addVertices: dimension == 0, no data to add");
   culling_box_exists = false;
 
   setData<GLfloat>(vertices, dimension, layout, GL_FLOAT);
@@ -27,7 +28,7 @@ void CW::Renderer::Mesh::addVertices(const std::vector<GLfloat>& vertices, const
 
 
 
-void CW::Renderer::Mesh::addIndices(const std::vector<unsigned int>& indices) {
+void CW::Renderer::Mesh::addIndices(const std::vector<unsigned int>& indices) noexcept {
   this->indices = indices;
 
   is_compiled = false;
@@ -35,20 +36,20 @@ void CW::Renderer::Mesh::addIndices(const std::vector<unsigned int>& indices) {
 
 
 
-void CW::Renderer::Mesh::removeData(const unsigned int layout){
+void CW::Renderer::Mesh::removeData(const unsigned int layout) noexcept {
   this->dataRegister.erase(layout);
 };
 
 
 
-void CW::Renderer::Mesh::clearData() {
+void CW::Renderer::Mesh::clearData() noexcept {
   this->dataRegister.clear();
 };
 
 
 
 void CW::Renderer::Mesh::generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension){
-  if(dimension == 0) return;
+  if(dimension == 0) throw std::runtime_error("CW::Renderer::Mesh::generateCullingBox: dimension == 0, no data to calculate");
   
   std::vector<GLfloat> vertex_max;
   vertex_max.reserve(dimension);
@@ -76,18 +77,24 @@ void CW::Renderer::Mesh::generateCullingBox(const std::vector<GLfloat>& data, co
 
 
 
-std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const{
+bool CW::Renderer::Mesh::getCullingBoxExists() const noexcept {
+  return culling_box_exists;
+};
+
+
+
+std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const noexcept {
   return culling_box;
 };
 
 
 
-std::vector<unsigned int> CW::Renderer::Mesh::getDataRegisterLayouts() const {
+std::vector<unsigned int> CW::Renderer::Mesh::getDataRegisterLayouts() const noexcept {
   std::vector<unsigned int> keys;
 
   keys.reserve(dataRegister.size());
   for (const std::pair<const unsigned int, MeshData> &pair : dataRegister)
-      keys.push_back(pair.first);
+      keys.emplace_back(pair.first);
 
   std::sort(keys.begin(), keys.end());
 
@@ -96,7 +103,7 @@ std::vector<unsigned int> CW::Renderer::Mesh::getDataRegisterLayouts() const {
 
 
 
-std::vector<char> CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) {
+std::vector<char> CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) const noexcept {
   std::vector<char> bufferData(total_size);
 
   unsigned int dstOffset = 0;
@@ -118,7 +125,7 @@ std::vector<char> CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsig
 
 
 
-void CW::Renderer::Mesh::genBuffers(const std::vector<char>& bufferData) {
+void CW::Renderer::Mesh::genBuffers(const std::vector<char>& bufferData) noexcept {
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
@@ -133,7 +140,7 @@ void CW::Renderer::Mesh::genBuffers(const std::vector<char>& bufferData) {
 
 
 
-void CW::Renderer::Mesh::closeBuffers() const {
+void CW::Renderer::Mesh::closeBuffers() const noexcept {
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -141,41 +148,45 @@ void CW::Renderer::Mesh::closeBuffers() const {
 
 
 
-void CW::Renderer::Mesh::setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) {
+void CW::Renderer::Mesh::setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) const noexcept {
   unsigned int offset = 0;
 
   for(unsigned int k = 0; k < keys.size(); k++){
-    glVertexAttribPointer(keys[k], dataRegister[keys[k]].getDimension(), dataRegister[keys[k]].getType(), GL_FALSE, line_size, (GLvoid*)(offset * sizeof(char)));
+    const CW::Renderer::MeshData& data = dataRegister.at(keys[k]);
+    glVertexAttribPointer(keys[k], data.getDimension(), data.getType(), GL_FALSE, line_size, (GLvoid*)(offset * sizeof(char)));
     glEnableVertexAttribArray(keys[k]);
-    offset += dataRegister[keys[k]].getDimension() * dataRegister[keys[k]].getSizeOfElement();
+    offset += data.getDimension() * data.getSizeOfElement();
   };
 };
 
 
 
-void CW::Renderer::Mesh::render(){
-  if(!is_compiled) compile();
+void CW::Renderer::Mesh::render() noexcept {
+  if(!is_compiled && indices.size() != 0 && !dataRegister.empty()) 
+    compile();
 
-  glBindVertexArray(VAO);
-  glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-  glBindVertexArray(0);
+  if(VAO != 0){
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+  };
 };
 
 
 
-void CW::Renderer::Mesh::compile(){
+void CW::Renderer::Mesh::compile() {
   if (is_compiled) destroy();
-  if(indices.size() == 0) return;
+  if(indices.size() == 0) throw std::runtime_error("CW::Renderer::Mesh::compile: indices.size() == 0, no data to create mesh");
 
   unsigned int line_size = 0;
-  unsigned int total_size = 0;  
+  unsigned int total_size = 0;
   
   for(const std::pair<const unsigned int, MeshData>& el : dataRegister){
     line_size += el.second.getDimension() * el.second.getSizeOfElement();
     total_size += el.second.getSize();
   };
 
-  if(line_size == 0) return;
+  if(line_size == 0) throw std::runtime_error("CW::Renderer::Mesh::compile: line_size == 0 no data to add");
   const unsigned int total_points = total_size / line_size;
       
   const std::vector<unsigned int> keys = getDataRegisterLayouts();
@@ -190,7 +201,7 @@ void CW::Renderer::Mesh::compile(){
 
 
 
-void CW::Renderer::Mesh::destroy() {
+void CW::Renderer::Mesh::destroy() noexcept {
   if (EBO) glDeleteBuffers(1, &EBO);
   if (VBO) glDeleteBuffers(1, &VBO);
   if (VAO) glDeleteVertexArrays(1, &VAO);
