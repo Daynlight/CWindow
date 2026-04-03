@@ -4,10 +4,31 @@ CWindow is cross-platform multi renderer lib for creating simple meshes, shaders
 It unify multiple renderers to simple most often used operations like, binding shaders, rendering mashes,
 swapping window etc. Good to use in simple project or just learning shaders and rendering.
 
+
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="docs/malgenbrota.png">
+        <img src="docs/malgenbrota.png" /><br>
+      </a>
+    </td>
+    <td align="center">
+      <a href="docs/docs/Julia.png">
+        <img src="docs/Julia.png" /><br>
+      </a>
+    </td>
+  </tr>
+</table>
+
+
+
 ## Table of Contents
 - [About](#about)
-- [Table of Contents](#table-of-contents)
 - [Screenshots](#screenshots)
+- [Table of Contents](#table-of-contents)
 - [Installation](#installation)
   - [1. clone repo with submodules](#1-clone-repo-with-submodules)
   - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
@@ -69,26 +90,6 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 - [License](#license)
 - [Prerequisites](#prerequisites)
 - [Other projects that use it](#other-projects-that-use-it)
-
-
-
-
-## Screenshots
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="docs/malgenbrota.png">
-        <img src="docs/malgenbrota.png" /><br>
-      </a>
-    </td>
-    <td align="center">
-      <a href="docs/docs/Julia.png">
-        <img src="docs/Julia.png" /><br>
-      </a>
-    </td>
-  </tr>
-</table>
 
 
 
