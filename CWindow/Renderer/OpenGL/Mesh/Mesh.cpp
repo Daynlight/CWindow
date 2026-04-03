@@ -16,51 +16,52 @@ CW::Renderer::Mesh::~Mesh() {
 
 
 
-void CW::Renderer::Mesh::addVertices(std::vector<GLfloat> vertices, unsigned int dimension, unsigned int layout){
+void CW::Renderer::Mesh::addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension, const unsigned int layout){
   culling_box_exists = false;
+
   setData<GLfloat>(vertices, dimension, layout, GL_FLOAT);
   generateCullingBox(vertices, dimension);
+  
   is_compiled = false;
 };
 
 
 
-void CW::Renderer::Mesh::addIndicies(std::vector<unsigned int> indices) {
+void CW::Renderer::Mesh::addIndices(const std::vector<unsigned int>& indices) {
   this->indices = indices;
+
   is_compiled = false;
 };
 
 
 
-std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const {
-  return culling_box;
+void CW::Renderer::Mesh::removeData(const unsigned int layout){
+  this->dataRegister.erase(layout);
 };
 
 
 
-void CW::Renderer::Mesh::render(){
-  if(!is_compiled) compile();
-
-  glBindVertexArray(VAO);
-  glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-  glBindVertexArray(0);
+void CW::Renderer::Mesh::clearData() {
+  this->dataRegister.clear();
 };
 
 
 
-void CW::Renderer::Mesh::generateCullingBox(std::vector<GLfloat> data, unsigned int dimension){
+void CW::Renderer::Mesh::generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension){
+  if(dimension == 0) return;
+  
   std::vector<GLfloat> vertex_max;
   vertex_max.reserve(dimension);
   std::vector<GLfloat> vertex_min;
   vertex_min.reserve(dimension);
   
-  for(int i = 0; i < dimension; i++){
+  for(unsigned int i = 0; i < dimension; i++){
     vertex_max.emplace_back(data[i]);
     vertex_min.emplace_back(data[i]);
   };
 
-  for(int i = 1; i < data.size() / dimension; i++){
-    for(int j = 0; j < dimension; j++){
+  for(unsigned int i = 1; i < data.size() / dimension; i++){
+    for(unsigned int j = 0; j < dimension; j++){
       if(vertex_max[j] < data[dimension * i + j])
         vertex_max[j] = data[dimension * i + j];
       if(vertex_min[j] > data[dimension * i + j])
@@ -75,26 +76,17 @@ void CW::Renderer::Mesh::generateCullingBox(std::vector<GLfloat> data, unsigned 
 
 
 
-std::vector<char> CW::Renderer::Mesh::arangeData(const std::vector<unsigned int>* keys, unsigned int total_size, unsigned int total_points){
-  std::vector<char> bufferData;
-  
-  bufferData.reserve(total_size);
-
-  for(size_t i = 0; i < total_points; ++i)
-    for(int k = 0; k < keys->size(); ++k)
-      for(size_t j = 0; j < data[(*keys)[k]].getDimension() * data[(*keys)[k]].getSizeOfElement(); ++j)
-        bufferData.push_back(data[(*keys)[k]][i * data[(*keys)[k]].getDimension() * data[(*keys)[k]].getSizeOfElement() + j]);
-  
-  return bufferData;
+std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const{
+  return culling_box;
 };
 
 
 
-std::vector<unsigned int> CW::Renderer::Mesh::getDataKeys(){
+std::vector<unsigned int> CW::Renderer::Mesh::getDataRegisterLayouts() const {
   std::vector<unsigned int> keys;
 
-  keys.reserve(data.size());
-  for (const std::pair<const unsigned int, MeshData> &pair : data)
+  keys.reserve(dataRegister.size());
+  for (const std::pair<const unsigned int, MeshData> &pair : dataRegister)
       keys.push_back(pair.first);
 
   std::sort(keys.begin(), keys.end());
@@ -104,25 +96,29 @@ std::vector<unsigned int> CW::Renderer::Mesh::getDataKeys(){
 
 
 
-void CW::Renderer::Mesh::compile(){
-  if (is_compiled) destroy();
-  if(indices.size() == 0) return;
+std::vector<char> CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) {
+  std::vector<char> bufferData(total_size);
 
-  unsigned int line_size = 0;
-  unsigned int total_size = 0;  
-  unsigned int offset = 0;
-  
-  for(std::pair<const unsigned int, MeshData> &el : data){
-    line_size += el.second.getDimension() * el.second.getSizeOfElement();
-    total_size += el.second.getSize();
+  unsigned int dstOffset = 0;
+
+  for (unsigned int i = 0; i < total_points; ++i) {
+    for (unsigned int k = 0; k < keys.size(); ++k) {
+      const CW::Renderer::MeshData& md = dataRegister.at(keys[k]);
+      const unsigned int elementSize = md.getDimension() * md.getSizeOfElement();
+      const unsigned int srcOffset = i * elementSize;
+
+      std::memcpy(bufferData.data() + dstOffset, md.getRawData() + srcOffset, elementSize);
+
+      dstOffset += elementSize;
+    };
   };
 
-  unsigned int total_points = total_size / line_size;
-  
-      
-  std::vector<unsigned int> keys = getDataKeys();
-  std::vector<char> bufferData = arangeData(&keys, total_size, total_points);
+  return bufferData;
+};
 
+
+
+void CW::Renderer::Mesh::genBuffers(const std::vector<char>& bufferData) {
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glGenBuffers(1, &EBO);
@@ -133,16 +129,61 @@ void CW::Renderer::Mesh::compile(){
   glBufferData(GL_ARRAY_BUFFER, bufferData.size() * sizeof(char), bufferData.data(), GL_STATIC_DRAW);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+};
 
-  for(int k = 0; k < keys.size(); k++){
-    glVertexAttribPointer(keys[k], data[keys[k]].getDimension(), data[keys[k]].getType(), GL_FALSE, line_size, (GLvoid*)(offset * sizeof(char)));
-    glEnableVertexAttribArray(keys[k]);
-    offset += data[keys[k]].getDimension() * data[keys[k]].getSizeOfElement();
-  };
 
+
+void CW::Renderer::Mesh::closeBuffers() const {
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+};
+
+
+
+void CW::Renderer::Mesh::setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) {
+  unsigned int offset = 0;
+
+  for(unsigned int k = 0; k < keys.size(); k++){
+    glVertexAttribPointer(keys[k], dataRegister[keys[k]].getDimension(), dataRegister[keys[k]].getType(), GL_FALSE, line_size, (GLvoid*)(offset * sizeof(char)));
+    glEnableVertexAttribArray(keys[k]);
+    offset += dataRegister[keys[k]].getDimension() * dataRegister[keys[k]].getSizeOfElement();
+  };
+};
+
+
+
+void CW::Renderer::Mesh::render(){
+  if(!is_compiled) compile();
+
+  glBindVertexArray(VAO);
+  glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+  glBindVertexArray(0);
+};
+
+
+
+void CW::Renderer::Mesh::compile(){
+  if (is_compiled) destroy();
+  if(indices.size() == 0) return;
+
+  unsigned int line_size = 0;
+  unsigned int total_size = 0;  
+  
+  for(const std::pair<const unsigned int, MeshData>& el : dataRegister){
+    line_size += el.second.getDimension() * el.second.getSizeOfElement();
+    total_size += el.second.getSize();
+  };
+
+  if(line_size == 0) return;
+  const unsigned int total_points = total_size / line_size;
+      
+  const std::vector<unsigned int> keys = getDataRegisterLayouts();
+  const std::vector<char> bufferData = generateDataBuffer(keys, total_size, total_points);
+
+  genBuffers(bufferData);
+  setDataPositions(keys, line_size);
+  closeBuffers();
 
   is_compiled = true;
 };

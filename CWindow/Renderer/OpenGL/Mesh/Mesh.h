@@ -7,6 +7,7 @@
 #include <array>
 #include <unordered_map>
 #include <algorithm>
+#include <cstring>
 
 #include "MeshData.h"
 
@@ -21,7 +22,7 @@ class Mesh{
 private:
   GLuint VAO, VBO, EBO;
 
-  std::unordered_map<unsigned int, CW::Renderer::MeshData> data;
+  std::unordered_map<unsigned int, CW::Renderer::MeshData> dataRegister;
   std::vector<GLuint> indices;
   
   std::array<std::vector<GLfloat>, 2> culling_box;
@@ -30,20 +31,25 @@ private:
   bool is_compiled = false;
 
 private:
-  void generateCullingBox(std::vector<GLfloat> data, unsigned int dimension);
-  std::vector<unsigned int> getDataKeys();
-  std::vector<char> arangeData(const std::vector<unsigned int>* keys, unsigned int total_size, unsigned int total_points);
+  void generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension);
+
+  std::vector<unsigned int> getDataRegisterLayouts() const;
+  std::vector<char> generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points);
+  
+  void genBuffers(const std::vector<char>& bufferData);
+  void setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size);
+  void closeBuffers() const;
 
 public:
   Mesh();
   ~Mesh();
 
-  void addVertices(std::vector<GLfloat> vertices, unsigned int dimension = 4, unsigned int layout = 0);
-  void addIndicies(std::vector<GLuint> indices);
+  void addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension = 4, const unsigned int layout = 0);
+  void addIndices(const std::vector<GLuint>& indices);
 
   template<typename T>
-  void setData(std::vector<T> data, unsigned int dimension, unsigned int layout, GLenum type);
-  void removeData(unsigned int layout);
+  void setData(const std::vector<T>& data, const unsigned int dimension, const unsigned int layout, const GLenum type = GL_FLOAT);
+  void removeData(const unsigned int layout);
   void clearData();
   
   std::array<std::vector<GLfloat>, 2> getCullingBox() const;

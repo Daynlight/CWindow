@@ -23,7 +23,7 @@ int main(){
     0, 1, 2,
     1, 3, 2
   });
-  viewport.addIndicies(indicies);
+  viewport.addIndices(indicies);
 
   std::vector<GLfloat> idtx({
     0.0f, 1.0f,

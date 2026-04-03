@@ -1,7 +1,12 @@
 #pragma once
+#include "glad/glad.h"
 
 #include <vector>
-#include <unordered_map>
+
+
+
+
+
 
 
 namespace CW::Renderer{
@@ -10,32 +15,19 @@ private:
   std::vector<char> data;
   unsigned int dimension = 0;
   unsigned int size_of_element = 0;
-  GLenum type;
+  unsigned int size = 0;
+  GLenum type = GL_FLOAT;
 
 public:
-  MeshData(){};
-  MeshData(std::vector<char> data, unsigned int dimension, unsigned int size_of_element, GLenum type)
-  : data(data), dimension(dimension), size_of_element(size_of_element), type(type){};
+  MeshData();
+  MeshData(std::vector<char> data, const unsigned int size, const unsigned int size_of_element, const unsigned int dimension, const GLenum type);
 
-  unsigned int getSize(){
-    return data.size();
-  };
-
-  unsigned int getSizeOfElement(){
-    return size_of_element;
-  };
-
-  unsigned int getDimension(){
-    return dimension;
-  };
-
-  char operator[](size_t index){
-    return data[index]; 
-  };
-
-  GLenum getType(){
-    return type;
-  };
+  unsigned int getSize() const noexcept;
+  unsigned int getSizeOfElement() const noexcept;
+  unsigned int getDimension() const noexcept;
+  char operator[](const unsigned int index) const;
+  const char* getRawData() const noexcept;
+  GLenum getType() const noexcept;
 
 };
 };

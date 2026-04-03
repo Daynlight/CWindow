@@ -44,7 +44,7 @@ int main(){
     1, 3, 5,
     3, 7, 5
   });
-  square.addIndicies(indicies);
+  square.addIndices(indicies);
 
   std::vector<float> colors = 
   {
