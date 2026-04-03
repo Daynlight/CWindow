@@ -7,8 +7,12 @@
 
 
 
+
+
+
+
 namespace CW::Renderer{
-class FreeCamera{
+class FreeCamera3D{
 private:
   glm::vec3 position = {0, 0, 0};
   glm::vec3 direction = {0, 0, 1};
@@ -19,13 +23,18 @@ private:
   float lastMouseX = 0.0f;
   float lastMouseY = 0.0f;
 
+  bool mouse_is_active = false;
+
 public:
-  FreeCamera(CW::Renderer::Renderer* renderer, glm::vec3 position = {0, 0, 0}, glm::vec3 direction = {0, 0, 1});
-  glm::mat4 transformation(CW::Renderer::Renderer* renderer);
+  FreeCamera3D(CW::Renderer::Renderer* renderer, glm::vec3 position = {0, 0, 0}, glm::vec3 direction = {0, 0, 1});
   
+private:
   void rotate(float xoffset, float yoffset);
   void updateDirection();
-  void resetMovement(CW::Renderer::Renderer* renderer);
+
+public:
+  glm::mat4 transformation(CW::Renderer::Renderer* renderer);
+  void resetMouse();
 
   void event(CW::Renderer::Renderer* renderer);
 

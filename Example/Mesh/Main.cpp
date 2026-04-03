@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include "Shaders.h"
 #include "Mesh.h"
-#include "FreeCamera/FreeCamera.h"
+#include "FreeCamera/FreeCamera3D.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "../vendor/glm/glm/gtx/euler_angles.hpp"
 
@@ -10,7 +10,7 @@
 int main(){
   CW::Renderer::Renderer window;
   window.setWindowTitle("Mesh Creation and Loading");
-  CW::Renderer::FreeCamera camera(&window);
+  CW::Renderer::FreeCamera3D camera(&window);
   window.setCursorVisibility(false);
 
 
@@ -28,7 +28,6 @@ int main(){
   float time = 0.0f;
   float cursor_visible_lock = 0.0f;
   bool cursor_lock = true;
-  camera.resetMovement(&window);
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
@@ -41,17 +40,19 @@ int main(){
     glm::mat4 mvp = camera.transformation(&window) * model;
     uniform["transformation"]->set<glm::mat4>(mvp);
 
+
     if(cursor_lock) window.setCursorOn(true);
     else window.setCursorOn(false);
 
     if(window.getInputData()->is_key_down("ESC") && cursor_visible_lock <= 0.0f) {
       cursor_lock = !cursor_lock;
       cursor_visible_lock = 0.5f;
-      camera.resetMovement(&window);
+      camera.resetMouse();
     }
     else if(cursor_visible_lock > 0.0f) cursor_visible_lock -= window.getWindowData()->delta_time;
 
     if(!cursor_lock) camera.event(&window);
+
 
     shader.bind();
     square.render();
