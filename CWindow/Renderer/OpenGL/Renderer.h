@@ -4,8 +4,8 @@
 
 #include "Mesh/Mesh.h"
 
-#include "Shader/DrawShader.h"
-#include "Shader/ComputeShader.h"
+#include "Shader/Shader/Shader.h"
+#include "Shader/Compute/Shader.h"
 
 #include "Uniform/Uniform.h"
 #include "Texture/Texture.h"
@@ -19,6 +19,12 @@
 #include <stdexcept>
 #include <functional>
 #include <chrono>
+
+
+
+
+
+
 
 namespace CW::Renderer{
 class Renderer : public iRenderer {
@@ -58,5 +64,6 @@ public:
   void setCursorVisibility(bool visible);
   void setCursorOn(bool on);
   void close();
+  
 };
 };

@@ -33,7 +33,7 @@ int main(){
   });
   viewport.setData<GLfloat>(idtx, 2, 1, GL_FLOAT);
 
-  CW::Renderer::DrawShader texture_shader(Texture::vertex, Texture::fragment);
+  CW::Renderer::Shader texture_shader(Texture::vertex, Texture::fragment);
   CW::Renderer::Uniform uniform;
   texture_shader.getUniforms().emplace_back(&uniform);
   uniform["uTexture"]->set<int>(0);

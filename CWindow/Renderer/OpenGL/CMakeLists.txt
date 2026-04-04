@@ -2,20 +2,29 @@ cmake_minimum_required(VERSION 3.15)
 
 set(src 
   "Renderer.cpp"
+  "Renderer.h"
   "Mesh/Mesh.cpp"
   "Mesh/Mesh.hpp"
+  "Mesh/Mesh.h"
   "Mesh/MeshData.h"
   "Mesh/MeshData.cpp"
   "FreeCamera/FreeCamera3D.cpp"
   "FreeCamera/FreeCamera3D.h"
-  "Shader/DrawShader.cpp"
-  "Shader/ComputeShader.cpp"
-  "Shader/ComputeShader.hpp"
+  "Shader/Shader/Shader.cpp"
+  "Shader/Shader/Shader.h"
+  "Shader/Shader/ShaderData.cpp"
+  "Shader/Shader/ShaderData.h"
+  "Shader/Compute/Shader.cpp"
+  "Shader/Compute/Shader.hpp"
+  "Shader/Compute/Shader.h"
   "Uniform/Uniform.cpp"
+  "Uniform/Uniform.h"
   "Texture/Texture.cpp"
+  "Texture/Texture.h"
   ${ROOT_DIR}/vendor/stb/deprecated/stb_image.c
   ${ROOT_DIR}/vendor/glad/src/glad.c
 )
+
 set(headers
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_DIR}
