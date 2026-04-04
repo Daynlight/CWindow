@@ -15,7 +15,7 @@ int main(){
 
 
 
-  CW::Renderer::DrawShader shader(Shader::vertex, Shader::fragment);
+  CW::Renderer::Shader shader(Shader::vertex, Shader::fragment);
   CW::Renderer::Uniform uniform;
 
   shader.getUniforms().emplace_back(&uniform);
