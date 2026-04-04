@@ -61,23 +61,24 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   - [Usage](#usage)
   - [Supported Types](#supported-types)
   - [Memory Management](#memory-management)
-- [DrawShader](#drawshader)
+- [Shader](#shader)
   - [Info](#info-6)
   - [Usage](#usage-1)
+  - [Add Geometry Shader](#add-geometry-shader)
   - [Hot-Reloading](#hot-reloading)
   - [Memory Management](#memory-management-1)
   - [Example](#example)
-- [Mesh](#mesh)
+- [ComputeShader](#computeshader)
   - [Info](#info-7)
+  - [Basic Usage](#basic-usage)
+  - [Data Processing Example](#data-processing-example)
+  - [Available Functions](#available-functions)
+- [Mesh](#mesh)
+  - [Info](#info-8)
   - [Storing Data](#storing-data)
   - [Mesh control and functions](#mesh-control-and-functions)
   - [Render Example](#render-example)
   - [Also check](#also-check)
-- [ComputeShader](#computeshader)
-  - [Info](#info-8)
-  - [Basic Usage](#basic-usage)
-  - [Data Processing Example](#data-processing-example)
-  - [Available Functions](#available-functions)
 - [FreeCamera3D](#freecamera3d)
   - [Info](#info-9)
   - [Camera control and functions](#camera-control-and-functions)
@@ -342,18 +343,25 @@ glm::vec3 color = uniform["color"]->get<glm::vec3>();
 
 
 
-## DrawShader
+## Shader
 ### Info
-1. DrawShader combines vertex and fragment shaders for rendering
+1. Shader combines multiple shaders to one program for rendering
 2. Automatically compiles when first used via `bind()`
 3. Supports multiple uniform bindings
-4. Provides shader hot-reloading via `setVertexShader()` and `setFragmentShader()`
+4. Supports lazy loading
+5. Provides shader hot-reloading via `setVertexShader()` and `setFragmentShader()`
+6. Add any other type of shader to program via ```setShader()```
 
 ### Usage
-#### Creating DrawShader
+#### Creating Shader
 ```cpp
 // Initialize with vertex and fragment shader sources
-CW::Renderer::DrawShader shader(vertexSource, fragmentSource);
+CW::Renderer::Shader shader(vertexSource, fragmentSource);
+```
+
+### Add Geometry Shader
+```cpp
+shader.setShader(geometrySource, GL_GEOMETRY_SHADER);
 ```
 
 #### Binding Uniforms
@@ -383,6 +391,12 @@ shader.setFragmentShader(newFragmentSource); // Update fragment shader
 ```
 
 ### Memory Management
+* `setVertexShader()` - Set vertex shader
+* `setFragmentShader()` - Set fragment shader
+* `setShader()` - Set shader
+* `removeShaders()` - Remove shader
+* `clearShaders()` - Remove all shader
+* `getUniforms()` - Manage uniforms
 * `compile()` - Manually compile shader (called automatically by bind)
 * `destroy()` - Free shader resources
 * `bind()` - Activate shader and bind uniforms
@@ -390,24 +404,26 @@ shader.setFragmentShader(newFragmentSource); // Update fragment shader
 
 ### Example
 ```cpp
+// set sources
+std::string vertex = R"(
+#version 430
+layout(location = 0) in vec3 aPos;
+void main() {
+    gl_Position = vec4(aPos, 1.0);
+}
+)";
+
+std::string fragment = R"(
+#version 430
+uniform vec3 color;
+out vec4 FragColor;
+void main() {
+    FragColor = vec4(color, 1.0);
+}
+)"
+
 // Create shader with sources
-CW::Renderer::DrawShader shader(
-    R"(
-        #version 430
-        layout(location = 0) in vec3 aPos;
-        void main() {
-            gl_Position = vec4(aPos, 1.0);
-        }
-    )",
-    R"(
-        #version 430
-        uniform vec3 color;
-        out vec4 FragColor;
-        void main() {
-            FragColor = vec4(color, 1.0);
-        }
-    )"
-);
+CW::Renderer::DrawShader shader(vertex, fragment);
 
 // Add uniform
 CW::Renderer::Uniform uniform;
@@ -418,6 +434,63 @@ shader.getUniforms().emplace_back(&uniform);
 shader.bind();
 mesh.render();
 shader.unbind();
+```
+
+
+
+
+## ComputeShader
+### Info
+1. It is used for computing data on GPU
+2. You need to provide compute shader on creation
+3. Is automatically compiled when ran
+4. On Run you must provide data and threads along X axis
+5. Optional you can provide threads along Y and Z axis
+6. `run()` and `get()` are templated functions
+
+### Basic Usage
+```cpp
+// Create a compute shader
+CW::Renderer::ComputeShader computeShader(R"(
+    #version 430
+    layout(local_size_x = 1) in;
+    
+    layout(std430, binding = 0) buffer DataBuffer {
+        float data[];
+    };
+    
+    void main() {
+        uint index = gl_GlobalInvocationID.x;
+        data[index] = data[index] * 2.0; // Double each value
+    }
+)");
+```
+
+### Data Processing Example
+```cpp
+// Prepare input data
+std::vector<float> inputData = {1.0f, 2.0f, 3.0f, 4.0f};
+
+// Run computation with 4 threads
+computeShader.run<float>(inputData, 4);
+
+// Get results
+std::vector<float> results = computeShader.get<float>();
+```
+
+### Available Functions
+```cpp
+void compile();   // Manually compile shader
+void destroy();   // Free resources
+
+template<typename T>
+void run(std::vector<T> data,   // Input data
+         unsigned int x,        // X threads
+         unsigned int y = 1,    // Y threads (optional)
+         unsigned int z = 1);   // Z threads (optional)
+
+template<typename T>
+std::vector<T> get();    // Get results
 ```
 
 
@@ -476,63 +549,6 @@ shader.unbind();
 ```
 
 ### [Also check](Example/Mesh/Main.cpp)
-
-
-
-
-## ComputeShader
-### Info
-1. It is used for computing data on GPU
-2. You need to provide compute shader on creation
-3. Is automatically compiled when ran
-4. On Run you must provide data and threads along X axis
-5. Optional you can provide threads along Y and Z axis
-6. `run()` and `get()` are templated functions
-
-### Basic Usage
-```cpp
-// Create a compute shader
-CW::Renderer::ComputeShader computeShader(R"(
-    #version 430
-    layout(local_size_x = 1) in;
-    
-    layout(std430, binding = 0) buffer DataBuffer {
-        float data[];
-    };
-    
-    void main() {
-        uint index = gl_GlobalInvocationID.x;
-        data[index] = data[index] * 2.0; // Double each value
-    }
-)");
-```
-
-### Data Processing Example
-```cpp
-// Prepare input data
-std::vector<float> inputData = {1.0f, 2.0f, 3.0f, 4.0f};
-
-// Run computation with 4 threads
-computeShader.run<float>(inputData, 4);
-
-// Get results
-std::vector<float> results = computeShader.get<float>();
-```
-
-### Available Functions
-```cpp
-void compile();   // Manually compile shader
-void destroy();   // Free resources
-
-template<typename T>
-void run(std::vector<T> data,   // Input data
-         unsigned int x,        // X threads
-         unsigned int y = 1,    // Y threads (optional)
-         unsigned int z = 1);   // Z threads (optional)
-
-template<typename T>
-std::vector<T> get();    // Get results
-```
 
 
 

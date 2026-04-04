@@ -21,6 +21,7 @@ CW::Renderer::Shader::Shader(const std::string& vertex_source, const std::string
 
 CW::Renderer::Shader::~Shader() noexcept {
   destroy();
+  is_compiled = false;
 };
 
 
@@ -57,7 +58,6 @@ void CW::Renderer::Shader::clearShaders() noexcept {
   this->registerShader.clear();
   is_compiled = false;
 };
-
 
 
 
