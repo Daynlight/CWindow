@@ -4,79 +4,6 @@ CWindow is cross-platform multi renderer lib for creating simple meshes, shaders
 It unify multiple renderers to simple most often used operations like, binding shaders, rendering mashes,
 swapping window etc. Good to use in simple project or just learning shaders and rendering.
 
-## Table of Contents
-- [CWindow](#cwindow)
-  - [About](#about)
-  - [Table of Contents](#table-of-contents)
-  - [Screenshots](#screenshots)
-  - [Installation](#installation)
-    - [1. clone repo with submodules](#1-clone-repo-with-submodules)
-    - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
-    - [3 Add CWindow to your cmake project](#3-add-cwindow-to-your-cmake-project)
-    - [4.1 compile via cmake](#41-compile-via-cmake)
-    - [4.2 compile via cmake with parameters for platform and renderer](#42-compile-via-cmake-with-parameters-for-platform-and-renderer)
-    - [5 Run your executable](#5-run-your-executable)
-  - [Configurations flags](#configurations-flags)
-    - [Platforms](#platforms)
-    - [Renderers](#renderers)
-    - [Default and Detection](#default-and-detection)
-  - [Gui Usage](#gui-usage)
-    - [Initialization](#initialization)
-    - [Workspace](#workspace)
-      - [Info](#info)
-      - [Example Workspace](#example-workspace)
-    - [Adding Window](#adding-window)
-      - [Info](#info-1)
-      - [Example Window](#example-window)
-    - [Full Example of Usage](#full-example-of-usage)
-  - [Renderer Usage](#renderer-usage)
-    - [Info](#info-2)
-    - [Editing Window](#editing-window)
-    - [Window loop](#window-loop)
-    - [Getting window ref](#getting-window-ref)
-  - [WindowData](#windowdata)
-    - [Info](#info-3)
-    - [Data Access](#data-access)
-  - [InputData](#inputdata)
-    - [Info](#info-4)
-    - [Data Access](#data-access-1)
-  - [Uniform](#uniform)
-    - [Info](#info-5)
-    - [Usage](#usage)
-      - [Creating Uniform](#creating-uniform)
-      - [Setting Values](#setting-values)
-      - [Getting Values](#getting-values)
-    - [Supported Types](#supported-types)
-    - [Memory Management](#memory-management)
-  - [DrawShader](#drawshader)
-    - [Info](#info-6)
-    - [Usage](#usage-1)
-      - [Creating DrawShader](#creating-drawshader)
-      - [Binding Uniforms](#binding-uniforms)
-      - [Rendering](#rendering)
-    - [Hot-Reloading](#hot-reloading)
-    - [Memory Management](#memory-management-1)
-    - [Example](#example)
-  - [Mesh](#mesh)
-    - [Info](#info-7)
-    - [Data Stored](#data-stored)
-    - [Mesh control](#mesh-control)
-    - [Render Example](#render-example)
-    - [Full Viewport Example](#full-viewport-example)
-  - [ComputeShader](#computeshader)
-    - [Info](#info-8)
-    - [Basic Usage](#basic-usage)
-    - [Data Processing Example](#data-processing-example)
-    - [Available Functions](#available-functions)
-  - [Implemented optimizations](#implemented-optimizations)
-  - [Full Example](#full-example)
-  - [Features](#features)
-  - [Libraries](#libraries)
-  - [License](#license)
-  - [Prerequisites](#prerequisites)
-  - [Other projects that use it](#other-projects-that-use-it)
-
-
 
 
 ## Screenshots
@@ -95,6 +22,75 @@ swapping window etc. Good to use in simple project or just learning shaders and 
     </td>
   </tr>
 </table>
+
+
+
+## Table of Contents
+- [About](#about)
+- [Screenshots](#screenshots)
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+  - [1. clone repo with submodules](#1-clone-repo-with-submodules)
+  - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
+  - [3 Add CWindow to your cmake project](#3-add-cwindow-to-your-cmake-project)
+  - [4.1 compile via cmake](#41-compile-via-cmake)
+  - [4.2 compile via cmake with parameters for platform and renderer](#42-compile-via-cmake-with-parameters-for-platform-and-renderer)
+  - [5 Run your executable](#5-run-your-executable)
+- [Configurations flags](#configurations-flags)
+  - [Platforms](#platforms)
+  - [Renderers](#renderers)
+  - [Default and Detection](#default-and-detection)
+- [Gui Usage](#gui-usage)
+  - [Initialization](#initialization)
+  - [Workspace](#workspace)
+  - [Adding Window](#adding-window)
+  - [Full Example of Usage](#full-example-of-usage)
+- [Renderer Usage](#renderer-usage)
+  - [Info](#info-2)
+  - [Editing Window](#editing-window)
+  - [Window loop](#window-loop)
+  - [Getting window ref](#getting-window-ref)
+- [WindowData](#windowdata)
+  - [Info](#info-3)
+  - [Data Access](#data-access)
+- [InputData](#inputdata)
+  - [Info](#info-4)
+  - [Data Access](#data-access-1)
+- [Uniform](#uniform)
+  - [Info](#info-5)
+  - [Usage](#usage)
+  - [Supported Types](#supported-types)
+  - [Memory Management](#memory-management)
+- [Shader](#shader)
+  - [Info](#info-6)
+  - [Usage](#usage-1)
+  - [Add Geometry Shader](#add-geometry-shader)
+  - [Hot-Reloading](#hot-reloading)
+  - [Memory Management](#memory-management-1)
+  - [Example](#example)
+- [ComputeShader](#computeshader)
+  - [Info](#info-7)
+  - [Basic Usage](#basic-usage)
+  - [Data Processing Example](#data-processing-example)
+  - [Available Functions](#available-functions)
+- [Mesh](#mesh)
+  - [Info](#info-8)
+  - [Storing Data](#storing-data)
+  - [Mesh control and functions](#mesh-control-and-functions)
+  - [Render Example](#render-example)
+  - [Also check](#also-check)
+- [FreeCamera3D](#freecamera3d)
+  - [Info](#info-9)
+  - [Camera control and functions](#camera-control-and-functions)
+  - [Code Example](#code-example)
+  - [Also check](#also-check-1)
+- [Implemented optimizations](#implemented-optimizations)
+- [Full Example](#full-example)
+- [Features](#features)
+- [Libraries](#libraries)
+- [License](#license)
+- [Prerequisites](#prerequisites)
+- [Other projects that use it](#other-projects-that-use-it)
 
 
 
@@ -347,18 +343,25 @@ glm::vec3 color = uniform["color"]->get<glm::vec3>();
 
 
 
-## DrawShader
+## Shader
 ### Info
-1. DrawShader combines vertex and fragment shaders for rendering
+1. Shader combines multiple shaders to one program for rendering
 2. Automatically compiles when first used via `bind()`
 3. Supports multiple uniform bindings
-4. Provides shader hot-reloading via `setVertexShader()` and `setFragmentShader()`
+4. Supports lazy loading
+5. Provides shader hot-reloading via `setVertexShader()` and `setFragmentShader()`
+6. Add any other type of shader to program via ```setShader()```
 
 ### Usage
-#### Creating DrawShader
+#### Creating Shader
 ```cpp
 // Initialize with vertex and fragment shader sources
-CW::Renderer::DrawShader shader(vertexSource, fragmentSource);
+CW::Renderer::Shader shader(vertexSource, fragmentSource);
+```
+
+### Add Geometry Shader
+```cpp
+shader.setShader(geometrySource, GL_GEOMETRY_SHADER);
 ```
 
 #### Binding Uniforms
@@ -388,6 +391,12 @@ shader.setFragmentShader(newFragmentSource); // Update fragment shader
 ```
 
 ### Memory Management
+* `setVertexShader()` - Set vertex shader
+* `setFragmentShader()` - Set fragment shader
+* `setShader()` - Set shader
+* `removeShaders()` - Remove shader
+* `clearShaders()` - Remove all shader
+* `getUniforms()` - Manage uniforms
 * `compile()` - Manually compile shader (called automatically by bind)
 * `destroy()` - Free shader resources
 * `bind()` - Activate shader and bind uniforms
@@ -395,24 +404,26 @@ shader.setFragmentShader(newFragmentSource); // Update fragment shader
 
 ### Example
 ```cpp
+// set sources
+std::string vertex = R"(
+#version 430
+layout(location = 0) in vec3 aPos;
+void main() {
+    gl_Position = vec4(aPos, 1.0);
+}
+)";
+
+std::string fragment = R"(
+#version 430
+uniform vec3 color;
+out vec4 FragColor;
+void main() {
+    FragColor = vec4(color, 1.0);
+}
+)"
+
 // Create shader with sources
-CW::Renderer::DrawShader shader(
-    R"(
-        #version 430
-        layout(location = 0) in vec3 aPos;
-        void main() {
-            gl_Position = vec4(aPos, 1.0);
-        }
-    )",
-    R"(
-        #version 430
-        uniform vec3 color;
-        out vec4 FragColor;
-        void main() {
-            FragColor = vec4(color, 1.0);
-        }
-    )"
-);
+CW::Renderer::DrawShader shader(vertex, fragment);
 
 // Add uniform
 CW::Renderer::Uniform uniform;
@@ -425,61 +436,6 @@ mesh.render();
 shader.unbind();
 ```
 
-
-
-
-## Mesh
-### Info
-1. Mesh stores data for rendering
-2. When some data is not provided then automatically doesn't push it to GPU
-3. vertices and indices are required
-4. automatically compiled when used and doesn't compile before
-
-### Data Stored
-1. vertices (vec3)
-2. indices (int)
-<!-- 3. normals (vec3) -->
-
-### Mesh control
-* compile()
-* destroy()
-* render()
-
-### Render Example
-```cpp
-// Create mesh with vertices and indices
-CW::Renderer::Mesh mesh({
-  // Vertices (vec3)
-  -0.5f, -0.5f, 0.0f,  // bottom left
-   0.5f, -0.5f, 0.0f,  // bottom right 
-   0.0f,  0.5f, 0.0f   // top
-}, {
-  // Indices
-  0, 1, 2  // triangle
-});
-
-// Render cycle
-shader.bind();
-mesh.render();
-shader.unbind();
-```
-
-### Full Viewport Example
-```cpp
-// Create full viewport quad mesh
-CW::Renderer::Mesh viewport({
-  -1.0f,  1.0f, 0.0f,  // top left
-  -1.0f, -1.0f, 0.0f,  // bottom left
-   1.0f,  1.0f, 0.0f,  // top right
-   1.0f, -1.0f, 0.0f   // bottom right
-}, {
-  0, 1, 2,  // first triangle
-  1, 3, 2   // second triangle
-});
-
-// Render mesh
-viewport.render();
-```
 
 
 
@@ -536,6 +492,103 @@ void run(std::vector<T> data,   // Input data
 template<typename T>
 std::vector<T> get();    // Get results
 ```
+
+
+
+
+## Mesh
+### Info
+1. Mesh moves data from vectors to own registers.
+2. Mesh automatically generate buffer and set locations(```layouts```) on gpu.
+3. We prefer using ```addVertices()``` for generating culling box.
+4. You can pass any other data to gpu via ```setData<T>()```.
+
+### Storing Data 
+1. vertices via ```addVertices()```
+2. indices via ```addIndices()```
+3. any other data via ```setData<T>()```
+
+### Mesh control and functions
+* ```setData<T>()```
+* ```removeData()```
+* ```clearData()```
+* ```getCullingBoxExists()```
+* ```getCullingBox()```
+* ```compile()```
+* ```destroy()```
+* ```render()```
+
+### Render Example
+```cpp
+// Create mesh
+CW::Renderer::Mesh mesh;
+
+// Vertices
+std::vector<float> vertices({
+  // Vertices (vec3)
+  -0.5f, -0.5f, 0.0f,  // bottom left
+   0.5f, -0.5f, 0.0f,  // bottom right 
+   0.0f,  0.5f, 0.0f   // top
+});
+mesh.addVertices(vertices, 3, 0);
+
+// Indices
+std::vector<unsigned int> indices({
+  0, 1, 2  // triangle
+})
+mesh.addIndices(indices);
+
+// Colors
+std::vector<float> colors({1.0f, 0.0f, 1.0f});
+square.setData<GLfloat>(colors, 3, 1, GL_FLOAT);
+
+// Render cycle
+shader.bind();
+mesh.render();
+shader.unbind();
+```
+
+### [Also check](Example/Mesh/Main.cpp)
+
+
+
+
+## FreeCamera3D
+### Info
+1. FreeCamera3D is simple camera in 3d that gives movement rotation and transform matrix(```mat4```)
+2. When change mouse movement or exist focus mode use ```resetMouse()```.
+
+### Camera control and functions
+* ```transformation``` returns transformation matrix for objects.
+* ```resetMouse()``` resets mouse position
+* ```event()``` mouse events and camera movement
+
+### Code Example
+```cpp
+CW::Renderer::FreeCamera3D camera(&window); // Init camera
+
+// Variables for swap camera event
+float cursor_visible_lock = 0.0f;
+bool cursor_lock = true;
+
+// Hide Cursor/Unhide cursor
+if(cursor_lock) window.setCursorOn(true);
+else window.setCursorOn(false);
+
+// ESC button operation with cooldown
+if(window.getInputData()->is_key_down("ESC") && cursor_visible_lock <= 0.0f) {
+  cursor_lock = !cursor_lock;
+  cursor_visible_lock = 0.5f;
+  camera.resetMouse();
+}
+else if(cursor_visible_lock > 0.0f) cursor_visible_lock -= window.getWindowData()->delta_time;
+
+// Camera events
+if(!cursor_lock) camera.event(&window);
+```
+
+### [Also check](Example/Mesh/Main.cpp)
+
 
 
 
@@ -744,3 +797,4 @@ int main(){
 * [Filters](https://github.com/Daynlight/Filters)
 * [Fractals](https://github.com/Daynlight/Fractals)
 * [Shader Editor](https://github.com/Daynlight/Shader_Editor)
+* [Graphite](https://github.com/Daynlight/Graphite)

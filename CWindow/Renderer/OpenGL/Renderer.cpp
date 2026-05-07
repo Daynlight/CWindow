@@ -3,6 +3,11 @@ static double scroll_x, scroll_y;
 #include "RendererEvents.h"
 
 
+
+
+
+
+
 CW::Renderer::Renderer::Renderer(bool windowless) { 
   if(!windowless) createWindow(); 
   else windowLessRenderer();
@@ -11,23 +16,33 @@ CW::Renderer::Renderer::Renderer(bool windowless) {
   setVsync(1);
 };
 
+
+
 CW::Renderer::Renderer::~Renderer() {
   windowData.should_close = false;
   if (window) glfwDestroyWindow(window);
   glfwTerminate();
 };
 
+
+
 const CW::Renderer::WindowData *CW::Renderer::Renderer::getWindowData() {
   return &windowData;
-}
+};
+
+
 
 const CW::Renderer::InputData *CW::Renderer::Renderer::getInputData() {
   return &inputData;
-}
+};
+
+
 
 void CW::Renderer::Renderer::setKeyboardBind(const std::string &action, char key){
   inputData.keyboard_binds[action] = key;
-}
+};
+
+
 
 void CW::Renderer::Renderer::createWindow(){
   if(!glfwInit()) {
@@ -56,6 +71,8 @@ void CW::Renderer::Renderer::createWindow(){
   });
 };
 
+
+
 void CW::Renderer::Renderer::windowLessRenderer() {
   if (!glfwInit()) {
     windowData.should_close = false;
@@ -78,15 +95,17 @@ void CW::Renderer::Renderer::windowLessRenderer() {
   }
 
   glfwMakeContextCurrent(window); // Make context current
-}
+};
+
 
 
 APIWindow* CW::Renderer::Renderer::getWindow() {
   return window;
-}
+};
 
-void CW::Renderer::Renderer::createRenderer()
-{
+
+
+void CW::Renderer::Renderer::createRenderer(){
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     windowData.should_close = false;
     return;
@@ -100,13 +119,17 @@ void CW::Renderer::Renderer::createRenderer()
   glDepthFunc(GL_LESS);
 
   windowEvents();
-}
+};
+
+
 
 void CW::Renderer::Renderer::beginFrame() {
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-}
+};
+
+
 
 void CW::Renderer::Renderer::swapBuffer() {
   glfwSwapBuffers(window);
-}
+};
