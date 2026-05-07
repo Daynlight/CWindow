@@ -1,6 +1,12 @@
 #pragma once 
 #include "stb_image.h"
 
+
+
+
+
+
+
 void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -27,17 +33,22 @@ void CW::Renderer::Renderer::setWindowMode(CW::Renderer::WindowMode new_mode){
       break;
   }
   windowData.window_mode = new_mode;
-}
+};
+
+
 
 void CW::Renderer::Renderer::setVsync(bool vsync){
   glfwSwapInterval(vsync);
   windowData.vsync = vsync;
-}
+};
+
+
 
 void CW::Renderer::Renderer::setWindowTitle(const std::string& title){
   glfwSetWindowTitle(window, title.c_str());
   windowData.title = title;
-}
+};
+
 
 
 // [FEATURE] To change when texture added
@@ -56,7 +67,9 @@ void CW::Renderer::Renderer::setIcon(const std::string& path){
   stbi_image_free(image);
 
   windowData.icon = path;
-}
+};
+
+
 
 void CW::Renderer::Renderer::minimize(bool minimize) {
   if(minimize){
@@ -67,7 +80,9 @@ void CW::Renderer::Renderer::minimize(bool minimize) {
     glfwRestoreWindow(window);
     windowData.is_minimize = 0;
   }
-}
+};
+
+
 
 void CW::Renderer::Renderer::maximize(bool maximize) {
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
@@ -89,13 +104,19 @@ void CW::Renderer::Renderer::maximize(bool maximize) {
   }
 };
 
+
+
 void CW::Renderer::Renderer::setPosition(int x, int y) {
   glfwSetWindowPos(window, x, y);
-}
+};
+
+
 
 void CW::Renderer::Renderer::setSize(int width, int height) {
   glfwSetWindowSize(window, width, height);
-}
+};
+
+
 
 void CW::Renderer::Renderer::setCursorVisibility(bool visible) {
   if(visible){
@@ -108,7 +129,9 @@ void CW::Renderer::Renderer::setCursorVisibility(bool visible) {
     windowData.is_cursor_visible = 0;
     windowData.is_cursor_on = 1;
   }
-}
+};
+
+
 
 void CW::Renderer::Renderer::setCursorOn(bool on) {
   if(on){
@@ -123,21 +146,11 @@ void CW::Renderer::Renderer::setCursorOn(bool on) {
   }
 };
 
+
+
 void CW::Renderer::Renderer::close(){
   windowData.should_close = 1;
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
