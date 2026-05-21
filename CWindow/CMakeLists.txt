@@ -42,6 +42,7 @@ project(CWindow LANGUAGES CXX C)
 ### Vendor Libs
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
+add_subdirectory(vendor/assimp)
 
 
 ### Subfolders
@@ -51,4 +52,4 @@ add_subdirectory(Gui)
 set(src "CWindow.cpp")
 
 add_library(CWindow STATIC ${src})
-target_link_libraries(CWindow  Renderer Gui)
+target_link_libraries(CWindow Renderer Gui)

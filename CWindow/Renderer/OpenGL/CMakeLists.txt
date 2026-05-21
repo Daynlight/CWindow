@@ -32,6 +32,7 @@ set(headers
   ${ROOT_DIR}/vendor/glfw/include/
   ${ROOT_DIR}/vendor/glm/glm/
   ${ROOT_DIR}/vendor/stb/
+  ${ROOT_DIR}/vendor/assimp/include/
 )
 
 ############# [Set Files] #############
@@ -40,6 +41,7 @@ if(PLATFORM STREQUAL "UNIX")
 set(libs 
   glfw 
   glm
+  assimp
   X11
   Xrandr
   Xcursor
@@ -51,6 +53,7 @@ elseif(PLATFORM STREQUAL "WIN32")
 set(libs 
   glfw 
   glm
+  assimp
   winmm
   imm32
   version
