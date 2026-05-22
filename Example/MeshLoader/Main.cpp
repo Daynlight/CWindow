@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Material/PBRMaterial.h"
 #include "Shaders.h"
 
 #include "FreeCamera/FreeCamera3D.h"
@@ -14,21 +15,7 @@
 #include <iostream>
 #include <unordered_map>
 
-struct Material {
-  glm::vec3 albedo = glm::vec3(1.0f);
 
-  float roughness = 1.0f;
-  float metallic = 0.0f;
-  float ao = 1.0f;
-
-  float specular = 0.5f;
-  float emissiveStrength = 0.0f;
-
-  int albedoTexID = -1;
-  int normalTexID = -1;
-  int roughnessTexID = -1;
-  int metallicTexID = -1;
-};
 
 class Model{
   public: 
@@ -39,7 +26,7 @@ class Model{
   std::vector<GLfloat> tangents;
   std::vector<GLfloat> bitangents;
   std::vector<GLfloat> colors;
-  Material material;
+  CW::PBRMaterial material;
 
   Assimp::Importer importer;
 
@@ -165,39 +152,64 @@ class Model{
     }
   }
 
-  void extractMaterial(aiMesh* mesh, const aiScene* scene){
+  void extractMaterial(aiMesh* mesh, const aiScene* scene)
+  {
     if (!scene || !mesh) return;
 
     aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
 
-    aiColor3D color(1.0f, 1.0f, 1.0f);
-
-    // Albedo / Diffuse
-    if (AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
-      material.albedo = glm::vec3(color.r, color.g, color.b);
+    // ---------------- BASE COLOR ----------------
+    aiColor3D baseColor(1.0f, 1.0f, 1.0f);
+    material.albedo = glm::vec3(1.0f);
+    if (mat->Get(AI_MATKEY_BASE_COLOR, baseColor) == AI_SUCCESS ||
+        mat->Get(AI_MATKEY_COLOR_DIFFUSE, baseColor) == AI_SUCCESS)
+    {
+      material.albedo = glm::vec3(baseColor.r, baseColor.g, baseColor.b);
     }
 
-    // Roughness (PBR extension)
+    // ---------------- ROUGHNESS ----------------
     float roughness = 1.0f;
-    if (AI_SUCCESS == mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness)) {
+    material.roughness = roughness;
+    if (mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness) == AI_SUCCESS)
+    {
       material.roughness = roughness;
     }
 
-    // Metallic (PBR extension)
+    // ---------------- METALLIC ----------------
     float metallic = 0.0f;
-    if (AI_SUCCESS == mat->Get(AI_MATKEY_METALLIC_FACTOR, metallic)) {
+    material.metallic = metallic;
+    if (mat->Get(AI_MATKEY_METALLIC_FACTOR, metallic) == AI_SUCCESS)
+    {
       material.metallic = metallic;
     }
 
-    // Ambient Occlusion (fallback guess, not always present)
-    material.ao = 1.0f;
-
-    // Specular (legacy pipeline fallback)
-    float spec = 0.5f;
-    if (AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS_STRENGTH, spec)) {
-      material.specular = spec;
+    // ---------------- EMISSIVE (REAL ONE) ----------------
+    aiColor3D emi_color(0.0f, 0.0f, 0.0f);
+    material.emission_color = glm::vec3(0.0f);
+    if (mat->Get(AI_MATKEY_COLOR_EMISSIVE, emi_color) == AI_SUCCESS)
+    {
+      material.emission_color = glm::vec3(emi_color.r, emi_color.g, emi_color.b);
     }
+
+    float emi_strength = 1.0f;
+    material.emission_strength = emi_strength;
+    if (mat->Get(AI_MATKEY_EMISSIVE_INTENSITY, emi_strength) == AI_SUCCESS)
+    {
+      material.emission_strength = emi_strength;
+    }
+
+    // ---------------- AO (fallback) ----------------
+    material.ambient_occlusion = 1.0f;
   }
+  
+  void bindMaterialToUniform(CW::Renderer::Uniform& uniform){
+    uniform["albedo"]->set<glm::vec3>(material.albedo);
+    uniform["roughness"]->set<float>(material.roughness);
+    uniform["metallic"]->set<float>(material.metallic);
+    uniform["emission_color"]->set<glm::vec3>(material.emission_color);
+    uniform["emission_strength"]->set<float>(material.emission_strength);
+    uniform["ambient_occlusion"]->set<float>(material.ambient_occlusion);
+  };
 
   void clear(){
     vertices.clear();
@@ -207,6 +219,7 @@ class Model{
     tangents.clear();
     bitangents.clear();
     colors.clear();
+    material = CW::PBRMaterial();
   }
 };
 
@@ -234,11 +247,7 @@ int main(){
   asset.setData<GLfloat>(data.normals, 3, 1, GL_FLOAT);
   // asset.setData<GLfloat>(data.colors, 3, 2, GL_FLOAT);
 
-  uniform["albedo"]->set<glm::vec3>(data.material.albedo);
-  uniform["roughness"]->set<float>(data.material.roughness);
-  uniform["metallic"]->set<float>(data.material.metallic);
-  uniform["ao"]->set<float>(data.material.ao);
-  uniform["specular"]->set<float>(data.material.specular);
+  data.bindMaterialToUniform(uniform);
 
   uniform["lightPos"]->set<glm::vec3>({50.0f, 100.0f, 20.0f});
   uniform["lightColor"]->set<glm::vec3>({1.0f, 1.0f, 1.0f});

@@ -28,6 +28,7 @@ set(src
 set(headers
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_DIR}
+  ${ROOT_DIR}
   ${ROOT_DIR}/vendor/glad/include/  
   ${ROOT_DIR}/vendor/glfw/include/
   ${ROOT_DIR}/vendor/glm/glm/
