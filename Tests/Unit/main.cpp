@@ -3,7 +3,7 @@
 
 
 int main(){
-  printf("Tests");
+  printf("Hello Tests");
   std::exit(0);
 
   return 0;
