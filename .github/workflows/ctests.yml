@@ -16,18 +16,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Ninja (Ubuntu)
+      - name: Install Linux dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y ninja-build
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            wayland-protocols \
+            libwayland-dev \
+            libxkbcommon-dev \
+            xorg-dev
 
-      - name: Install Ninja (Windows)
+      - name: Install Windows dependencies
         if: runner.os == 'Windows'
         run: choco install ninja -y
 
       - name: Initialize submodules
         run: git submodule update --init --recursive
 
-      - name: Configure project
+      - name: Configure project (Linux X11)
+        if: runner.os == 'Linux'
+        run: cmake -S . -B build -G Ninja \
+              -DGLFW_BUILD_WAYLAND=OFF \
+              -DGLFW_BUILD_X11=ON
+
+      - name: Configure project (Windows)
+        if: runner.os == 'Windows'
         run: cmake -S . -B build -G Ninja
 
       - name: Build project
