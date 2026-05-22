@@ -144,4 +144,4 @@ vec3 BRDF(
   return lighting + ambient + emissiveColor;
 }
 )";
-}
+};

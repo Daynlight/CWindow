@@ -49,14 +49,9 @@ add_subdirectory(vendor/assimp)
 add_subdirectory(Renderer)
 add_subdirectory(Gui)
 
-set(headers
-  "Renderer/Material/"
-)
-
 set(src 
   "CWindow.cpp"
-  )
+)
 
 add_library(CWindow STATIC ${src})
-target_include_directories(CWindow PUBLIC ${headers})
 target_link_libraries(CWindow Renderer Gui)

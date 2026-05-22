@@ -8,12 +8,16 @@
 #include "Shader/Compute/Shader.h"
 
 #include "Uniform/Uniform.h"
+
 #include "Texture/Texture.h"
 
 #include "../Data/WindowData.h"
 #include "../Data/InputData.h"
 
 #include "glad/glad.h"
+
+#include "../../Material/PBRMaterial.h"
+#include "../../MeshLoader/MeshLoader.h"
 
 #include <vector>
 #include <stdexcept>
