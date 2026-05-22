@@ -40,6 +40,12 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   - [Platforms](#platforms)
   - [Renderers](#renderers)
   - [Default and Detection](#default-and-detection)
+- [Testing](#testing)
+  - [Command:](#command)
+  - [VSCode Extension](#vscode-extension)
+  - [Workflow](#workflow)
+  - [See or Write new Tests](#see-or-write-new-tests)
+  - [Structure](#structure)
 - [Gui Usage](#gui-usage)
   - [Initialization](#initialization)
   - [Workspace](#workspace)
@@ -150,6 +156,34 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 ### Default and Detection
 1. Platform is detected in cmake
 2. Default renderer is OpenGL
+
+
+
+## Testing
+### Command:
+```bash
+cmake -S . -B build -G Ninja
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+### VSCode Extension
+Use [CMake Test Explorer](https://marketplace.visualstudio.com/items?itemName=fredericbonnet.cmake-test-adapter)
+
+### Workflow
+We have set up ```github action``` for **ubuntu X11** and **Windows**.
+
+### See or Write new Tests
+All Tests are in [Test Directory](Tests/)
+
+### Structure
+```
+Tests/
+ └── Unit/
+       ├── main.cpp
+       ├── CMakeLists.txt
+       └── ...
+```
 
 
 
