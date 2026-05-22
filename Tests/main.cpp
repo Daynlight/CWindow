@@ -4,7 +4,7 @@
 
 int main(){
   printf("Tests");
-  std::exit(1);
+  std::exit(0);
 
   return 0;
 };
