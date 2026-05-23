@@ -6,6 +6,7 @@
 
 #include "Shader/Shader/Shader.h"
 #include "Shader/Compute/Shader.h"
+#include "Shader/SSBO/Shader.h"
 
 #include "Uniform/Uniform.h"
 
