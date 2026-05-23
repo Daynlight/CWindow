@@ -859,6 +859,7 @@ int main(){
 * [glad](https://glad.dav1d.de/)
 * [imgui](https://github.com/ocornut/imgui/tree/docking)
 * [glm](https://github.com/g-truc/glm)
+* [stb](https://github.com/nothings/stb.git)
 
 
 
