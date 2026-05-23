@@ -15,3 +15,6 @@
 [submodule "CWindow/vendor/stb"]
 	path = CWindow/vendor/stb
 	url = https://github.com/nothings/stb.git
+[submodule "CWindow/vendor/assimp"]
+	path = CWindow/vendor/assimp
+	url = https://github.com/assimp/assimp
