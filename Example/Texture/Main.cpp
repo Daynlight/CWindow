@@ -7,7 +7,7 @@ int main(){
 
   CW::Renderer::TextureLoader loader("../Assets/image.png");
   CW::Renderer::Texture texture;
-  texture.create(loader);
+  texture.compile(loader.data);
   
 
   CW::Renderer::Mesh viewport;
@@ -32,19 +32,18 @@ int main(){
     1.0f, 1.0f,
     1.0f, 0.0f,
   });
-
   viewport.setData<GLfloat>(idtx, 2, 1, GL_FLOAT);
 
   CW::Renderer::Shader texture_shader(Texture::vertex, Texture::fragment);
   CW::Renderer::Uniform uniform;
   texture_shader.getUniforms().emplace_back(&uniform);
-  uniform["uTexture"]->set<int>(0);
-
-
+  
+  
   while(!window.getWindowData()->should_close){
     window.beginFrame();
-
+    
     texture.bind(0);
+    uniform["uTexture"]->set<int>(0);
     texture_shader.bind();
     viewport.render();
     texture_shader.unbind();
@@ -55,4 +54,4 @@ int main(){
   };
 
   return 0;
-}
+};

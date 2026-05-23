@@ -3,17 +3,21 @@
 
 #include <string>
 
+#include "TextureData.h"
+
+
+
+
 
 
 
 namespace CW::Renderer{
 class TextureLoader{
 public:
-  GLenum format;
-  int width, height, channels;
-  unsigned char* data;
+  TextureData data;
 
 public:
+  TextureLoader();
   TextureLoader(const std::string& path);
   ~TextureLoader();
 };
