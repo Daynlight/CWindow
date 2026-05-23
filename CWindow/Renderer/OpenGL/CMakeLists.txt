@@ -21,6 +21,8 @@ set(src
   "Uniform/Uniform.h"
   "Texture/Texture.cpp"
   "Texture/Texture.h"
+  "Texture/TextureLoader.cpp"
+  "Texture/TextureLoader.h"
   ${ROOT_DIR}/vendor/stb/deprecated/stb_image.c
   ${ROOT_DIR}/vendor/glad/src/glad.c
 )

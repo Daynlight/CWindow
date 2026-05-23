@@ -67,26 +67,31 @@ swapping window etc. Good to use in simple project or just learning shaders and 
   - [Usage](#usage)
   - [Supported Types](#supported-types)
   - [Memory Management](#memory-management)
-- [Shader](#shader)
+- [Textures](#textures)
   - [Info](#info-6)
   - [Usage](#usage-1)
+  - [Memory Management](#memory-management-1)
+  - [Texture](#texture)
+- [Shader](#shader)
+  - [Info](#info-7)
+  - [Usage](#usage-2)
   - [Add Geometry Shader](#add-geometry-shader)
   - [Hot-Reloading](#hot-reloading)
-  - [Memory Management](#memory-management-1)
+  - [Memory Management](#memory-management-2)
   - [Example](#example)
 - [ComputeShader](#computeshader)
-  - [Info](#info-7)
+  - [Info](#info-8)
   - [Basic Usage](#basic-usage)
   - [Data Processing Example](#data-processing-example)
   - [Available Functions](#available-functions)
 - [Mesh](#mesh)
-  - [Info](#info-8)
+  - [Info](#info-9)
   - [Storing Data](#storing-data)
   - [Mesh control and functions](#mesh-control-and-functions)
   - [Render Example](#render-example)
   - [Also check](#also-check)
 - [FreeCamera3D](#freecamera3d)
-  - [Info](#info-9)
+  - [Info](#info-10)
   - [Camera control and functions](#camera-control-and-functions)
   - [Code Example](#code-example)
   - [Also check](#also-check-1)
@@ -374,6 +379,49 @@ glm::vec3 color = uniform["color"]->get<glm::vec3>();
 * `compile()` - Manually compile uniform buffer (called automatically when needed)
 * `destroy()` - Free uniform buffer resources
 
+
+
+
+## Textures
+### Info
+1. Each Texture is loaded via ```TextureLoader``` (**stb**).
+2. ```TextureData``` is struct of texture data.
+3. If texture is un compiled than we skip binding.
+4. After creating ```Texture``` you can delete your ```TextureData``` if needed any more.
+5. ```Texture``` stores data fully on **GPU**.
+
+### Usage
+#### Loading Texture
+For loading texture create ```TextureLoader```
+```cpp
+CW::Renderer::TextureLoader loader("example.png");
+```
+
+#### Creating Texture
+Texture is created via ```Texture``` class.
+```cpp
+CW::Renderer::Texture texture;
+// GLint min_filter = GL_LINEAR, GLint max_filter = GL_LINEAR (pass optional values)
+texture.compile(loader.data);
+```
+
+#### Binding Texture
+To bind use:
+```cpp
+texture.bind(2);
+uniform["uTexture"]->set<int>(2); // in shader variable
+```
+
+### Memory Management
+#### Texture Loader
+* ```TextureLoader(const std::string& path);``` - loads asset to ```data``` public variable.
+* ```~TextureLoader();``` - destroys whole class.
+
+### Texture
+* ````void compile(TextureData data, GLint min_filter = GL_LINEAR, GLint max_filter = GL_LINEAR);```` - creates texture on **GPU**.
+* ```void destroy();``` - destroys texture from **GPU**.
+* ```void bind(unsigned int socket);``` - binds texture to **socket** slot.
+* ```void unbind();``` - unbinds textures.
 
 
 
@@ -811,6 +859,7 @@ int main(){
 * [glad](https://glad.dav1d.de/)
 * [imgui](https://github.com/ocornut/imgui/tree/docking)
 * [glm](https://github.com/g-truc/glm)
+* [stb](https://github.com/nothings/stb.git)
 
 
 
