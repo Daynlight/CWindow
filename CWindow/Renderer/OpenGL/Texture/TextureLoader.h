@@ -17,7 +17,6 @@ public:
   TextureData data;
 
 public:
-  TextureLoader();
   TextureLoader(const std::string& path);
   ~TextureLoader();
 };

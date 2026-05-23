@@ -42,8 +42,8 @@ int main(){
   while(!window.getWindowData()->should_close){
     window.beginFrame();
     
-    texture.bind(0);
-    uniform["uTexture"]->set<int>(0);
+    texture.bind(2);
+    uniform["uTexture"]->set<int>(2);
     texture_shader.bind();
     viewport.render();
     texture_shader.unbind();

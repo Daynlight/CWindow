@@ -20,10 +20,11 @@ private:
   
 public:
   Texture();
-  Texture(TextureData data);
+  Texture(TextureData data, GLint min_filter = GL_LINEAR, GLint max_filter = GL_LINEAR);
   ~Texture();
 
   void compile(TextureData data, GLint min_filter = GL_LINEAR, GLint max_filter = GL_LINEAR);
+  void destroy();
   void bind(unsigned int socket);
   void unbind();
 };

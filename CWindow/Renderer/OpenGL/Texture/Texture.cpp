@@ -8,18 +8,17 @@
 
 CW::Renderer::Texture::Texture() : is_compiled(false) {};
 
-CW::Renderer::Texture::Texture(TextureData data)
+
+
+CW::Renderer::Texture::Texture(TextureData data, GLint min_filter, GLint max_filter)
 : is_compiled(false){
-  compile(data);
+  compile(data, min_filter, max_filter);
 };
 
 
 
 CW::Renderer::Texture::~Texture() {
-  if(is_compiled)
-    glDeleteTextures(1, &texture);
-  
-  is_compiled = false;
+  destroy();
 };
 
 
@@ -40,6 +39,15 @@ void CW::Renderer::Texture::compile(TextureData data, GLint min_filter, GLint ma
   
   is_compiled = true;
 };
+
+
+
+void CW::Renderer::Texture::destroy(){
+  if(is_compiled)
+    glDeleteTextures(1, &texture);
+  
+  is_compiled = false;
+}
 
 
 
