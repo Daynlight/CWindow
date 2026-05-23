@@ -5,19 +5,20 @@
 int main(){
   CW::Renderer::Renderer window;
 
+  CW::Renderer::TextureLoader loader("../Assets/image.png");
   CW::Renderer::Texture texture;
-  if(texture.load("../Assets/image.png"))
-    return -1;
+  texture.create(loader);
+  
 
   CW::Renderer::Mesh viewport;
 
   std::vector<GLfloat> vertices({
     -1.0f,  1.0f, 0.0f,
     -1.0f, -1.0f, 0.0f,
-    1.0f,  1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,
+    1.0f,  1.0f, 0.0f, 
+    1.0f, -1.0f, 0.0f, 
   });
-  viewport.addVertices(vertices);
+  viewport.addVertices(vertices, 3);
 
   std::vector<GLuint> indicies({
     0, 1, 2,
@@ -29,8 +30,9 @@ int main(){
     0.0f, 1.0f,
     0.0f, 0.0f,
     1.0f, 1.0f,
-    1.0f, 0.0f
+    1.0f, 0.0f,
   });
+
   viewport.setData<GLfloat>(idtx, 2, 1, GL_FLOAT);
 
   CW::Renderer::Shader texture_shader(Texture::vertex, Texture::fragment);
@@ -42,7 +44,7 @@ int main(){
   while(!window.getWindowData()->should_close){
     window.beginFrame();
 
-    texture.bind();
+    texture.bind(0);
     texture_shader.bind();
     viewport.render();
     texture_shader.unbind();

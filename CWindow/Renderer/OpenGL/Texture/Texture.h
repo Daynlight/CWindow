@@ -1,7 +1,10 @@
 #pragma once
-
 #include "glad/glad.h"
 #include <string>
+
+#include "TextureLoader.h"
+
+
 
 namespace CW::Renderer{
 class Texture{
@@ -12,8 +15,8 @@ public:
   Texture();
   ~Texture();
 
-  bool load(const std::string& path);
-  void bind();
+  void create(TextureLoader data);
+  void bind(unsigned int socket);
   void unbind();
 };
 };
