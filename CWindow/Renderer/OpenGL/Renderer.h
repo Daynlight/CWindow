@@ -10,6 +10,8 @@
 #include "Uniform/Uniform.h"
 #include "Texture/Texture.h"
 
+#include "Texture/TextureLoader.h"
+
 #include "../Data/WindowData.h"
 #include "../Data/InputData.h"
 
