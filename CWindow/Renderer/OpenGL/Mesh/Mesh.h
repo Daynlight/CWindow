@@ -60,7 +60,7 @@ public:
   void compile();
   void destroy() noexcept;
   
-  void render() noexcept ;
+  void render(GLenum type = GL_TRIANGLES) noexcept;
 };
 };
 

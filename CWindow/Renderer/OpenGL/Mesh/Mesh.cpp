@@ -201,13 +201,13 @@ void CW::Renderer::Mesh::destroy() noexcept {
 
 
 
-void CW::Renderer::Mesh::render() noexcept {
+void CW::Renderer::Mesh::render(GLenum type) noexcept {
   if(!is_compiled && indices.size() != 0 && !dataRegister.empty()) 
     compile();
 
   if(VAO != 0){
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(type, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
   };
 };
