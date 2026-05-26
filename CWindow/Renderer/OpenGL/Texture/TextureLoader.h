@@ -18,6 +18,7 @@ public:
 
 public:
   TextureLoader(const std::string& path);
+  TextureLoader(const unsigned char* buffer, size_t size);
   ~TextureLoader();
 };
 }; // namespace CW
