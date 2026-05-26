@@ -54,4 +54,4 @@ set(src
 )
 
 add_library(CWindow STATIC ${src})
-target_link_libraries(CWindow Renderer Gui)
+target_link_libraries(CWindow PUBLIC Renderer Gui)
