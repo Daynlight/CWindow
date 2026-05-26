@@ -16,6 +16,15 @@ struct PBRMaterial {
   glm::vec3 emission_color = glm::vec3(0.0f);
   float emission_strength = 0.0f;
   float ambient_occlusion = 1.0f;
+
+  void setMaterialUniform(CW::Renderer::Uniform& uniform){
+    uniform["albedo"]->set<glm::vec3>(albedo);
+    uniform["roughness"]->set<float>(roughness);
+    uniform["metallic"]->set<float>(metallic);
+    uniform["emission_color"]->set<glm::vec3>(emission_color);
+    uniform["emission_strength"]->set<float>(emission_strength);
+    uniform["ambient_occlusion"]->set<float>(ambient_occlusion);
+  };
 };
 
 
