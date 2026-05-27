@@ -42,6 +42,7 @@ project(CWindow LANGUAGES CXX C)
 ### Vendor Libs
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
 add_subdirectory(vendor/assimp)
 
 
