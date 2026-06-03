@@ -8,11 +8,6 @@ set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Root directory of the proje
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pg")
-  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -pg")
-endif()
-
 
 
 ############# [Set Variables] #############
@@ -39,11 +34,26 @@ message("Used Renderer: ${RENDERER}")
 ############# [Setup project] #############
 project(CWindow LANGUAGES CXX C)
 
+if(PLATFORM STREQUAL "Windows")
+  set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
+  set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+endif()
+
 ### Vendor Libs
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
 add_subdirectory(vendor/assimp)
+
+if(PLATFORM STREQUAL "Windows")
+  if(TARGET assimp)
+    target_compile_options(assimp PRIVATE -Wno-unused-but-set-variable)
+  endif()
+endif()
+
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_options(-g -pg)
+endif()
 
 
 ### Subfolders
@@ -56,3 +66,8 @@ set(src
 
 add_library(CWindow STATIC ${src})
 target_link_libraries(CWindow PUBLIC Renderer Gui)
+
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  target_link_options(CWindow INTERFACE -pg)
+endif()
