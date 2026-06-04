@@ -35,6 +35,7 @@ public:
   void setFragmentShader(const std::string& source) noexcept;
 
   void setShader(const std::string& source, GLuint type) noexcept;
+  const std::unordered_map<GLenum, CW::Renderer::ShaderData>& getShaders();
   void removeShaders(GLuint type) noexcept;
   void clearShaders() noexcept;
 

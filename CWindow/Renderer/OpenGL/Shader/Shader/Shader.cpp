@@ -47,6 +47,12 @@ void CW::Renderer::Shader::setShader(const std::string& source, const GLuint typ
 
 
 
+const std::unordered_map<GLenum, CW::Renderer::ShaderData>& CW::Renderer::Shader::getShaders(){
+  return registerShader;
+}
+
+
+
 void CW::Renderer::Shader::removeShaders(GLuint type) noexcept {
   this->registerShader.erase(type);
   is_compiled = false;
