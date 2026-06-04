@@ -24,6 +24,7 @@ public:
   ShaderData(std::string source, const GLenum type) noexcept;
 
   GLuint getCompiledShader() noexcept;
+  std::string getSource() const;
   void deleteCompiledShader() noexcept;
 
 };

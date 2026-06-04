@@ -30,6 +30,12 @@ GLuint CW::Renderer::ShaderData::getCompiledShader() noexcept {
 
 
 
+std::string CW::Renderer::ShaderData::getSource() const {
+  return source;
+};
+
+
+
 void CW::Renderer::ShaderData::deleteCompiledShader() noexcept {
   glDeleteShader(shaderPart);
   shaderPart = 0;

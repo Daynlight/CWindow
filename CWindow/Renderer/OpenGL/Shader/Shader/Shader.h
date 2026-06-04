@@ -33,8 +33,9 @@ public:
 
   void setVertexShader(const std::string& source) noexcept;
   void setFragmentShader(const std::string& source) noexcept;
-
   void setShader(const std::string& source, GLuint type) noexcept;
+  
+  const std::unordered_map<GLenum, CW::Renderer::ShaderData>& getRegisterShader() const;
   void removeShaders(GLuint type) noexcept;
   void clearShaders() noexcept;
 
