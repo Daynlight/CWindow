@@ -115,6 +115,10 @@ void CW::Renderer::Shader::unbind() const noexcept {
 };
 
 
+GLuint CW::Renderer::Shader::getShaderProgram(){
+  return compiledShader;
+};
+
 
 std::vector<const CW::Renderer::Uniform*>& CW::Renderer::Shader::getUniforms() noexcept {
   return uniforms;

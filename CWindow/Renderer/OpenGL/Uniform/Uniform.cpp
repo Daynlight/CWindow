@@ -46,63 +46,63 @@ void CW::Renderer::Uniform::bind(GLuint& shader) const {
     // int
     if(el.second.type == &typeid(int)){
       int data = std::get<int>(el.second.value);
-      glUniform1iv(loc, 1, &data); 
+      glUniform1iv(loc, el.second.size, &data); 
     }
     else if(el.second.type == &typeid(glm::ivec2)){
       glm::ivec2 data = std::get<glm::ivec2>(el.second.value);
-      glUniform2iv(loc, 1, &data[0]); 
+      glUniform2iv(loc, el.second.size, &data[0]); 
     }
     else if(el.second.type == &typeid(glm::ivec3)){
       glm::ivec3 data = std::get<glm::ivec3>(el.second.value);
-      glUniform3iv(loc, 1, &data[0]); 
+      glUniform3iv(loc, el.second.size, &data[0]); 
     }
     else if(el.second.type == &typeid(glm::ivec4)){
       glm::ivec4 data = std::get<glm::ivec4>(el.second.value);
-      glUniform4iv(loc, 1, &data[0]); 
+      glUniform4iv(loc, el.second.size, &data[0]); 
     } // float
     else if(el.second.type == &typeid(float)){
       float data = std::get<float>(el.second.value);
-      glUniform1fv(loc, 1, &data); 
+      glUniform1fv(loc, el.second.size, &data); 
     }
     else if (el.second.type == &typeid(glm::vec2)) {
       glm::vec2 data = std::get<glm::vec2>(el.second.value);
-      glUniform2fv(loc, 1, &data[0]);
+      glUniform2fv(loc, el.second.size, &data[0]);
     }
     else if (el.second.type == &typeid(glm::vec3)) {
       glm::vec3 data = std::get<glm::vec3>(el.second.value);
-      glUniform3fv(loc, 1, &data[0]);
+      glUniform3fv(loc, el.second.size, &data[0]);
     }
     else if (el.second.type == &typeid(glm::vec4)) {
       glm::vec4 data = std::get<glm::vec4>(el.second.value);
-      glUniform4fv(loc, 1, &data[0]);
+      glUniform4fv(loc, el.second.size, &data[0]);
     } // double
     else if(el.second.type == &typeid(double)){
       double data = std::get<double>(el.second.value);
-      glUniform1dv(loc, 1, &data);
+      glUniform1dv(loc, el.second.size, &data);
     }
     else if(el.second.type == &typeid(glm::dvec2)){
       glm::dvec2 data = std::get<glm::dvec2>(el.second.value);
-      glUniform2dv(loc, 1, &data[0]);
+      glUniform2dv(loc, el.second.size, &data[0]);
     }
     else if(el.second.type == &typeid(glm::dvec3)){
       glm::dvec3 data = std::get<glm::dvec3>(el.second.value);
-      glUniform3dv(loc, 1, &data[0]);
+      glUniform3dv(loc, el.second.size, &data[0]);
     }
     else if(el.second.type == &typeid(glm::dvec4)){
       glm::dvec4 data = std::get<glm::dvec4>(el.second.value);
-      glUniform4dv(loc, 1, &data[0]);
+      glUniform4dv(loc, el.second.size, &data[0]);
     } //mat
     else if(el.second.type == &typeid(glm::mat2)){
       glm::mat2 data = std::get<glm::mat2>(el.second.value);
-      glUniformMatrix2fv(loc, 1, GL_FALSE, glm::value_ptr(data));
+      glUniformMatrix2fv(loc, el.second.size, GL_FALSE, glm::value_ptr(data));
     }
     else if(el.second.type == &typeid(glm::mat3)){
       glm::mat3 data = std::get<glm::mat3>(el.second.value);
-      glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(data));
+      glUniformMatrix3fv(loc, el.second.size, GL_FALSE, glm::value_ptr(data));
     }
     else if(el.second.type == &typeid(glm::mat4)){
       glm::mat4 data = std::get<glm::mat4>(el.second.value);
-      glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(data));
+      glUniformMatrix4fv(loc, el.second.size, GL_FALSE, glm::value_ptr(data));
     }
   };
 };

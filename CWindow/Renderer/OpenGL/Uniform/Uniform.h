@@ -17,6 +17,7 @@ using DataVariants = std::variant<int, glm::ivec2, glm::ivec3, glm::ivec4,
 
 struct UniformData{
   DataVariants value = 0.0f;
+  unsigned int size = 1;
   const std::type_info* type = &typeid(float);
 
   UniformData() {};
@@ -24,6 +25,13 @@ struct UniformData{
   template<typename T>
   void set(T value) {
     this->value = value;
+    this->type = &typeid(T);
+  };
+
+  template<typename T>
+  void set(T value, unsigned int size) {
+    this->value = value;
+    this->size = size;
     this->type = &typeid(T);
   };
 

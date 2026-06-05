@@ -44,6 +44,8 @@ public:
 
   void bind() noexcept;
   void unbind() const noexcept;
+
+  GLuint getShaderProgram();
   
   std::vector<const CW::Renderer::Uniform*>& getUniforms() noexcept;
 
