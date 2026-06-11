@@ -59,8 +59,9 @@ std::vector<unsigned int> CW::Renderer::Mesh::getDataRegisterLayouts() const noe
 
 
 
-std::vector<char> CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) const noexcept {
-  std::vector<char> bufferData(total_size);
+void CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) noexcept {
+  bufferData.clear();
+  bufferData.resize(total_size);
 
   unsigned int dstOffset = 0;
 
@@ -75,8 +76,6 @@ std::vector<char> CW::Renderer::Mesh::generateDataBuffer(const std::vector<unsig
       dstOffset += elementSize;
     };
   };
-
-  return bufferData;
 };
 
 
@@ -161,6 +160,18 @@ std::array<std::vector<GLfloat>, 2> CW::Renderer::Mesh::getCullingBox() const no
 
 
 
+const std::vector<GLuint> &CW::Renderer::Mesh::getIndices() const noexcept {
+  return indices;
+};
+
+
+
+const std::vector<char> &CW::Renderer::Mesh::getBufferData() const noexcept {
+  return bufferData;
+}
+
+
+
 void CW::Renderer::Mesh::compile() {
   if (is_compiled) destroy();
   if(indices.size() == 0) throw std::runtime_error("CW::Renderer::Mesh::compile: indices.size() == 0, no data to create mesh");
@@ -177,7 +188,7 @@ void CW::Renderer::Mesh::compile() {
   const unsigned int total_points = total_size / line_size;
       
   const std::vector<unsigned int> keys = getDataRegisterLayouts();
-  const std::vector<char> bufferData = generateDataBuffer(keys, total_size, total_points);
+  generateDataBuffer(keys, total_size, total_points); 
 
   genBuffers(bufferData);
   setDataPositions(keys, line_size);

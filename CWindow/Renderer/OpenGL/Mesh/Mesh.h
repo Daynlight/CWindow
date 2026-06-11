@@ -25,6 +25,7 @@ private:
 
   std::unordered_map<unsigned int, CW::Renderer::MeshData> dataRegister;
   std::vector<GLuint> indices;
+  std::vector<char> bufferData;
   
   std::array<std::vector<GLfloat>, 2> culling_box;
   bool culling_box_exists = false;
@@ -39,7 +40,7 @@ private:
   void generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension);
 
   std::vector<unsigned int> getDataRegisterLayouts() const noexcept;
-  std::vector<char> generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) const noexcept;
+  void generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) noexcept;
   
   void genBuffers(const std::vector<char>& bufferData) noexcept;
   void setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) const noexcept;
@@ -57,6 +58,9 @@ public:
   bool getCullingBoxExists() const noexcept;
   std::array<std::vector<GLfloat>, 2> getCullingBox() const noexcept;
   
+  const std::vector<GLuint>& getIndices() const noexcept;
+  const std::vector<char>& getBufferData() const noexcept;
+
   void compile();
   void destroy() noexcept;
   
