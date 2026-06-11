@@ -60,6 +60,7 @@ public:
   
   const std::vector<GLuint>& getIndices() const noexcept;
   const std::vector<char>& getBufferData() const noexcept;
+  const std::unordered_map<unsigned int, CW::Renderer::MeshData>& getDataRegister() const noexcept;
 
   void compile();
   void destroy() noexcept;

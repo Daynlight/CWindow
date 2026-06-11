@@ -168,7 +168,13 @@ const std::vector<GLuint> &CW::Renderer::Mesh::getIndices() const noexcept {
 
 const std::vector<char> &CW::Renderer::Mesh::getBufferData() const noexcept {
   return bufferData;
-}
+};
+
+
+
+const std::unordered_map<unsigned int, CW::Renderer::MeshData> &CW::Renderer::Mesh::getDataRegister() const noexcept{
+  return dataRegister;
+};
 
 
 
