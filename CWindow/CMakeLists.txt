@@ -40,6 +40,7 @@ message("Used Renderer: ${RENDERER}")
 project(CWindow LANGUAGES CXX C)
 
 ### Vendor Libs
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
