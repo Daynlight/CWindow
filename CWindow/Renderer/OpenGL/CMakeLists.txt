@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(src 
   "Renderer.cpp"
   "Renderer.h"
+  "Framebuffer.cpp"
   "Mesh/Mesh.cpp"
   "Mesh/Mesh.hpp"
   "Mesh/Mesh.h"
