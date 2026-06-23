@@ -16,6 +16,87 @@ CW::Renderer::Mesh::~Mesh() noexcept {
 
 
 
+CW::Renderer::Mesh::Mesh(const Mesh& other) 
+  : VAO(0),
+    VBO(0), 
+    EBO(0),
+    dataRegister(other.dataRegister),
+    indices(other.indices),
+    bufferData(other.bufferData),
+    culling_box(other.culling_box),
+    culling_box_exists(other.culling_box_exists),
+    is_compiled(false)
+{};
+
+
+
+CW::Renderer::Mesh& CW::Renderer::Mesh::operator=(const Mesh& other) {
+  if (this != &other) {
+    this->destroy(); 
+
+    this->VAO = 0;
+    this->VBO = 0;
+    this->EBO = 0;
+    this->is_compiled = false;
+
+    this->dataRegister = other.dataRegister;
+    this->indices = other.indices;
+    this->bufferData = other.bufferData;
+    this->culling_box = other.culling_box;
+    this->culling_box_exists = other.culling_box_exists;
+  };
+  return *this;
+};
+
+
+
+CW::Renderer::Mesh::Mesh(Mesh&& other) noexcept 
+  : VAO(other.VAO), 
+    VBO(other.VBO), 
+    EBO(other.EBO),
+    dataRegister(std::move(other.dataRegister)),
+    indices(std::move(other.indices)),
+    bufferData(std::move(other.bufferData)),
+    culling_box(std::move(other.culling_box)),
+    culling_box_exists(other.culling_box_exists),
+    is_compiled(other.is_compiled) 
+{
+  other.VAO = 0;
+  other.VBO = 0;
+  other.EBO = 0;
+  other.culling_box_exists = false;
+  other.is_compiled = false;
+};
+
+
+
+CW::Renderer::Mesh& CW::Renderer::Mesh::operator=(Mesh&& other) noexcept {
+  if (this != &other) {
+    
+    this->destroy(); 
+
+    this->VAO = other.VAO;
+    this->VBO = other.VBO;
+    this->EBO = other.EBO;
+    this->culling_box_exists = other.culling_box_exists;
+    this->is_compiled = other.is_compiled;
+
+    this->dataRegister = std::move(other.dataRegister);
+    this->indices = std::move(other.indices);
+    this->bufferData = std::move(other.bufferData);
+    this->culling_box = std::move(other.culling_box);
+
+    other.VAO = 0;
+    other.VBO = 0;
+    other.EBO = 0;
+    other.culling_box_exists = false;
+    other.is_compiled = false;
+  };
+  return *this;
+};
+
+
+
 void CW::Renderer::Mesh::generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension){
   if(dimension == 0) throw std::runtime_error("CW::Renderer::Mesh::generateCullingBox: dimension == 0, no data to calculate");
   

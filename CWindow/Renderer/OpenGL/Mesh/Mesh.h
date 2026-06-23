@@ -35,6 +35,10 @@ private:
 public:
   Mesh() noexcept;
   ~Mesh() noexcept;
+  Mesh(const Mesh&);
+  Mesh& operator=(const Mesh&);
+  Mesh(Mesh&& other) noexcept;
+  Mesh& operator=(Mesh&& other) noexcept;
 
 private:
   void generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension);
