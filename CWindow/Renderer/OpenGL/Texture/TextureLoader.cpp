@@ -32,10 +32,30 @@ CW::Renderer::TextureLoader::TextureLoader(const unsigned char* buffer, size_t s
   if (data.channels == 1) data.format = GL_RED;
   else if (data.channels == 3) data.format = GL_RGB;
   else if (data.channels == 4) data.format = GL_RGBA;
-}
+};
+
+
+
+CW::Renderer::TextureLoader::TextureLoader(TextureLoader&& other) noexcept {
+  data = other.data;
+  other.data.data = nullptr; 
+};
+
+
+
+CW::Renderer::TextureLoader& CW::Renderer::TextureLoader::operator=(TextureLoader&& other) noexcept {
+  if (this != &other) {
+    if (data.data) stbi_image_free(data.data);
+    
+    data = other.data;
+    other.data.data = nullptr;
+  };
+
+  return *this;
+};
 
 
 
 CW::Renderer::TextureLoader::~TextureLoader() {
-  stbi_image_free(data.data);
+  if (data.data) stbi_image_free(data.data);
 };
