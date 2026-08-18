@@ -13,6 +13,7 @@ private:
   int width, height;
 
 public:
+  Framebuffer();
   Framebuffer(int width, int height);
   ~Framebuffer();
 

@@ -2,6 +2,12 @@
 
 
 
+CW::Renderer::Framebuffer::Framebuffer(){
+
+};
+
+
+
 CW::Renderer::Framebuffer::Framebuffer(int width, int height) : width(width), height(height) {
   rescale(width, height);
 };
@@ -9,9 +15,11 @@ CW::Renderer::Framebuffer::Framebuffer(int width, int height) : width(width), he
 
 
 CW::Renderer::Framebuffer::~Framebuffer() {
-  glDeleteFramebuffers(1, &fboID);
-  glDeleteTextures(1, &colorTextureID);
-  glDeleteTextures(1, &depthTextureID);
+  if(fboID){
+    glDeleteFramebuffers(1, &fboID);
+    glDeleteTextures(1, &colorTextureID);
+    glDeleteTextures(1, &depthTextureID);
+  };
 };
 
 
