@@ -15,7 +15,7 @@ CW::Renderer::Framebuffer::Framebuffer(int width, int height) : width(width), he
 
 
 CW::Renderer::Framebuffer::~Framebuffer() {
-  if(fboID){
+  if(fboID != 0){
     glDeleteFramebuffers(1, &fboID);
     glDeleteTextures(1, &colorTextureID);
     glDeleteTextures(1, &depthTextureID);
