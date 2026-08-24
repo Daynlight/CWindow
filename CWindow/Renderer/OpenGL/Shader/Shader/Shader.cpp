@@ -26,6 +26,54 @@ CW::Renderer::Shader::~Shader() noexcept {
 
 
 
+CW::Renderer::Shader::Shader(const CW::Renderer::Shader& second) noexcept
+  : compiledShader(second.compiledShader),
+    registerShader(second.registerShader),
+    uniforms(second.uniforms),
+    is_compiled(second.is_compiled) {};
+
+
+
+CW::Renderer::Shader& CW::Renderer::Shader::operator=(const CW::Renderer::Shader& second) noexcept {
+  if(this == &second) return *this;
+  
+  compiledShader = second.compiledShader;
+  registerShader = second.registerShader;
+  uniforms = second.uniforms;
+  is_compiled = second.is_compiled;
+  
+  return *this;
+};
+
+
+
+CW::Renderer::Shader::Shader(CW::Renderer::Shader&& second) noexcept
+  : compiledShader(std::move(second.compiledShader)),
+    registerShader(std::move(second.registerShader)),
+    uniforms(std::move(second.uniforms)),
+    is_compiled(std::move(second.is_compiled)){
+  second.compiledShader = 0;
+  second.is_compiled = false;
+};
+
+
+
+CW::Renderer::Shader& CW::Renderer::Shader::operator=(CW::Renderer::Shader&& second) noexcept {
+  if(this == &second) return *this;
+  
+  compiledShader = std::move(second.compiledShader);
+  registerShader = std::move(second.registerShader);
+  uniforms = std::move(second.uniforms);
+  is_compiled = std::move(second.is_compiled);
+
+  second.compiledShader = 0;
+  second.is_compiled = false;
+
+  return *this;
+};
+
+
+
 void CW::Renderer::Shader::setVertexShader(const std::string& source) noexcept {
   setShader(source, GL_VERTEX_SHADER);
   is_compiled = false;

@@ -30,6 +30,10 @@ public:
   Shader() noexcept;
   Shader(const std::string& vertex, const std::string& fragment) noexcept;
   ~Shader() noexcept;
+  Shader(const Shader& second) noexcept;
+  Shader& operator=(const Shader& second) noexcept;
+  Shader(Shader&& second) noexcept;
+  Shader& operator=(Shader&& second) noexcept;
 
   void setVertexShader(const std::string& source) noexcept;
   void setFragmentShader(const std::string& source) noexcept;
