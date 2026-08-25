@@ -11,8 +11,11 @@ CW::Renderer::Texture::Texture() : is_compiled(false) {};
 
 
 CW::Renderer::Texture::Texture(TextureData data, GLint min_filter, GLint max_filter)
-: is_compiled(false){
-  compile(data, min_filter, max_filter);
+: is_compiled(false),
+  data(data),
+  min_filter(min_filter), 
+  max_filter(max_filter){
+  compile();
 };
 
 
@@ -23,7 +26,77 @@ CW::Renderer::Texture::~Texture() {
 
 
 
+CW::Renderer::Texture::Texture(const Texture &second) noexcept
+  : texture(second.texture),
+    is_compiled(second.is_compiled),
+    data(second.data),
+    min_filter(second.min_filter), 
+    max_filter(second.max_filter){};
+
+
+
+Texture &CW::Renderer::Texture::operator=(const Texture &second) noexcept{
+  if(this == &second) return *this;
+
+  texture = second.texture;
+  is_compiled = second.is_compiled;
+  data = second.data;
+  min_filter = second.min_filter; 
+  max_filter = second.max_filter;
+
+  return *this;
+};
+
+
+
+CW::Renderer::Texture::Texture(Texture &&second) noexcept 
+  : texture(std::move(second.texture)),
+    is_compiled(std::move(second.is_compiled)),
+    data(std::move(second.data)),
+    min_filter(std::move(second.min_filter)), 
+    max_filter(std::move(second.max_filter)){
+  second.texture = 0;
+  second.data = TextureData();
+  second.is_compiled = false;
+  second.min_filter = GL_LINEAR; 
+  second.max_filter = GL_LINEAR
+};
+
+
+
+Texture &CW::Renderer::Texture::operator=(Texture &&second) noexcept{
+  if(this == &second) return *this;
+
+  texture = std::move(second.texture);
+  is_compiled = std::move(second.is_compiled);
+  data = std::move(second.data);
+  min_filter = std::move(second.min_filter); 
+  max_filter = std::move(second.max_filter);
+
+  second.texture = 0;
+  second.data = TextureData();
+  second.is_compiled = false;
+  second.min_filter = GL_LINEAR; 
+  second.max_filter = GL_LINEAR
+
+  return *this;
+};
+
+
+
 void CW::Renderer::Texture::compile(TextureData data, GLint min_filter, GLint max_filter) {
+  this->data = data;
+  this->min_filter = min_filter; 
+  this->max_filter = max_filter;
+
+  compile();
+};
+
+
+
+
+void CW::Renderer::Texture::compile() {
+
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
 
