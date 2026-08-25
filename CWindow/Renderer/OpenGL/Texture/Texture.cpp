@@ -35,7 +35,7 @@ CW::Renderer::Texture::Texture(const Texture &second) noexcept
 
 
 
-CW::Renderer::Texture::Texture &CW::Renderer::Texture::operator=(const Texture &second) noexcept{
+CW::Renderer::Texture &CW::Renderer::Texture::operator=(const Texture &second) noexcept{
   if(this == &second) return *this;
 
   texture = second.texture;
@@ -64,7 +64,7 @@ CW::Renderer::Texture::Texture(Texture &&second) noexcept
 
 
 
-CW::Renderer::Texture::Texture &CW::Renderer::Texture::operator=(Texture &&second) noexcept{
+CW::Renderer::Texture &CW::Renderer::Texture::operator=(Texture &&second) noexcept{
   if(this == &second) return *this;
 
   texture = std::move(second.texture);
@@ -77,7 +77,7 @@ CW::Renderer::Texture::Texture &CW::Renderer::Texture::operator=(Texture &&secon
   second.data = TextureData();
   second.is_compiled = false;
   second.min_filter = GL_LINEAR; 
-  second.max_filter = GL_LINEAR
+  second.max_filter = GL_LINEAR;
 
   return *this;
 };
