@@ -72,6 +72,6 @@ public:
   void setCursorVisibility(bool visible);
   void setCursorOn(bool on);
   void close();
-  
+
 };
 };
