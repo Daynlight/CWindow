@@ -1,0 +1,83 @@
+# CWindow
+# Copyright 2026 Daynlight
+# Licensed under the GNU General, Version 3.0.
+# See LICENSE file for details.
+
+
+
+name: Tests via CMake + GTests
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os: [ubuntu-latest] # windows-latest
+        build_type: [Release, Debug]
+        include:
+          # - os: windows-latest
+          #   c_compiler: gcc
+          #   cpp_compiler: g++
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          xvfb \
+          mesa-utils \
+          libgl1-mesa-dri \
+          libwayland-dev \
+          wayland-protocols \
+          extra-cmake-modules \
+          libxkbcommon-dev \
+          libx11-dev \
+          libxrandr-dev \
+          libxinerama-dev \
+          libxcursor-dev \
+          libxi-dev \
+          libxext-dev \
+          libgl1-mesa-dev
+
+    - name: Set reusable strings
+      id: strings
+      shell: bash
+      run: |
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+    - name: Configure CMake
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -G Ninja
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -S ${{ github.workspace }}
+
+    - name: Build
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+
+    - name: Test (Linux)
+      if: runner.os == 'Linux'
+      run: xvfb-run --auto-servernum ctest --test-dir ${{ steps.strings.outputs.build-output-dir }} -C ${{ matrix.build_type }} --output-on-failure
+
+    - name: Test (Windows)
+      if: runner.os == 'Windows'
+      run: ctest --test-dir ${{ steps.strings.outputs.build-output-dir }} -C ${{ matrix.build_type }} --output-on-failure

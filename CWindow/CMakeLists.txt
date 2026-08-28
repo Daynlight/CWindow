@@ -46,6 +46,7 @@ add_subdirectory(vendor/glm)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
 set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/assimp)
+add_subdirectory(vendor/googletests)
 
 
 ### Subfolders
