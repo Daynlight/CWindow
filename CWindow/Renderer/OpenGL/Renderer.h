@@ -1,7 +1,7 @@
 #pragma once
 #include "Macro.h"
-#include "../iRenderer.h"
-#include "Framebuffer.h"
+#include "../Interface/iRenderer.h"
+#include "Framebuffer/Framebuffer.h"
 
 #include "Mesh/Mesh.h"
 
@@ -15,13 +15,13 @@
 
 #include "Texture/TextureLoader.h"
 
-#include "../Data/WindowData.h"
-#include "../Data/InputData.h"
+#include "../Shared/Data/WindowData.h"
+#include "../Shared/Data/InputData.h"
 
 #include "glad/glad.h"
 
-#include "../../Material/PBRMaterial.h"
-#include "../../MeshLoader/MeshLoader.h"
+#include "../Shared/Material/PBRMaterial.h"
+#include "../Shared/MeshLoader/MeshLoader.h"
 
 #include <vector>
 #include <stdexcept>

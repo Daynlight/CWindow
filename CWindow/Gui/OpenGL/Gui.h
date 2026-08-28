@@ -1,8 +1,8 @@
 #pragma once
 #include "Macro.h"
 
-#include "../GuiWindow/GuiWindow.h"
-#include "../iGui.h"
+#include "../Shared/GuiWindow/GuiWindow.h"
+#include "../Interface/iGui.h"
 #include "OpenGL/Renderer.h"
 
 #include "imgui.h"

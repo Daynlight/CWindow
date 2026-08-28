@@ -1,16 +1,26 @@
+# CWindow
+# Copyright 2026 Daynlight
+# Licensed under the GNU General.
+# See LICENSE file for details.
+
+
+
 cmake_minimum_required(VERSION 3.15)
+
+
 
 set(src 
   "Renderer.cpp"
   "Renderer.h"
-  "Framebuffer.cpp"
+  "Framebuffer/Framebuffer.cpp"
+  "Framebuffer/Framebuffer.h"
+  "FreeCamera/FreeCamera3D.cpp"
+  "FreeCamera/FreeCamera3D.h"
   "Mesh/Mesh.cpp"
   "Mesh/Mesh.hpp"
   "Mesh/Mesh.h"
   "Mesh/MeshData.h"
   "Mesh/MeshData.cpp"
-  "FreeCamera/FreeCamera3D.cpp"
-  "FreeCamera/FreeCamera3D.h"
   "Shader/Shader/Shader.cpp"
   "Shader/Shader/Shader.h"
   "Shader/Shader/ShaderData.cpp"
@@ -31,6 +41,7 @@ set(src
   ${ROOT_DIR}/vendor/glad/src/glad.c
 )
 
+
 set(headers
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_DIR}
@@ -39,7 +50,11 @@ set(headers
   ${ROOT_DIR}/vendor/glm/glm/
   ${ROOT_DIR}/vendor/stb/
   ${ROOT_DIR}/vendor/assimp/include/
+  ../Shared/
+  ../Interface/
 )
+
+
 
 ############# [Set Files] #############
 ### UNIX
@@ -72,11 +87,9 @@ endif()
 
 
 
-
 ############# [Create Renderer] #############
 project(Renderer LANGUAGES CXX)
+
 add_library(Renderer STATIC ${src})
 target_include_directories(Renderer PUBLIC ${headers})
 target_link_libraries(Renderer ${libs})
-    
-  

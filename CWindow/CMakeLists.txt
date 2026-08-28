@@ -1,25 +1,27 @@
+# CWindow
+# Copyright 2026 Daynlight
+# Licensed under the GNU General.
+# See LICENSE file for details.
+
+
+
 cmake_minimum_required(VERSION 3.15)
 
+
+
 ############## [Set Global Properties] #############
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Root directory of the project")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pg")
-  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -pg")
-endif()
 
 
-
-############# [Set Variables] #############
+############# [Set Build] #############
 # [OPENGL/VULKAN/DIRECTX]
 if(NOT DEFINED RENDERER)
   set(RENDERER "OPENGL")
-endif() 
+endif()
+
 # [UNIX/WIN32]
 if(NOT DEFINED PLATFORM)
   if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
@@ -31,8 +33,8 @@ if(NOT DEFINED PLATFORM)
   endif()
 endif()
 
-message("Used Platform: ${PLATFORM}")
-message("Used Renderer: ${RENDERER}")
+message(STATUS, "Used Platform: ${PLATFORM}")
+message(STATUS, "Used Renderer: ${RENDERER}")
 
 
 
@@ -40,22 +42,17 @@ message("Used Renderer: ${RENDERER}")
 project(CWindow LANGUAGES CXX C)
 
 ### Vendor Libs
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
 set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/assimp)
 add_subdirectory(vendor/googletests)
 
 
-### Subfolders
+### Sub Projects
 add_subdirectory(Renderer)
 add_subdirectory(Gui)
 
-set(src 
-  "CWindow.cpp"
-)
 
-add_library(CWindow STATIC ${src})
+add_library(CWindow STATIC Renderer Gui)
 target_link_libraries(CWindow PUBLIC Renderer Gui)

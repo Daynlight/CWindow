@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 set(src 
   "Gui.cpp"
-  "../iGui.h"
-  "../GuiWindow/GuiWindow.cpp"
+  "../Interface/iGui.h"
+  "../Shared/GuiWindow/GuiWindow.cpp"
   ${ROOT_DIR}/vendor/imgui/imgui.cpp
   ${ROOT_DIR}/vendor/imgui/imgui_draw.cpp
   ${ROOT_DIR}/vendor/imgui/imgui_tables.cpp
@@ -22,6 +22,8 @@ set(headers
   ${ROOT_DIR}/vendor/assimp/include/
   ${ROOT_DIR}/vendor/imgui/
   ${ROOT_DIR}/vendor/imgui/backends/
+  ../Shared/
+  ../Interface/
 )
 
 ############# [Set Files] #############
