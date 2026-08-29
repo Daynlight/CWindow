@@ -3,7 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 
-#include "Renderer/OpenGL/Renderer.h"
+#include "../Renderer.h"
 
 
 
