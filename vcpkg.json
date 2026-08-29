@@ -1,0 +1,25 @@
+{
+  "name": "cwindow",
+  "version": "1.0.0",
+  "dependencies": [
+    "glfw3",
+    "glm",
+    "assimp",
+    "stb",
+    "gtest",
+    {
+      "name": "imgui",
+      "features": [
+        "docking-experimental",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
+    },
+    {
+      "name": "glad",
+      "features": [
+        "gl-api-46"
+      ]
+    }
+  ]
+}
