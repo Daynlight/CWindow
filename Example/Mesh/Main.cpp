@@ -3,7 +3,7 @@
 #include "Mesh.h"
 #include "FreeCamera/FreeCamera3D.h"
 #define GLM_ENABLE_EXPERIMENTAL
-#include "../vendor/glm/glm/gtx/euler_angles.hpp"
+#include "glm/gtx/euler_angles.hpp"
 
 
 

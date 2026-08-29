@@ -2,8 +2,7 @@
 #include "Gui.h"
 #include "Shaders.h"
 #define GLM_ENABLE_EXPERIMENTAL
-#include "../vendor/glm/glm/gtx/euler_angles.hpp"
-
+#include "glm/gtx/euler_angles.hpp"
 
 
 int main(){

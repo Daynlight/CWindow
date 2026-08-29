@@ -30,6 +30,7 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 - [Screenshots](#screenshots)
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
+  - [0. Clone repo and vspckg](#0-clone-repo-and-vspckg)
   - [1. clone repo with submodules](#1-clone-repo-with-submodules)
   - [2. init and update submodules (if not cloned with --recursive flag)](#2-init-and-update-submodules-if-not-cloned-with---recursive-flag)
   - [3 Add CWindow to your cmake project](#3-add-cwindow-to-your-cmake-project)
@@ -106,6 +107,11 @@ swapping window etc. Good to use in simple project or just learning shaders and 
 
 
 ## Installation
+### 0. Clone repo and vspckg
+```bash
+  git clone https://github.com/Daynlight/CWindow.git
+  vcpkg install --x-install-root=./vendor
+```
 ### 1. clone repo with submodules
 ```bash
   git clone --recursive https://github.com/Daynlight/CWindow.git

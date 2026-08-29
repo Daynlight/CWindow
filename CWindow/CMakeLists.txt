@@ -42,11 +42,23 @@ message(STATUS, "Used Renderer: ${RENDERER}")
 project(CWindow LANGUAGES CXX C)
 
 ### Vendor Libs
-add_subdirectory(vendor/glfw)
-add_subdirectory(vendor/glm)
+set(VCPKG_INSTALLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../vendor/x64-linux")
+
+# Tells CMake where to find *-config.cmake packages
+list(APPEND CMAKE_PREFIX_PATH "${VCPKG_INSTALLED_DIR}")
+
+# Tells CMake where to find Find*.cmake module packages (like FindStb.cmake)
+file(GLOB VCPKG_SHARE_DIRS "${VCPKG_INSTALLED_DIR}/share/*")
+list(APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIRS})
+
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
-add_subdirectory(vendor/assimp)
-add_subdirectory(vendor/googletests vendor/googletests EXCLUDE_FROM_ALL)
+find_package(assimp CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+find_package(Stb REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
 
 ### Sub Projects

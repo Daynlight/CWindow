@@ -37,21 +37,15 @@ set(src
   "Texture/Texture.h"
   "Texture/TextureLoader.cpp"
   "Texture/TextureLoader.h"
-  ${ROOT_DIR}/vendor/stb/deprecated/stb_image.c
-  ${ROOT_DIR}/vendor/glad/src/glad.c
 )
 
 
 set(headers
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${ROOT_DIR}
-  ${ROOT_DIR}/vendor/glad/include/  
-  ${ROOT_DIR}/vendor/glfw/include/
-  ${ROOT_DIR}/vendor/glm/glm/
-  ${ROOT_DIR}/vendor/stb/
-  ${ROOT_DIR}/vendor/assimp/include/
   ../Shared/
   ../Interface/
+  ${Stb_INCLUDE_DIR}
 )
 
 
@@ -61,8 +55,9 @@ set(headers
 if(PLATFORM STREQUAL "UNIX")
 set(libs 
   glfw 
-  glm
-  assimp
+  glm::glm
+  assimp::assimp
+  glad::glad
   X11
   Xrandr
   Xcursor
@@ -73,8 +68,9 @@ set(libs
 elseif(PLATFORM STREQUAL "WIN32")
 set(libs 
   glfw 
-  glm
-  assimp
+  glm::glm
+  assimp::assimp
+  glad::glad
   winmm
   imm32
   version
