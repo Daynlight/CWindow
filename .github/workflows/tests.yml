@@ -61,14 +61,6 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
         echo "vendor-dir=${{ github.workspace }}/vendor" >> "$GITHUB_OUTPUT"
 
-    - name: Cache vcpkg vendor folder
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.paths.outputs.vendor-dir }}
-        key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
-        restore-keys: |
-          vcpkg-${{ runner.os }}-
-
     - name: Install vcpkg dependencies
       run: |
         vcpkg install --x-install-root=${{ steps.paths.outputs.vendor-dir }}
