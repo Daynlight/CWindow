@@ -1,5 +1,5 @@
 #pragma once
-#include "Macro.h"
+#include "../../Macro.h"
 
 #include "../../Renderer/OpenGL/Renderer.h"
 #include "../Shared/GuiWindow/GuiWindow.h"

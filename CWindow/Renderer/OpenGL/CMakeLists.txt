@@ -88,4 +88,4 @@ project(Renderer LANGUAGES CXX)
 
 add_library(Renderer STATIC ${src})
 target_include_directories(Renderer PUBLIC ${headers})
-target_link_libraries(Renderer ${libs})
+target_link_libraries(Renderer PRIVATE ${libs})

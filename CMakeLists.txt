@@ -39,7 +39,10 @@ message(STATUS, "Used Renderer: ${RENDERER}")
 
 
 ############# [Set Dependencies] #############
-set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vendor/x64-linux")
+if(NOT DEFINED VCPKG_INSTALLED_DIR)
+  set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vendor/x64-linux")
+endif()
+
 list(APPEND CMAKE_PREFIX_PATH "${VCPKG_INSTALLED_DIR}")
 file(GLOB VCPKG_SHARE_DIRS "${VCPKG_INSTALLED_DIR}/share/*")
 list(APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIRS})

@@ -1,7 +1,7 @@
 #pragma once
-#include "Macro.h"
+#include "../../../Macro.h"
 
-#include "OpenGL/Renderer.h"
+#include "../../../Renderer/OpenGL/Renderer.h"
 
 #include "imgui.h"
 #include <imgui_impl_glfw.h>
