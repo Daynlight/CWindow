@@ -59,11 +59,10 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "vendor-dir=${{ github.workspace }}/vendor" >> "$GITHUB_OUTPUT"
 
     - name: Install vcpkg dependencies
       run: |
-        vcpkg install --x-install-root=${{ steps.paths.outputs.vendor-dir }}
+        vcpkg install --x-install-root=./vendor
     
     - name: Configure CMake
       run: >
