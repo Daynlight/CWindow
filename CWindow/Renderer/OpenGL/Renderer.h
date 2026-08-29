@@ -1,36 +1,34 @@
+// CWindow
+// Copyright 2026 Daynlight
+// Licensed under the GNU General.
+// See LICENSE file for details.
+
+
+
 #pragma once
 #include "../../Macro.h"
 #include "../Interface/iRenderer.h"
-#include "Framebuffer/Framebuffer.h"
-
-#include "Mesh/Mesh.h"
-
-#include "Shader/Shader/Shader.h"
-#include "Shader/Compute/Shader.h"
-#include "Shader/SSBO/Shader.h"
-
-#include "Uniform/Uniform.h"
-
-#include "Texture/Texture.h"
-
-#include "Texture/TextureLoader.h"
 
 #include "../Shared/Data/WindowData.h"
 #include "../Shared/Data/InputData.h"
-
-#include "glad/glad.h"
-
 #include "../Shared/Material/PBRMaterial.h"
 #include "../Shared/MeshLoader/MeshLoader.h"
+#include "../Shared/Texture/TextureLoader.h"
+
+#include "Framebuffer/Framebuffer.h"
+#include "Mesh/Mesh.h"
+#include "Shader/Shader/Shader.h"
+#include "Shader/Compute/Shader.h"
+#include "Shader/SSBO/Shader.h"
+#include "Uniform/Uniform.h"
+#include "Texture/Texture.h"
+
+#include "glad/glad.h"
 
 #include <vector>
 #include <stdexcept>
 #include <functional>
 #include <chrono>
-
-
-
-
 
 
 
@@ -72,6 +70,5 @@ public:
   void setCursorVisibility(bool visible);
   void setCursorOn(bool on);
   void close();
-
 };
 };

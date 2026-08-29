@@ -3,12 +3,8 @@
 
 #include <string>
 
-#include "TextureLoader.h"
-#include "TextureData.h"
-
-
-
-
+#include "../../Shared/Texture/TextureLoader.h"
+#include "../../Shared/Texture/TextureData.h"
 
 
 

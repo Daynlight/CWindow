@@ -1,10 +1,12 @@
-static double scroll_x, scroll_y;
+// CWindow
+// Copyright 2026 Daynlight
+// Licensed under the GNU General.
+// See LICENSE file for details.
+
+
+
 #include "Renderer.h"
-#include "RendererEvents.h"
-
-
-
-
+static double scroll_x, scroll_y;
 
 
 

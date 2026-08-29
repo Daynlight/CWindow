@@ -11,6 +11,7 @@ cmake_minimum_required(VERSION 3.15)
 
 set(src 
   "Renderer.cpp"
+  "RendererEvents.cpp"
   "Renderer.h"
   "Framebuffer/Framebuffer.cpp"
   "Framebuffer/Framebuffer.h"
@@ -19,8 +20,6 @@ set(src
   "Mesh/Mesh.cpp"
   "Mesh/Mesh.hpp"
   "Mesh/Mesh.h"
-  "Mesh/MeshData.h"
-  "Mesh/MeshData.cpp"
   "Shader/Shader/Shader.cpp"
   "Shader/Shader/Shader.h"
   "Shader/Shader/ShaderData.cpp"
@@ -35,8 +34,10 @@ set(src
   "Uniform/Uniform.h"
   "Texture/Texture.cpp"
   "Texture/Texture.h"
-  "Texture/TextureLoader.cpp"
-  "Texture/TextureLoader.h"
+  "../Shared/Texture/TextureLoader.cpp"
+  "../Shared/Texture/TextureLoader.h"
+  "../Shared/Mesh/MeshData.h"
+  "../Shared/Mesh/MeshData.cpp"
 )
 
 

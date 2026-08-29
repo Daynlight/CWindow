@@ -10,7 +10,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "MeshData.h"
+#include "../../Shared/Mesh/MeshData.h"
 
 
 

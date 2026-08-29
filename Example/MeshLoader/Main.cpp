@@ -6,7 +6,14 @@
 #include "glm/gtx/euler_angles.hpp"
 
 
-
+void bindMaterialToUniform(CW::Renderer::Uniform& uniform, CW::MeshLoader &data){
+  uniform["albedo"]->set<glm::vec3>(data.material.albedo);
+  uniform["roughness"]->set<float>(data.material.roughness);
+  uniform["metallic"]->set<float>(data.material.metallic);
+  uniform["emission_color"]->set<glm::vec3>(data.material.emission_color);
+  uniform["emission_strength"]->set<float>(data.material.emission_strength);
+  uniform["ambient_occlusion"]->set<float>(data.material.ambient_occlusion);
+};
 
 int main(){
   CW::Renderer::Renderer window;
@@ -30,7 +37,7 @@ int main(){
   asset.setData<GLfloat>(data.normals, 3, 1, GL_FLOAT);
   // asset.setData<GLfloat>(data.colors, 3, 2, GL_FLOAT);
 
-  data.bindMaterialToUniform(uniform);
+  bindMaterialToUniform(uniform, data);
 
   uniform["lightPos"]->set<glm::vec3>({50.0f, 100.0f, 20.0f});
   uniform["lightColor"]->set<glm::vec3>({1.0f, 1.0f, 1.0f});

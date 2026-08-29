@@ -201,15 +201,6 @@ class MeshLoader{
     // ---------------- AO (fallback) ----------------
     material.ambient_occlusion = 1.0f;
   }
-  
-  void bindMaterialToUniform(CW::Renderer::Uniform& uniform){
-    uniform["albedo"]->set<glm::vec3>(material.albedo);
-    uniform["roughness"]->set<float>(material.roughness);
-    uniform["metallic"]->set<float>(material.metallic);
-    uniform["emission_color"]->set<glm::vec3>(material.emission_color);
-    uniform["emission_strength"]->set<float>(material.emission_strength);
-    uniform["ambient_occlusion"]->set<float>(material.ambient_occlusion);
-  };
 
   void clear(){
     vertices.clear();
