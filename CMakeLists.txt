@@ -64,3 +64,25 @@ add_subdirectory(Example)
 
 enable_testing()
 add_subdirectory(Tests)
+
+
+
+############# [Install] #############
+install(
+  TARGETS 
+    CWindow
+    Renderer
+    Gui
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+install(
+  DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CWindow/"
+  DESTINATION include/CWindow
+  FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+    PATTERN "*.inl"
+)
