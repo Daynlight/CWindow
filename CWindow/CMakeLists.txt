@@ -46,7 +46,7 @@ add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
 set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/assimp)
-add_subdirectory(vendor/googletests)
+add_subdirectory(vendor/googletests vendor/googletests EXCLUDE_FROM_ALL)
 
 
 ### Sub Projects
