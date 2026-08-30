@@ -13,6 +13,8 @@ cmake_minimum_required(VERSION 3.15)
 set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Root directory of the project")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+option(CWINDOW_BUILD_EXAMPLE "Build example" ON)
+option(CWINDOW_BUILD_TESTS "Build tests" ON)
 
 
 
@@ -60,11 +62,14 @@ find_package(GTest CONFIG REQUIRED)
 
 ############# [Build Project] #############
 add_subdirectory(CWindow)
-add_subdirectory(Example)
+if(CWINDOW_BUILD_EXAMPLE)
+  add_subdirectory(Example)
+endif()
 
-enable_testing()
-add_subdirectory(Tests)
-
+if(CWINDOW_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(Tests)
+endif()
 
 
 ############# [Install] #############
