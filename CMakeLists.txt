@@ -69,10 +69,7 @@ add_subdirectory(Tests)
 
 ############# [Install] #############
 install(
-  TARGETS 
-    CWindow
-    Renderer
-    Gui
+  TARGETS CWindow
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
