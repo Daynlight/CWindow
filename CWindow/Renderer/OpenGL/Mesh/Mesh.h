@@ -1,82 +1,75 @@
+// CWindow
+// Copyright 2026 Daynlight
+// Licensed under the GNU General.
+// See LICENSE file for details.
+
+
+
 #pragma once
 #include "glad/glad.h"
-#include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
 
-#include <vector>
-#include <array>
 #include <unordered_map>
-#include <algorithm>
-#include <cstring>
-#include <stdexcept>
+#include <vector>
 
+#include "../../Interface/Mesh/iMesh.h"
+
+#include "../Translate.h"
+
+#include "../../Shared/Translate.h"
+#include "../../Shared/Mesh/MeshDataRecord.h"
 #include "../../Shared/Mesh/MeshData.h"
 
 
 
-
-
-
-
 namespace CW::Renderer{
-class Mesh{
+class Mesh : public CW::Renderer::Interface::iMesh{
+// ===============================================
+// ==================== Data =====================
+// ===============================================
 private:
-  GLuint VAO, VBO, EBO = 0;
-
-  std::unordered_map<unsigned int, CW::Renderer::MeshData> dataRegister;
-  std::vector<GLuint> indices;
-  std::vector<char> bufferData;
-  
-  std::array<std::vector<GLfloat>, 2> culling_box;
-  bool culling_box_exists = false;
-
+  GLuint VAO = 0;
+  GLuint VBO = 0;
+  GLuint EBO = 0;
   bool is_compiled = false;
+  CW::Renderer::Shared::MeshData mesh_data;
+  unsigned int mesh_data_version = -1;
 
+
+
+// ===============================================
+// ================== Functions ==================
+// ===============================================
+// =============================
+// ======= Constructors ========
+// =============================
 public:
+  // core
   Mesh() noexcept;
+  Mesh(const CW::Renderer::Shared::MeshData& mesh_data) noexcept;
   ~Mesh() noexcept;
-  Mesh(const Mesh&);
-  Mesh& operator=(const Mesh&);
-  Mesh(Mesh&& other) noexcept;
-  Mesh& operator=(Mesh&& other) noexcept;
+  // copy
+  Mesh(const Mesh& second) noexcept;
+  Mesh& operator=(const Mesh& second) noexcept;
+  // move
+  Mesh(Mesh&& second) noexcept;
+  Mesh& operator=(Mesh&& second) noexcept;
 
-private:
-  void generateCullingBox(const std::vector<GLfloat>& data, const unsigned int dimension);
-
-  std::vector<unsigned int> getDataRegisterLayouts() const noexcept;
-  void generateDataBuffer(const std::vector<unsigned int>& keys, const unsigned int total_size, const unsigned int total_points) noexcept;
-  
-  void genBuffers(const std::vector<char>& bufferData) noexcept;
-  void setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) const noexcept;
-  void closeBuffers() const noexcept;
-
+// =============================
+// ======= Data Control ========
+// =============================
 public:
-  void addVertices(const std::vector<GLfloat>& vertices, const unsigned int dimension = 4, const unsigned int layout = 0);
-  void addIndices(const std::vector<GLuint>& indices) noexcept;
+  void setMeshData(const CW::Renderer::Shared::MeshData& mesh_data) noexcept override;
+  const CW::Renderer::Shared::MeshData& getMeshData() const noexcept override;
+  void compile() noexcept override;
+  void destroy() noexcept override;
+  void render(CW::Renderer::Shared::RenderType type = CW::Renderer::Shared::RenderType::Triangles) noexcept override;
 
-  template<typename T>
-  void setData(const std::vector<T>& data, const unsigned int dimension, const unsigned int layout, const GLenum type = GL_FLOAT);
-  void removeData(const unsigned int layout) noexcept;
-  void clearData() noexcept;
-  
-  bool getCullingBoxExists() const noexcept;
-  std::array<std::vector<GLfloat>, 2> getCullingBox() const noexcept;
-  
-  const std::vector<GLuint>& getIndices() const noexcept;
-  const std::vector<char>& getBufferData() const noexcept;
-  const std::unordered_map<unsigned int, CW::Renderer::MeshData>& getDataRegister() const noexcept;
-
-  void compile();
-  void destroy() noexcept;
-  
-  void render(GLenum type = GL_TRIANGLES) noexcept;
+// =============================
+// ========== Helpers ==========
+// =============================
+private:
+  void genBuffers(const std::vector<char>& bufferData) noexcept;
+  void closeBuffers() const noexcept;
+  void setDataPositions(const std::vector<unsigned int>& keys, const unsigned int line_size) const noexcept;
 };
 };
-
-
-
-
-
-
-
-#include "Mesh.hpp"

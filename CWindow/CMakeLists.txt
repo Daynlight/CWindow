@@ -16,3 +16,9 @@ add_library(CWindow STATIC
   $<TARGET_OBJECTS:Renderer>
   $<TARGET_OBJECTS:Gui>
 )
+
+target_link_libraries(CWindow
+  PUBLIC
+  Renderer
+  Gui
+)

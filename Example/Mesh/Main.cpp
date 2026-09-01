@@ -20,14 +20,16 @@ int main(){
 
   shader.getUniforms().emplace_back(&uniform);
 
-  CW::Renderer::Mesh square;
+  CW::Renderer::Shared::MeshData square;
   square.addVertices(Mesh::vertices, 4, 0);
   square.addIndices(Mesh::indicies);
-  square.setData<GLfloat>(Mesh::colors, 3, 1, GL_FLOAT);
+  square.setData<float>(Mesh::colors, 3, 1, CW::Renderer::Shared::MeshDataType::Float);
 
   float time = 0.0f;
   float cursor_visible_lock = 0.0f;
   bool cursor_lock = true;
+
+  CW::Renderer::Mesh square_mesh(square);
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
@@ -55,7 +57,7 @@ int main(){
 
 
     shader.bind();
-    square.render();
+    square_mesh.render();
     shader.unbind();
 
     window.windowEvents();

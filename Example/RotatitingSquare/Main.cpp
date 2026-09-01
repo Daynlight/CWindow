@@ -15,7 +15,7 @@ int main(){
   shader.getUniforms().emplace_back(&uniform);
 
   
-  CW::Renderer::Mesh square;
+  CW::Renderer::Shared::MeshData square;
 
   std::vector<GLfloat> vertices({
     -1.0f,  1.0f, -1.0f, 1.0f,
@@ -58,9 +58,10 @@ int main(){
     1.0f, 1.0f, 0.0f,
   };
 
-  square.setData<GLfloat>(colors, 3, 1, GL_FLOAT);
+  square.setData<float>(colors, 3, 1, CW::Renderer::Shared::MeshDataType::Float);
 
   float time = 0.0f;
+  CW::Renderer::Mesh square_mesh(square);
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
@@ -72,7 +73,7 @@ int main(){
     uniform["transformation"]->set<glm::mat4>(transformation);
 
     shader.bind();
-    square.render();
+    square_mesh.render();
     shader.unbind();
 
     window.windowEvents();

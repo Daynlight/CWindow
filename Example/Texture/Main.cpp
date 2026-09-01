@@ -10,7 +10,7 @@ int main(){
   texture.compile(loader.data);
   
 
-  CW::Renderer::Mesh viewport;
+  CW::Renderer::Shared::MeshData viewport;
 
   std::vector<GLfloat> vertices({
     -1.0f,  1.0f, 0.0f,
@@ -32,12 +32,13 @@ int main(){
     1.0f, 1.0f,
     1.0f, 0.0f,
   });
-  viewport.setData<GLfloat>(idtx, 2, 1, GL_FLOAT);
+  viewport.setData<float>(idtx, 2, 1, CW::Renderer::Shared::MeshDataType::Float);
 
   CW::Renderer::Shader texture_shader(Texture::vertex, Texture::fragment);
   CW::Renderer::Uniform uniform;
   texture_shader.getUniforms().emplace_back(&uniform);
   
+  CW::Renderer::Mesh viewport_mesh(viewport);
   
   while(!window.getWindowData()->should_close){
     window.beginFrame();
@@ -45,7 +46,7 @@ int main(){
     texture.bind(2);
     uniform["uTexture"]->set<int>(2);
     texture_shader.bind();
-    viewport.render();
+    viewport_mesh.render();
     texture_shader.unbind();
     texture.unbind();
 

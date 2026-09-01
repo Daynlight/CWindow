@@ -31,11 +31,11 @@ int main(){
   CW::MeshLoader data = CW::MeshLoader(); 
   data.LoadModel("../Example/MeshLoader/asset.stl");
 
-  CW::Renderer::Mesh asset;
+  CW::Renderer::Shared::MeshData asset;
   asset.addVertices(data.vertices, 4, 0);
   asset.addIndices(data.indices);
-  asset.setData<GLfloat>(data.normals, 3, 1, GL_FLOAT);
-  // asset.setData<GLfloat>(data.colors, 3, 2, GL_FLOAT);
+  asset.setData<float>(data.normals, 3, 1, CW::Renderer::Shared::MeshDataType::Float);
+  // asset.setData<float>(data.colors, 3, 2, GL_FLOAT);
 
   bindMaterialToUniform(uniform, data);
 
@@ -45,6 +45,8 @@ int main(){
   float time = 0.0f;
   float cursor_visible_lock = 0.0f;
   bool cursor_lock = true;
+
+  CW::Renderer::Mesh asset_mesh(asset);
 
   while(!window.getWindowData()->should_close){
     window.beginFrame();
@@ -75,7 +77,7 @@ int main(){
 
 
     shader.bind();
-    asset.render();
+    asset_mesh.render();
     shader.unbind();
 
     window.windowEvents();
