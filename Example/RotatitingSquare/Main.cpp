@@ -1,5 +1,5 @@
-#include "Renderer.h"
-#include "Gui.h"
+#include "CWindow/Renderer/OpenGL/Renderer.h"
+#include "CWindow/Gui/OpenGL/Gui.h"
 #include "Shaders.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/euler_angles.hpp"

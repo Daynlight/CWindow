@@ -1,7 +1,7 @@
-#include "Renderer.h"
+#include "CWindow/Renderer/OpenGL/Renderer.h"
 #include "Shaders.h"
 #include "Mesh.h"
-#include "FreeCamera/FreeCamera3D.h"
+#include "CWindow/Renderer/OpenGL/FreeCamera/FreeCamera3D.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/euler_angles.hpp"
 

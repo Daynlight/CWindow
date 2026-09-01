@@ -55,43 +55,10 @@ set(headers
 )
 
 
-
-############# [Set Files] #############
-### UNIX
-if(PLATFORM STREQUAL "UNIX")
-set(libs 
-  glfw 
-  glm::glm
-  assimp::assimp
-  glad::glad
-  X11
-  Xrandr
-  Xcursor
-  Xi
-)
-
-### WIN32
-elseif(PLATFORM STREQUAL "WIN32")
-set(libs 
-  glfw 
-  glm::glm
-  assimp::assimp
-  glad::glad
-  winmm
-  imm32
-  version
-  setupapi
-)
-
-else()
-  message(FATAL_ERROR "Invalid PLATFORM specified: ${PLATFORM}.")
-endif()
-
-
-
 ############# [Create Renderer] #############
 project(Renderer LANGUAGES CXX)
 
 add_library(Renderer STATIC ${src})
+
 target_include_directories(Renderer PUBLIC ${headers})
-target_link_libraries(Renderer PRIVATE ${libs})
+target_link_libraries(Renderer PRIVATE ${libs_renderer})

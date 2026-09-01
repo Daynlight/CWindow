@@ -41,11 +41,6 @@ message(STATUS, "Used Renderer: ${RENDERER}")
 
 
 ############# [Set Dependencies] #############
-set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vendor/x64-linux")
-list(APPEND CMAKE_PREFIX_PATH "${VCPKG_INSTALLED_DIR}")
-file(GLOB VCPKG_SHARE_DIRS "${VCPKG_INSTALLED_DIR}/share/*")
-list(APPEND CMAKE_MODULE_PATH ${VCPKG_SHARE_DIRS})
-
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 set(ASSIMP_WARNINGS_AS_ERRORS OFF CACHE BOOL "" FORCE)

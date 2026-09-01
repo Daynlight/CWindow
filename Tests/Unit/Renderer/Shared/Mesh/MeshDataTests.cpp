@@ -19,7 +19,7 @@
 #define private public
 #define protected public
 
-#include "Renderer/Shared/Mesh/MeshData.h"
+#include "CWindow/Renderer/Shared/Mesh/MeshData.h"
 
 #undef private
 #undef protected

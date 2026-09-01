@@ -13,7 +13,7 @@
 #define private public
 #define protected public
 
-#include "Renderer/Shared/Mesh/MeshDataRecord.h"
+#include "CWindow/Renderer/Shared/Mesh/MeshDataRecord.h"
 
 #undef private
 #undef protected

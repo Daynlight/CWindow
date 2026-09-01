@@ -14,13 +14,11 @@
 #define private public
 #define protected public
 
-#include "Renderer/OpenGL/Renderer.h"
-#include "Renderer/OpenGL/Mesh/Mesh.h"
+#include "CWindow/Renderer/OpenGL/Renderer.h"
+#include "CWindow/Renderer/OpenGL/Mesh/Mesh.h"
 
 #undef private
 #undef protected
-
-#include "Renderer.h"
 
 
 

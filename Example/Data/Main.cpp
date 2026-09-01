@@ -1,5 +1,5 @@
-#include "Renderer.h"
-#include "Gui.h"
+#include "CWindow/Renderer/OpenGL/Renderer.h"
+#include "CWindow/Gui/OpenGL/Gui.h"
 
 inline std::function<void(CW::Renderer::iRenderer *window)> dataInputWindow(){
 return [](CW::Renderer::iRenderer *window){

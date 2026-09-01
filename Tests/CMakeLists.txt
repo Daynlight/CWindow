@@ -19,14 +19,11 @@ add_executable(unit_tests ${tests_src})
 
 
 target_link_libraries(unit_tests PRIVATE 
-  CWindow
+  CWindow::CWindow
   GTest::gtest
   GTest::gtest_main
-  GTest::gmock_main
 )
-target_include_directories(unit_tests PRIVATE 
-  ../CWindow/
-)
+
 
 include(GoogleTest)
 gtest_discover_tests(unit_tests)
