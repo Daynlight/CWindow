@@ -1,5 +1,7 @@
 @PACKAGE_INIT@
 
+include(CMakeFindDependencyMacro)
+
 find_dependency(glfw3 CONFIG REQUIRED)
 find_dependency(glm CONFIG REQUIRED)
 find_dependency(assimp CONFIG REQUIRED)
