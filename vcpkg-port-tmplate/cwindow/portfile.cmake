@@ -1,6 +1,6 @@
 vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
-  REPO Daynlight/Crypt
+  REPO Daynlight/CWindow
 
   REF 1b1b9a54b6faf60135f00d25bc1739300143aa71
   SHA512 "0"

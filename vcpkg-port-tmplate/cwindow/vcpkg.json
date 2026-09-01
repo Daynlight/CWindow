@@ -20,6 +20,14 @@
       "features": [
         "gl-api-46"
       ]
+    },
+        {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
     }
   ]
 }

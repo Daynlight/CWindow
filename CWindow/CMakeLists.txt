@@ -19,7 +19,7 @@ add_library(CWindow STATIC
   $<TARGET_OBJECTS:Gui>
 )
 
-add_library(Crypt::Crypt ALIAS Crypt)
+add_library(CWindow::CWindow ALIAS CWindow)
 
 
 target_link_libraries(CWindow
