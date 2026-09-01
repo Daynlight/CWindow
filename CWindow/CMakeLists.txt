@@ -73,7 +73,7 @@ add_library(CWindow STATIC
 )
 
 add_library(CWindow::CWindow ALIAS CWindow)
-target_link_libraries(CWindow PRIVATE ${libs_renderer} ${libs_gui})
+target_link_libraries(CWindow PUBLIC ${libs_renderer} ${libs_gui})
 
 target_include_directories(
   CWindow
