@@ -62,6 +62,7 @@ find_package(GTest CONFIG REQUIRED)
 
 ############# [Build Project] #############
 add_subdirectory(CWindow)
+
 if(CWINDOW_BUILD_EXAMPLE)
   add_subdirectory(Example)
 endif()
@@ -73,18 +74,47 @@ endif()
 
 
 ############# [Install] #############
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 install(
   TARGETS CWindow
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  EXPORT CWindowTargets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 install(
   DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CWindow/"
-  DESTINATION include/CWindow
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/CWindow"
   FILES_MATCHING
     PATTERN "*.h"
     PATTERN "*.hpp"
     PATTERN "*.inl"
+)
+
+install(
+  EXPORT CWindowTargets
+  FILE CWindowTargets.cmake
+  NAMESPACE CWindow::
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CWindow"
+)
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CWindowConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/CWindowConfig.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CWindow"
+)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/CWindowConfigVersion.cmake"
+  VERSION 1.0.0
+  COMPATIBILITY SameMajorVersion
+)
+
+install(
+  FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/CWindowConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/CWindowConfigVersion.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CWindow"
 )
