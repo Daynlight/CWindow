@@ -12,6 +12,8 @@ find_package(GTest REQUIRED CONFIG)
 set(tests_src
   Unit/Renderer/Shared/Mesh/MeshDataRecordTests.cpp
   Unit/Renderer/Shared/Mesh/MeshDataTests.cpp
+  Unit/Renderer/Shared/Uniform/UniformDataRecord.cpp
+  Unit/Renderer/Shared/Uniform/UniformData.cpp
   Unit/Renderer/OpenGL/Mesh/MeshTests.cpp
 )
 

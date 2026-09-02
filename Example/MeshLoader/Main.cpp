@@ -6,13 +6,13 @@
 #include "glm/gtx/euler_angles.hpp"
 
 
-void bindMaterialToUniform(CW::Renderer::Uniform& uniform, CW::MeshLoader &data){
-  uniform["albedo"]->set<glm::vec3>(data.material.albedo);
-  uniform["roughness"]->set<float>(data.material.roughness);
-  uniform["metallic"]->set<float>(data.material.metallic);
-  uniform["emission_color"]->set<glm::vec3>(data.material.emission_color);
-  uniform["emission_strength"]->set<float>(data.material.emission_strength);
-  uniform["ambient_occlusion"]->set<float>(data.material.ambient_occlusion);
+void bindMaterialToUniform(CW::Renderer::Shared::UniformData& uniform, CW::MeshLoader &data){
+  uniform.at("albedo").set<glm::vec3>(data.material.albedo);
+  uniform.at("roughness").set<float>(data.material.roughness);
+  uniform.at("metallic").set<float>(data.material.metallic);
+  uniform.at("emission_color").set<glm::vec3>(data.material.emission_color);
+  uniform.at("emission_strength").set<float>(data.material.emission_strength);
+  uniform.at("ambient_occlusion").set<float>(data.material.ambient_occlusion);
 };
 
 int main(){
@@ -24,6 +24,8 @@ int main(){
 
 
   CW::Renderer::Shader shader(Shader::vertex, Shader::fragment);
+  
+  CW::Renderer::Shared::UniformData uniform_data;
   CW::Renderer::Uniform uniform;
 
   shader.getUniforms().emplace_back(&uniform);
@@ -37,10 +39,10 @@ int main(){
   asset.setData<float>(data.normals, 3, 1, CW::Renderer::Shared::MeshDataType::Float);
   // asset.setData<float>(data.colors, 3, 2, GL_FLOAT);
 
-  bindMaterialToUniform(uniform, data);
+  bindMaterialToUniform(uniform_data, data);
 
-  uniform["lightPos"]->set<glm::vec3>({50.0f, 100.0f, 20.0f});
-  uniform["lightColor"]->set<glm::vec3>({1.0f, 1.0f, 1.0f});
+  uniform_data.at("lightPos").set<glm::vec3>({50.0f, 100.0f, 20.0f});
+  uniform_data.at("lightColor").set<glm::vec3>({1.0f, 1.0f, 1.0f});
 
   float time = 0.0f;
   float cursor_visible_lock = 0.0f;
@@ -58,9 +60,9 @@ int main(){
     model = glm::scale(model, glm::vec3(0.1f));
 
     glm::mat4 mvp = camera.transformation(&window) * model;
-
-    uniform["transformation"]->set<glm::mat4>(mvp);
-    uniform["model"]->set<glm::mat4>(model);
+    uniform_data.at("transformation").set<glm::mat4>(mvp);
+    uniform_data.at("model").set<glm::mat4>(model);
+    uniform.setUniformData(uniform_data);
 
 
     if(cursor_lock) window.setCursorOn(true);

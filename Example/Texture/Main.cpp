@@ -35,6 +35,7 @@ int main(){
   viewport.setData<float>(idtx, 2, 1, CW::Renderer::Shared::MeshDataType::Float);
 
   CW::Renderer::Shader texture_shader(Texture::vertex, Texture::fragment);
+  CW::Renderer::Shared::UniformData uniform_data;
   CW::Renderer::Uniform uniform;
   texture_shader.getUniforms().emplace_back(&uniform);
   
@@ -44,7 +45,8 @@ int main(){
     window.beginFrame();
     
     texture.bind(2);
-    uniform["uTexture"]->set<int>(2);
+    uniform_data.at("uTexture").set<int>(2);
+    uniform.setUniformData(uniform_data);
     texture_shader.bind();
     viewport_mesh.render();
     texture_shader.unbind();

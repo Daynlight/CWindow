@@ -22,7 +22,7 @@ private:
   GLuint compiledShader = 0;
   std::unordered_map<GLenum, CW::Renderer::ShaderData> registerShader;
   
-  std::vector<const CW::Renderer::Uniform *> uniforms;
+  std::vector<CW::Renderer::Uniform *> uniforms;
   
   bool is_compiled = false;
 
@@ -51,7 +51,7 @@ public:
 
   GLuint getShaderProgram();
   
-  std::vector<const CW::Renderer::Uniform*>& getUniforms() noexcept;
+  std::vector<CW::Renderer::Uniform*>& getUniforms() noexcept;
 
 };
 };

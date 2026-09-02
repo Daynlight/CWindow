@@ -42,6 +42,10 @@ set(src
   "../Shared/Mesh/MeshData.cpp"
   "../Shared/Mesh/MeshData.h"
   "../Shared/Mesh/MeshData.hpp"
+  "../Shared/Uniform/UniformData.h"
+  "../Shared/Uniform/UniformData.cpp"
+  "../Shared/Uniform/UniformDataRecord.h"
+  "../Shared/Uniform/UniformDataRecord.hpp"
   "../Shared/Translate.h"
 )
 

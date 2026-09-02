@@ -152,7 +152,7 @@ void CW::Renderer::Shader::bind() noexcept {
   
   glUseProgram(compiledShader);
 
-  for(const CW::Renderer::Uniform* uniform : uniforms) 
+  for(CW::Renderer::Uniform* uniform : uniforms) 
     uniform->bind(compiledShader);
 };
 
@@ -168,6 +168,6 @@ GLuint CW::Renderer::Shader::getShaderProgram(){
 };
 
 
-std::vector<const CW::Renderer::Uniform*>& CW::Renderer::Shader::getUniforms() noexcept {
+std::vector<CW::Renderer::Uniform*>& CW::Renderer::Shader::getUniforms() noexcept {
   return uniforms;
 };

@@ -10,6 +10,7 @@ int main(){
   window.setWindowTitle("Rotating Square");
 
   CW::Renderer::Shader shader(Shader::vertex, Shader::fragment);
+  CW::Renderer::Shared::UniformData uniform_data;
   CW::Renderer::Uniform uniform;
 
   shader.getUniforms().emplace_back(&uniform);
@@ -70,7 +71,8 @@ int main(){
     glm::mat4 transformation;
     transformation = glm::eulerAngleXYZ(10.0f, time, 0.0f);
     transformation = glm::scale(transformation, glm::vec3(0.2f));
-    uniform["transformation"]->set<glm::mat4>(transformation);
+    uniform_data.at("transformation").set<glm::mat4>(transformation);
+    uniform.setUniformData(uniform_data);
 
     shader.bind();
     square_mesh.render();

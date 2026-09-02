@@ -40,7 +40,9 @@ int main(){
     model = model * glm::eulerAngleXYZ(0.0f, time, 0.0f);
     model = glm::scale(model, glm::vec3(0.1f));
     glm::mat4 mvp = camera.transformation(&window) * model;
-    uniform["transformation"]->set<glm::mat4>(mvp);
+    CW::Renderer::Shared::UniformData uniform_data;
+    uniform_data.at("transformation").set<glm::mat4>(mvp);
+    uniform.setUniformData(uniform_data);
 
 
     if(cursor_lock) window.setCursorOn(true);

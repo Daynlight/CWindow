@@ -6,6 +6,9 @@
 
 
 #pragma once
+#include <variant>
+#include <typeinfo>
+#include <glm/glm.hpp>
 
 
 
@@ -27,4 +30,16 @@ enum class RenderType {
   TriangleStrip,
   LineStrip
 };
+
+
+// using UniformDataVariants = std::variant<int, int[2], int[3], int[4],
+//                                   float, float[2], float[3], float[4], 
+//                                   double, double[2], double[3], double[4], 
+//                                   float[2][2], float[3][3], float[4][4]>;
+
+using UniformDataVariants = std::variant<int, glm::ivec2, glm::ivec3, glm::ivec4,
+                                  float, glm::vec2, glm::vec3, glm::vec4, 
+                                  double, glm::dvec2, glm::dvec3, glm::dvec4, 
+                                  glm::mat2, glm::mat3, glm::mat4>;
+
 };
